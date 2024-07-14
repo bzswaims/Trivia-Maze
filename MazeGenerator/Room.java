@@ -1,0 +1,78 @@
+public class Room {
+    private Door[] myDoors;
+    private boolean myIsBlock;
+    private boolean myIsStart;
+    private int myRow;
+    private int myCol;
+
+    public Room(final int theRow, final int theCol) {
+        myRow = theRow;
+        myCol = theCol;
+        myDoors = new Door[4];
+        setBlock(true);
+        setStart(false);
+    }
+
+    public int getRow() {
+        return myRow;
+    }
+
+    public int getCol() {
+        return myCol;
+    }
+
+    public void addDoor(final Direction theDirection) {
+        if (myIsBlock) {
+            setBlock(false);
+        }
+        Door door = new Door(theDirection);
+        switch (theDirection) {
+            case NORTH:
+                myDoors[0] = door;
+                break;
+            case EAST:
+                myDoors[1] = door;
+                break;
+            case SOUTH:
+                myDoors[2] = door;
+                break;
+            case WEST:
+                myDoors[3] = door;
+                break;
+        }
+    }
+
+    public void setStart(final boolean theBool) {
+        myIsStart = theBool;
+    }
+
+    public void setBlock(final boolean theBool) {
+        myIsBlock = theBool;
+    }
+
+    public char roomToChar() {
+        if (myIsStart) {
+            return 'S';
+        } else if (myIsBlock) {
+            return 'B';
+        } else {
+            return '+';
+        }
+    }
+
+    public boolean isBlock() {
+        return myIsBlock;
+    }
+}
+
+/*
+NOTES:
+Door[] Index guide:
+    0 - North
+    1 - East
+    2 - South
+    3 - West
+I like to remember directions like "Never Eat Soggy Worms" or smthn lol
+
+
+ */
