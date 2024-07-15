@@ -1,2 +1,4 @@
-package model;public class Question {
+package model;
+
+public class Question {
 }

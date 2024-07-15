@@ -1,2 +1,4 @@
-package view;public class MainMenu {
+package view;
+
+public class MainMenu {
 }

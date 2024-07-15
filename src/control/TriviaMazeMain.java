@@ -1,2 +1,4 @@
-package control;public class TriviaMazeMain {
+package control;
+
+public class TriviaMazeMain {
 }

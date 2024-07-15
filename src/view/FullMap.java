@@ -1,2 +1,4 @@
-package view;public class FullMap {
+package view;
+
+public class FullMap {
 }

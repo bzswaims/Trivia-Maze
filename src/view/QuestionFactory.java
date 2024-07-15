@@ -1,2 +1,4 @@
-package view;public class QuestionFactory {
+package view;
+
+public class QuestionFactory {
 }

@@ -1,2 +1,4 @@
-package view;public class MiniMap {
+package view;
+
+public class MiniMap {
 }

@@ -1,2 +1,4 @@
-package view;public class TriviaMazeGui {
+package view;
+
+public class TriviaMazeGui {
 }

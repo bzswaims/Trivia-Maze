@@ -1,2 +1,4 @@
-package view;public class StartMenu {
+package view;
+
+public class StartMenu {
 }

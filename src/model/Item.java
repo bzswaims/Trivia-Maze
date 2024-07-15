@@ -1,2 +1,4 @@
-package model;public class Item {
+package model;
+
+public class Item {
 }

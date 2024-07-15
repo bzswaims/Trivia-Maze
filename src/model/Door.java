@@ -1,2 +1,4 @@
-package model;public class Door {
+package model;
+
+public class Door {
 }
