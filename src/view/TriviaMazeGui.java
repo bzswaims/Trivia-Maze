@@ -1,10 +1,12 @@
+//TODO clean up my code, its so not good
+
 package view;
 
 //need to reorganize these later.
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 /**
  * Starts the GUI for the Trivia Maze. Still has not been tested
@@ -14,7 +16,30 @@ import javax.swing.JFrame;
  */
 public class TriviaMazeGui implements PropertyChangeListener {
 
+    /**
+     * title of the game to be used all over
+     */
     private final String myTitle = "Trivia Maze Title Placeholder";
+
+    /**
+     * The icon for the window. bag is a place holder
+     */
+    private final ImageIcon myIcon = new ImageIcon("files/bag.png");
+
+    /**
+     * Fetches the screen size.
+     */
+    private final Dimension myScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+    /**
+     * Finds 1/3 of the width of the screen.
+     */
+    private final int myWidth = (int) myScreenSize.getWidth() / 3;
+
+    /**
+     * Finds 1/3 of the height of the screen.
+     */
+    private final int myHeight = (int) myScreenSize.getHeight() / 3;
 
     /**
      * The window.
@@ -26,13 +51,21 @@ public class TriviaMazeGui implements PropertyChangeListener {
      */
     private final Board myBoard;
 
+    //jpanel for the nav bar
+    private final NavButtonBar myNavBar;
+
     /**
      * Constructor.
      */
     public TriviaMazeGui() {
         super();
+
         myFrame = new JFrame(myTitle);
+        myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        myFrame.setIconImage(myIcon.getImage());
+
         myBoard = new Board();
+        myNavBar = new NavButtonBar();
 
         start();
     }
@@ -43,6 +76,10 @@ public class TriviaMazeGui implements PropertyChangeListener {
      */
     protected void start() {
         myFrame.add(myBoard, BorderLayout.CENTER);
+        myFrame.add(myNavBar.getNavBar(), BorderLayout.SOUTH);
+
+        myFrame.setSize(new Dimension(myWidth, myHeight));
+        myFrame.setLocationRelativeTo(null);
 
         myFrame.setVisible(true);
     }
