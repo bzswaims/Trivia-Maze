@@ -54,6 +54,9 @@ public class TriviaMazeGui implements PropertyChangeListener {
     //jpanel for the nav bar
     private final NavButtonBar myNavBar;
 
+    //jpanel for menu
+    private final MainMenu myMainMenu;
+
     /**
      * Constructor.
      */
@@ -65,6 +68,7 @@ public class TriviaMazeGui implements PropertyChangeListener {
         myFrame.setIconImage(myIcon.getImage());
 
         myBoard = new Board();
+        myMainMenu = new MainMenu();
         myNavBar = new NavButtonBar();
 
         start();
@@ -75,8 +79,7 @@ public class TriviaMazeGui implements PropertyChangeListener {
      * Performs all tasks necessary to display the UI.
      */
     protected void start() {
-        myFrame.add(myBoard, BorderLayout.CENTER);
-        myFrame.add(myNavBar.getNavBar(), BorderLayout.SOUTH);
+        myFrame.add(myMainMenu.getMenu(), BorderLayout.CENTER);
 
         myFrame.setSize(new Dimension(myWidth, myHeight));
         myFrame.setLocationRelativeTo(null);
