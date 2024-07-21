@@ -11,6 +11,9 @@ package view;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +42,8 @@ public class NavButtonBar {
      */
     private final JPanel myNavBar;
 
+    private final Board myBoard;
+
     /**
      * Constructor.
      */
@@ -47,6 +52,7 @@ public class NavButtonBar {
         myNavigation = new ArrayList<>();
         myNavButtons = new ArrayList<>();
         myNavBar = new JPanel();
+        myBoard = new Board();
 
         createButtons();
     }
@@ -93,5 +99,48 @@ public class NavButtonBar {
         button.setEnabled(true);
 
         return button;
+    }
+
+    /**
+     * This creates an array of action listeners.
+     *
+     * @return an array of action listeners for my buttons
+     */
+    private ActionListener[] createListeners() {
+        return new ActionListener[]{new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                //left button
+                myBoard.left();
+            }
+        }, new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                // up button
+            }
+        }, new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                // right button
+                myBoard.right();
+            }
+        }, new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                // interact
+                System.exit(1);
+            }
+        }, new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                // inventory
+                //Inventory should open inventory if it is not open, and close it if it is open i think
+                //or it could be implamented like help on the menus
+                myNavBar.removeAll();
+                //setUpMainMenu();
+                myNavBar.revalidate();
+                myNavBar.repaint();
+            }
+        }};
     }
 }

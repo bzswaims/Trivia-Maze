@@ -99,19 +99,6 @@ public class TriviaMazeGui implements PropertyChangeListener {
         myFrame.setVisible(true);
     }
 
-    //TODO THIS IS TERRIBLE NEED TO FIND A BETTER WAY
-    /**
-     * This takes in a JFrame to set the new screen as.
-     *
-     * This is likely the worst way to handle this.
-     *
-     * @param theNewScreen The new screen to display.
-     */
-    public static void setScreen(final JFrame theNewScreen) {
-        myFrame.dispose();
-        myFrame = theNewScreen;
-    }
-
     //place holder because I do not know if I am using it yet.
     @Override
     public void propertyChange(PropertyChangeEvent evt) {

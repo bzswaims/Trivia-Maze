@@ -1,3 +1,6 @@
+//TODO remove the array of 4 boards, and actually use a different class to compile the maze proper.
+//TODO make pov a better field, for now it is testing
+
 package view;
 
 //These need to be reorganized later
@@ -6,7 +9,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  * Displays the "board", that is what the user will see.
@@ -16,6 +19,11 @@ import javax.swing.JPanel;
  * @version 0.1
  */
 public class Board extends JPanel{
+
+    //testing fields
+    private ImageIcon[] myRoom;
+    //pov is what board we are looking at in the array.
+    int pov = 0;
 
     /**
      * Property change support object.
@@ -28,7 +36,8 @@ public class Board extends JPanel{
      */
     Board() {
         super();
-    }
+        myRoom = new ImageIcon[4];
+  ;  }
 
     /**
      * This will display the board proper.
@@ -41,5 +50,47 @@ public class Board extends JPanel{
 
         final Graphics2D g2d = (Graphics2D) theGraphics;
         setBackground(Color.WHITE);
+    }
+
+    public void clear() {
+        //
+    }
+
+    public void left() {
+        if(pov == 0) {
+            pov = 3;
+        }
+        else {
+            pov--;
+        }
+
+        //redraw the screen with new pov.
+    }
+
+    public void right() {
+        if(pov == 3) {
+            pov = 0;
+        }
+        else {
+            pov++;
+        }
+
+        //redraw the screen with new pov.
+    }
+
+    public void up() {
+        //this method will go up to the door
+        //if unlocked go thro the door
+        //if locked, prompt player
+        //if have not been answered, prompt with question
+        //if there is nothign there do nothing
+    }
+
+    public void interact() {
+        //
+    }
+
+    public void inventory() {
+        //
     }
 }

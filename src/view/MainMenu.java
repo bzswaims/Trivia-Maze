@@ -5,7 +5,7 @@
 
 package view;
 
-import java.awt.GridLayout;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
@@ -58,7 +58,13 @@ public class MainMenu {
         return new ActionListener[]{new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
-                // new
+                //newgame, this feels weird to have it all run from the main menu class instead of the
+                //triviamaze gui class, i will work on this
+                myMenuBar.removeAll();
+                myMenuBar.add(new Board(), BorderLayout.CENTER);
+                myMenuBar.add(new NavButtonBar().getNavBar(), BorderLayout.SOUTH);
+                myMenuBar.revalidate();
+                myMenuBar.repaint();
             }
         }, new ActionListener() {
             @Override
@@ -68,6 +74,7 @@ public class MainMenu {
         }, new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
+                //help
                 // this and action on the back button could go in a method hmmm
                 myMenuBar.removeAll();
                 myMenuBar.add(new Help());
@@ -78,6 +85,7 @@ public class MainMenu {
         }, new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
+                //exit
                 System.exit(1);
             }
         }, new ActionListener() {
