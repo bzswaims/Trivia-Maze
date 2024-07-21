@@ -1,16 +1,28 @@
 public class Room {
-    private Door[] myDoors;
+    private final Door[] myDoors;
     private boolean myIsBlock;
     private boolean myIsStart;
     private int myRow;
     private int myCol;
 
     public Room(final int theRow, final int theCol) {
-        myRow = theRow;
-        myCol = theCol;
+        setRow(theRow);
+        setCol(theCol);
         myDoors = new Door[4];
         setBlock(true);
         setStart(false);
+    }
+
+    public Room(final Room theRoom) {
+        this(theRoom.getRow(), theRoom.getCol());
+    }
+
+    public void setRow(final int theRow) {
+        myRow = theRow;
+    }
+
+    public void setCol(final int theCol) {
+        myCol = theCol;
     }
 
     public int getRow() {
@@ -50,7 +62,7 @@ public class Room {
         myIsBlock = theBool;
     }
 
-    public char roomToChar() {
+    public char toChar() {
         if (myIsStart) {
             return 'S';
         } else if (myIsBlock) {
@@ -66,7 +78,7 @@ public class Room {
 }
 
 /*
-NOTES:
+NOTES (possibly but can be changed):
 Door[] Index guide:
     0 - North
     1 - East

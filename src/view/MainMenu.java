@@ -18,36 +18,28 @@ import java.util.List;
 /**
  * Builds the main menu for the game.
  *
- * @author Zane Swaims (bzswaims@uw.edu)
- * @version 0.1
+ * @author Zane Swaims (bzswaims@uw.edu), Abbygaile Yrojo
+ * @version 0.2
  */
 public class MainMenu {
+    /* To add to buttons. */
+    private final ActionListener[] myListeners;
 
-    /**
-     * This is for the icons attaching to the buttons.
-     * This is primarily for testing and to be removed.
-     */
-    private final List<ImageIcon> myMenu;
-
-    /**
-     * List to store the buttons.
-     */
+    /** To store buttons in. */
     private final List<JButton> myMenuButtons;
 
-    /**
-     * Object to store the buttons onto.
-     */
+    /* To show buttons in. */
     private final JPanel myMenuBar;
 
     /**
      * Constructor.
      */
     public MainMenu() {
-        myMenu = new ArrayList<>();
         myMenuButtons = new ArrayList<>();
         myMenuBar = new JPanel(new GridLayout(0, 1));
-
+        myListeners = createListeners();
         createButtons();
+        setUpMainMenu();
     }
 
     /**
@@ -58,74 +50,68 @@ public class MainMenu {
         return myMenuBar;
     }
 
-    //I will have to make each button differently sadly i think
+    /**
+     * Creates an array of ActionListeners for buttons.
+     * @return ActionListener array.
+     */
+    private ActionListener[] createListeners() {
+        return new ActionListener[]{new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                // new
+            }
+        }, new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                // load
+            }
+        }, new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                // this and action on the back button could go in a method hmmm
+                myMenuBar.removeAll();
+                myMenuBar.add(new Help());
+                myMenuBar.add(myMenuButtons.get(4));
+                myMenuBar.revalidate();
+                myMenuBar.repaint();
+            }
+        }, new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                System.exit(1);
+            }
+        }, new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent theEvent) {
+                // back
+                myMenuBar.removeAll();
+                setUpMainMenu();
+                myMenuBar.revalidate();
+                myMenuBar.repaint();
+            }
+        }};
+    }
 
     /**
      * Methods that compiles the buttons into the panel.
      */
     private void createButtons() {
-        myMenu.add(new ImageIcon("files/new.png"));
-        myMenu.add(new ImageIcon("files/load.png"));
-
-        for(final ImageIcon i : myMenu) {
-            myMenuButtons.add(buttonMaker(i));
+        final String[] imageNames = {"new", "load", "help", "exit", "back"};
+        for (int i = 0; i < imageNames.length; i++) {
+            JButton button = buttonMaker(new ImageIcon(
+                    String.format("files/%s.png", imageNames[i])));
+            button.addActionListener(myListeners[i]);
+            myMenuButtons.add(button);
         }
-
-        for (final JButton b : myMenuButtons) {
-            myMenuBar.add(b);
-        }
-
-        myMenuBar.add(createHelpButton(new ImageIcon("files/help.png")));
-        myMenuBar.add(createExitButton(new ImageIcon("files/exit.png")));
     }
 
     /**
-     * Creates the exit button.
-     *
-     * @param theIcon The image attached to the button.
-     *
-     * @return The completed exit button.
+     * Populates the menu bar.
      */
-    private JButton createExitButton(ImageIcon theIcon) {
-        final JButton button = new JButton(theIcon);
-        button.setEnabled(true);
-
-        button.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                //This line completely shuts down the java virtual machine
-                //not sure if thats ok but for now it works.
-                System.exit(1);
-            }
-        });
-
-        return button;
-    }
-
-    /**
-     * Creates the help button.
-     *
-     * @param theIcon The image attached to the button.
-     *
-     * @return The completed help button.
-     */
-    private JButton createHelpButton(ImageIcon theIcon) {
-        final JButton button = new JButton(theIcon);
-        button.setEnabled(true);
-
-        button.addActionListener(new ActionListener() {
-
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                //need to clear the jframe, and attach onto it the image for the help screen
-                //for now creates a new window. This is fine for testing.
-                TriviaMazeGui.setScreen(new Help().getHelp());
-                //TriviaMazeGui.revalidate();
-            }
-        });
-
-        return button;
+    private void setUpMainMenu() {
+        for (int i = 0; i < myMenuButtons.size() - 1; i++) {
+            myMenuBar.add(myMenuButtons.get(i));
+        }
     }
 
     /**
@@ -133,7 +119,6 @@ public class MainMenu {
      * this is primarily for testing and should be removed for the final product.
      *
      * @param theIcon The image attached to the button.
-     *
      * @return The completed button.
      */
     public JButton buttonMaker(ImageIcon theIcon) {
