@@ -2,30 +2,41 @@
 //TODO make images a decent size, or variable (small medium large depending on screen size)
 //I find 150px or 200x square work well proabbly
 //TODO potentially make the buttons their own object like filters from project 4 in 305
-
+//TODO remove the test object myNavigation.
+//TODO remove the test method buttonMaker.
+//TODO add a minimap/map button.
 
 package view;
 
-//to be cleaned up later and made proper
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Builds the navigation bar for the game.
+ * Builds the navigation bar for the game. This is used by the user
+ * to navigate the maze.
  *
  * @author Zane Swaims (bzswaims@uw.edu)
  * @version 0.1
  */
 public class NavButtonBar {
 
-    //For the attaching objects to the buttons
+    /**
+     * This is for storing the icons used by the buttons.
+     * This is for testing and should be removed.
+     */
     private final List<ImageIcon> myNavigation;
 
-    //for storing the buttons proper
+    /**
+     * List for storing the buttons.
+     */
     private final List<JButton> myNavButtons;
 
-    //the bar proper
+    /**
+     * JPanel to store the buttons onto.
+     */
     private final JPanel myNavBar;
 
     /**
@@ -40,17 +51,24 @@ public class NavButtonBar {
         createButtons();
     }
 
-    //accessor for the button panel
+    /**
+     * Accessor for the navigation bar.
+     *
+     * @return The navigation bar.
+     */
     public JPanel getNavBar() {
         return myNavBar;
     }
 
-    //Pretty much just trying to populate some buttons and can fiddle with this later
+    /**
+     * Mass creates buttons and puts them into the JPanel.
+     */
     private void createButtons() {
-        //I will likely use this for left forward and right, but make interact and item individually.
+        //I will likely use this for left forward and right since they are similar.
         myNavigation.add(new ImageIcon("files/left.png"));
         myNavigation.add(new ImageIcon("files/up.png"));
         myNavigation.add(new ImageIcon("files/right.png"));
+        //The rest of the buttons will need to be done one by one since they are all different.
         myNavigation.add(new ImageIcon("files/hand.png"));
         myNavigation.add(new ImageIcon("files/bag.png"));
 
@@ -63,6 +81,13 @@ public class NavButtonBar {
         }
     }
 
+    /**
+     * Creates the buttons proper, this is for testing and should be removed.
+     *
+     * @param theIcon The icon attached to the button.
+     *
+     * @return The button proper.
+     */
     public JButton buttonMaker(ImageIcon theIcon) {
         final JButton button = new JButton(theIcon);
         button.setEnabled(true);

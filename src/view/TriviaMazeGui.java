@@ -1,15 +1,17 @@
-//TODO clean up my code, its so not good
+//TODO Make an actual icon for the game.
 
 package view;
 
-//need to reorganize these later.
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
 
 /**
- * Starts the GUI for the Trivia Maze. Still has not been tested
+ * Starts the GUI for the Trivia Maze.
  *
  * @author Zane Swaims (bzswaims@uw.edu)
  * @version 0.1
@@ -17,12 +19,12 @@ import javax.swing.*;
 public class TriviaMazeGui implements PropertyChangeListener {
 
     /**
-     * title of the game to be used all over
+     * Title of the game.
      */
     private final String myTitle = "Trivia Maze Title Placeholder";
 
     /**
-     * The icon for the window. bag is a place holder
+     * The icon for the window. bag is a placeholder.
      */
     private final ImageIcon myIcon = new ImageIcon("files/bag.png");
 
@@ -51,10 +53,14 @@ public class TriviaMazeGui implements PropertyChangeListener {
      */
     private final Board myBoard;
 
-    //jpanel for the nav bar
+    /**
+     * The navigation bar.
+     */
     private final NavButtonBar myNavBar;
 
-    //jpanel for menu
+    /**
+     * The main menu.
+     */
     private final MainMenu myMainMenu;
 
     /**
@@ -74,7 +80,6 @@ public class TriviaMazeGui implements PropertyChangeListener {
         start();
     }
 
-    //This barely even runs the window, purely at testing stages.
     /**
      * Performs all tasks necessary to display the UI.
      */
@@ -87,6 +92,7 @@ public class TriviaMazeGui implements PropertyChangeListener {
         myFrame.setVisible(true);
     }
 
+    //place holder because I do not know if I am using it yet.
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
 
