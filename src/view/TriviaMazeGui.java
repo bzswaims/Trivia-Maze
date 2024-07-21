@@ -1,4 +1,11 @@
 //TODO Make an actual icon for the game.
+//TODO fix the way I am making the help screen. currently causes 2 way dependendencies with the method setScreen.
+
+//What I need to do is create panels, the panels will each house the different classes.
+//trivia mazegui will pass the frame down to the mainmenu class, and well pretty much pass the jframe around the program
+//from there when main menu clicks a button i can pass the jframe into a new class and adjust it there.
+
+//instead I can pass in the jframe and return the jframe, and set the jframe into the returned jframe
 
 package view;
 
@@ -46,7 +53,7 @@ public class TriviaMazeGui implements PropertyChangeListener {
     /**
      * The window.
      */
-    private final JFrame myFrame;
+    private static JFrame myFrame;
 
     /**
      * The board to draw to.
@@ -83,13 +90,26 @@ public class TriviaMazeGui implements PropertyChangeListener {
     /**
      * Performs all tasks necessary to display the UI.
      */
-    protected void start() {
+    private void start() {
         myFrame.add(myMainMenu.getMenu(), BorderLayout.CENTER);
 
         myFrame.setSize(new Dimension(myWidth, myHeight));
         myFrame.setLocationRelativeTo(null);
 
         myFrame.setVisible(true);
+    }
+
+    //TODO THIS IS TERRIBLE NEED TO FIND A BETTER WAY
+    /**
+     * This takes in a JFrame to set the new screen as.
+     *
+     * This is likely the worst way to handle this.
+     *
+     * @param theNewScreen The new screen to display.
+     */
+    public static void setScreen(final JFrame theNewScreen) {
+        myFrame.dispose();
+        myFrame = theNewScreen;
     }
 
     //place holder because I do not know if I am using it yet.

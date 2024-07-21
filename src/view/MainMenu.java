@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +120,8 @@ public class MainMenu {
             public void actionPerformed(final ActionEvent theEvent) {
                 //need to clear the jframe, and attach onto it the image for the help screen
                 //for now creates a new window. This is fine for testing.
-                new Help();
+                TriviaMazeGui.setScreen(new Help().getHelp());
+                //TriviaMazeGui.revalidate();
             }
         });
 
