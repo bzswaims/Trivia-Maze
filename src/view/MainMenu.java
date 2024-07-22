@@ -61,8 +61,7 @@ public class MainMenu {
                 //newgame, this feels weird to have it all run from the main menu class instead of the
                 //triviamaze gui class, i will work on this
                 myMenuBar.removeAll();
-                myMenuBar.add(new Board(), BorderLayout.CENTER);
-                myMenuBar.add(new NavButtonBar().getNavBar(), BorderLayout.SOUTH);
+                myMenuBar.add(new NavButtonBar(new Board()).getNavBar());
                 myMenuBar.revalidate();
                 myMenuBar.repaint();
             }
@@ -86,7 +85,7 @@ public class MainMenu {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
                 //exit
-                System.exit(1);
+                System.exit(0);
             }
         }, new ActionListener() {
             @Override

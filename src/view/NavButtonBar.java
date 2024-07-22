@@ -11,7 +11,6 @@ package view;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -42,19 +41,30 @@ public class NavButtonBar {
      */
     private final JPanel myNavBar;
 
+    /**
+     * The board that will display what the user sees.
+     */
     private final Board myBoard;
+
+    /**
+     * Array of listeners for the buttons.
+     */
+    private final ActionListener myListeners[];
 
     /**
      * Constructor.
      */
-    NavButtonBar()
+    NavButtonBar(Board theBoard)
     {
         myNavigation = new ArrayList<>();
         myNavButtons = new ArrayList<>();
         myNavBar = new JPanel();
-        myBoard = new Board();
+        myBoard = theBoard;
+        myNavBar.add(myBoard);
 
+        myListeners = createListeners();
         createButtons();
+        setUpNavBar();
     }
 
     /**
@@ -64,27 +74,6 @@ public class NavButtonBar {
      */
     public JPanel getNavBar() {
         return myNavBar;
-    }
-
-    /**
-     * Mass creates buttons and puts them into the JPanel.
-     */
-    private void createButtons() {
-        //I will likely use this for left forward and right since they are similar.
-        myNavigation.add(new ImageIcon("files/left.png"));
-        myNavigation.add(new ImageIcon("files/up.png"));
-        myNavigation.add(new ImageIcon("files/right.png"));
-        //The rest of the buttons will need to be done one by one since they are all different.
-        myNavigation.add(new ImageIcon("files/hand.png"));
-        myNavigation.add(new ImageIcon("files/bag.png"));
-
-        for(final ImageIcon i : myNavigation) {
-            myNavButtons.add(buttonMaker(i));
-        }
-
-        for (final JButton b : myNavButtons) {
-            myNavBar.add(b);
-        }
     }
 
     /**
@@ -128,7 +117,6 @@ public class NavButtonBar {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
                 // interact
-                System.exit(1);
             }
         }, new ActionListener() {
             @Override
@@ -142,5 +130,27 @@ public class NavButtonBar {
                 myNavBar.repaint();
             }
         }};
+    }
+
+    /**
+     * Methods that compiles the buttons into the panel.
+     */
+    private void createButtons() {
+        final String[] imageNames = {"left", "up", "right", "hand", "bag"};
+        for (int i = 0; i < imageNames.length; i++) {
+            JButton button = buttonMaker(new ImageIcon(
+                    String.format("files/%s.png", imageNames[i])));
+            button.addActionListener(myListeners[i]);
+            myNavButtons.add(button);
+        }
+    }
+
+    /**
+     * Populates the menu bar.
+     */
+    private void setUpNavBar() {
+        for (int i = 0; i < myNavButtons.size(); i++) {
+            myNavBar.add(myNavButtons.get(i));
+        }
     }
 }

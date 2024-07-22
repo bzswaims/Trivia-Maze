@@ -63,7 +63,7 @@ public class TriviaMazeGui implements PropertyChangeListener {
     /**
      * The navigation bar.
      */
-    private final NavButtonBar myNavBar;
+    //private final NavButtonBar myNavBar;
 
     /**
      * The main menu.
@@ -82,7 +82,7 @@ public class TriviaMazeGui implements PropertyChangeListener {
 
         myBoard = new Board();
         myMainMenu = new MainMenu();
-        myNavBar = new NavButtonBar();
+        //myNavBar = new NavButtonBar();
 
         start();
     }

@@ -4,10 +4,7 @@
 package view;
 
 //These need to be reorganized later
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.beans.PropertyChangeListener;
+import java.awt.*;
 import java.beans.PropertyChangeSupport;
 import javax.swing.*;
 
@@ -37,6 +34,12 @@ public class Board extends JPanel{
     Board() {
         super();
         myRoom = new ImageIcon[4];
+        myRoom[0] = new ImageIcon("boards/north.png");
+        myRoom[1] = new ImageIcon("boards/east.png");
+        myRoom[2] = new ImageIcon("boards/south.png");
+        myRoom[3] = new ImageIcon("boards/west.png");
+
+        start();
   ;  }
 
     /**
@@ -52,8 +55,9 @@ public class Board extends JPanel{
         setBackground(Color.WHITE);
     }
 
-    public void clear() {
-        //
+    private void start () {
+        add(new JLabel(myRoom[pov]));
+        setVisible(true);
     }
 
     public void left() {
@@ -64,7 +68,7 @@ public class Board extends JPanel{
             pov--;
         }
 
-        //redraw the screen with new pov.
+        turn();
     }
 
     public void right() {
@@ -75,7 +79,14 @@ public class Board extends JPanel{
             pov++;
         }
 
-        //redraw the screen with new pov.
+        turn();
+    }
+
+    private void turn() {
+        removeAll();
+        add(new JLabel(myRoom[pov]));
+        revalidate();
+        repaint();
     }
 
     public void up() {
