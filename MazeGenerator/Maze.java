@@ -4,7 +4,7 @@
  */
 
 // TO DO : change each Door in each path room to proper state
-//          also add an ending door!!
+// CHANGES: end room added, but still needs edge of door as exit
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import java.util.Random;
  * horizontally or vertically.
  *
  * @author Abbygaile Yrojo
- * @version July 21, 2024
+ * @version July 22, 2024
  */
 public class Maze {
     /** To control how filled the maze is with Rooms. */
@@ -24,8 +24,8 @@ public class Maze {
     private final Room[][] myRooms;
     /** Rooms that may be travelled through. */
     private List<Room> myPathRooms;
-    /** To choose which Room along a side to start in. */
-    private Direction myStartSide;
+    /** The beginning of the maze. */
+    private Room myStartRoom;
 
     /**
      * Constructs the Maze.
@@ -36,7 +36,7 @@ public class Maze {
         // toss in exception for < 1?
 
         myRooms = new Room[theWidth][theHeight];
-        myStartSide = null;
+        myStartRoom = null;
         myPathRooms = new ArrayList<>();
     }
 
@@ -63,10 +63,9 @@ public class Maze {
      * @param theRandom Random.
      */
     private void setStart(final Random theRandom) {
-        myStartSide = Direction.randomDirection();
-        Room room;
+        Direction startSide = Direction.randomDirection();
         int[] index = {0, 0};
-        switch (myStartSide) {
+        switch (startSide) {
             case NORTH:
                 index[1] = theRandom.nextInt(myRooms[0].length);
                 break;
@@ -82,9 +81,9 @@ public class Maze {
                 index[0] = theRandom.nextInt(myRooms.length);
                 break;
         }
-        room = myRooms[index[0]][index[1]];
-        room.setStart(true);
-        myPathRooms.add(room);
+        myStartRoom = myRooms[index[0]][index[1]];
+        myStartRoom.setStart(true);
+        myPathRooms.add(myStartRoom);
     }
 
     /**
@@ -122,13 +121,56 @@ public class Maze {
             if (!myPathRooms.contains(currentRoom)) {
                 myPathRooms.add(currentRoom);
                 // this will be for finding a possible ending door
-//                if (isAlongEdge(currentRoom)) {
-//
-//                }
+                if (isAlongEdge(currentRoom)) {
+                    edgeRooms.add(currentRoom);
+                }
             }
-
             currentRatio = (double) myPathRooms.size() / size;
         }
+        setEnd(edgeRooms, theRandom);
+    }
+
+    /**
+     * Sets Room with door to exit.
+     * @param theList List of Rooms along the edge of the maze.
+     * @param theRandom Random.
+     */
+    private void setEnd(final List<Room> theList, final Random theRandom) {
+        Room room = myStartRoom;
+        final double minDistance = getDistanceBetweenRooms(myStartRoom,
+                                        myRooms[myRooms.length / 2]
+                                               [myRooms[0].length / 2]);
+        while (!room.getIsEnd()) {
+            if (getDistanceBetweenRooms(myStartRoom, room) >= minDistance) {
+                room.setIsEnd(true);
+            } else {
+                room = theList.get(theRandom.nextInt(theList.size()));
+            }
+        }
+    }
+
+    /**
+     * Returns distance between Rooms.
+     * @param theRoom1 Room operand 1.
+     * @param theRoom2 Room operand 2.
+     * @return double.
+     */
+    private double getDistanceBetweenRooms(final Room theRoom1,
+                                        final Room theRoom2) {
+        return Math.sqrt(Math.pow(theRoom1.getCol() - theRoom2.getCol(), 2) +
+                Math.pow(theRoom1.getRow() - theRoom2.getRow(), 2));
+    }
+
+    /**
+     * Returns if a room is along the edge of the maze.
+     * @param theRoom Room.
+     * @return boolean.
+     */
+    private boolean isAlongEdge(final Room theRoom) {
+        return !(canGo(theRoom, Direction.NORTH)
+                && canGo(theRoom, Direction.EAST)
+                && canGo(theRoom, Direction.SOUTH)
+                && canGo(theRoom, Direction.WEST));
     }
 
     /**

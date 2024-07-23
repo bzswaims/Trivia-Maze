@@ -4,6 +4,8 @@ public class Room {
     private boolean myIsStart;
     private int myRow;
     private int myCol;
+    // testing purposes
+    private boolean myIsEnd;
 
     public Room(final int theRow, final int theCol) {
         setRow(theRow);
@@ -11,10 +13,15 @@ public class Room {
         myDoors = new Door[4];
         setBlock(true);
         setStart(false);
+        setIsEnd(false);
     }
 
     public Room(final Room theRoom) {
         this(theRoom.getRow(), theRoom.getCol());
+    }
+
+    public void setIsEnd(final boolean theBool) {
+        myIsEnd = theBool;
     }
 
     public void setRow(final int theRow) {
@@ -31,6 +38,10 @@ public class Room {
 
     public int getCol() {
         return myCol;
+    }
+
+    public boolean getIsEnd() {
+        return myIsEnd;
     }
 
     public void addDoor(final Direction theDirection) {
@@ -67,6 +78,8 @@ public class Room {
             return 'S';
         } else if (myIsBlock) {
             return 'B';
+        } else if (myIsEnd) { // REMOVE THIS LATER. WILL ADD DOORS TO MAZE STRING
+            return 'E';
         } else {
             return '+';
         }
