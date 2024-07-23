@@ -5,15 +5,18 @@ package view;
 
 //These need to be reorganized later
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeSupport;
+import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 
 /**
  * Displays the "board", that is what the user will see.
  * This handles updating the graphics so the user knows where they are.
  *
- * @author Zane Swaims (bzswaims@uw.edu)
- * @version 0.1
+ * @author Zane Swaims (bzswaims@uw.edu), Abbygaile Yrojo
+ * @version 0.2
  */
 public class Board extends JPanel{
 
@@ -27,18 +30,29 @@ public class Board extends JPanel{
      * I do not know if we will need this, but just in case.
      */
     private final PropertyChangeSupport myPCS = new PropertyChangeSupport(this);
+    private JLabel myCurrentImage;
+    private Timer myTimer;
 
     /**
      * Constructor.
      */
     Board() {
         super();
-        myRoom = new ImageIcon[4];
+        myRoom = new ImageIcon[5];
         myRoom[0] = new ImageIcon("boards/north.png");
         myRoom[1] = new ImageIcon("boards/east.png");
         myRoom[2] = new ImageIcon("boards/south.png");
         myRoom[3] = new ImageIcon("boards/west.png");
+        myRoom[4] = new ImageIcon("boards/turn.png");
 
+        myCurrentImage = new JLabel(myRoom[pov]);
+        // delay, then performs action
+        myTimer = new Timer(500, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                myCurrentImage.setIcon(myRoom[pov]);
+            }
+        });
         start();
   ;  }
 
@@ -50,13 +64,13 @@ public class Board extends JPanel{
     @Override
     public void paintComponent(final Graphics theGraphics) {
         super.paintComponent(theGraphics);
-
         final Graphics2D g2d = (Graphics2D) theGraphics;
-        setBackground(Color.WHITE);
+
     }
 
     private void start () {
-        add(new JLabel(myRoom[pov]));
+        setBackground(Color.WHITE);
+        add(myCurrentImage);
         setVisible(true);
     }
 
@@ -83,10 +97,8 @@ public class Board extends JPanel{
     }
 
     private void turn() {
-        removeAll();
-        add(new JLabel(myRoom[pov]));
-        revalidate();
-        repaint();
+        myCurrentImage.setIcon(myRoom[4]);
+        myTimer.start();
     }
 
     public void up() {
