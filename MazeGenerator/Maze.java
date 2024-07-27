@@ -15,11 +15,11 @@ import java.util.Random;
  * horizontally or vertically.
  *
  * @author Abbygaile Yrojo
- * @version July 22, 2024
+ * @version July 27, 2024
  */
 public class Maze {
     /** To control how filled the maze is with Rooms. */
-    private final static double MAX_RATIO = 0.5;
+    private final static double MAX_RATIO = 0.6;
     /** The maze itself. */
     private final Room[][] myRooms;
     /** Rooms that may be travelled through. */
@@ -55,7 +55,8 @@ public class Maze {
         setStart(random);
         // carve a "winning path"
         createPaths(random);
-        // set end
+        // set up doors
+        createDoors();
     }
 
     /**
@@ -111,8 +112,9 @@ public class Maze {
         int i = 0;
         while (currentRatio <= MAX_RATIO) {
             // pick a valid direction
-            if (!canGo(currentRoom, dir) || i++ % 5 == 0) {
+            if (!canGo(currentRoom, dir) || i == 2) {
                 dir = chooseDirection(currentRoom, theRandom);
+                i = 0;
             }
             // find and convert that room to a path
             currentRoom = myRooms[currentRoom.getRow() + dir.dy()]
@@ -120,12 +122,13 @@ public class Maze {
             currentRoom.setBlock(false);
             if (!myPathRooms.contains(currentRoom)) {
                 myPathRooms.add(currentRoom);
-                // this will be for finding a possible ending door
+                // for finding a possible ending door
                 if (isAlongEdge(currentRoom)) {
                     edgeRooms.add(currentRoom);
                 }
             }
             currentRatio = (double) myPathRooms.size() / size;
+            i++;
         }
         setEnd(edgeRooms, theRandom);
     }
@@ -140,11 +143,30 @@ public class Maze {
         final double minDistance = getDistanceBetweenRooms(myStartRoom,
                                         myRooms[myRooms.length / 2]
                                                [myRooms[0].length / 2]);
-        while (!room.getIsEnd()) {
-            if (getDistanceBetweenRooms(myStartRoom, room) >= minDistance) {
-                room.setIsEnd(true);
+        while (!room.isEnd()) {
+            if (getDistanceBetweenRooms(myStartRoom, room) > minDistance) {
+                room.setEnd(true);
             } else {
                 room = theList.get(theRandom.nextInt(theList.size()));
+            }
+        }
+        // open up the right door for exit
+        for (Direction d : Direction.values()) {
+            if (!canGo(room, d)) {
+                room.addDoor(d);
+                break;
+            }
+        }
+    }
+
+    private void createDoors() {
+        Room room;
+        for (int i = 0; i < myPathRooms.size(); i++) {
+            for (Direction d : Direction.values()) {
+                room = myPathRooms.get(i);
+                if (isOpenRoom(room, d)) {
+                    room.addDoor(d);
+                }
             }
         }
     }
@@ -183,8 +205,22 @@ public class Maze {
         return theDirection != null &&
                 isInBounds(theRoom.getCol() +
                         theDirection.dx(), myRooms[0].length) &&
-                isInBounds(theRoom.getRow()
+                        isInBounds(theRoom.getRow()
                         + theDirection.dy(), myRooms.length);
+    }
+
+    /**
+     * Returns if the Room can be entered.
+     * @param theRoom Current room.
+     * @param theDirection Direction.
+     * @return boolean.
+     */
+    private boolean isOpenRoom(final Room theRoom, final Direction theDirection) {
+        return canGo(theRoom, theDirection) &&
+                (!myRooms[theRoom.getRow()]
+                        [theRoom.getCol() + theDirection.dx()].isBlock() &&
+                !myRooms[theRoom.getRow() + theDirection.dy()][theRoom.getCol()]
+                        .isBlock());
     }
 
     /**
@@ -241,12 +277,49 @@ public class Maze {
     @Override
     public String toString() {
         StringBuilder s = new StringBuilder();
-        for (Room[] myRoom : myRooms) {
+        String space = " ";
+        for (int i = 0; i < myRooms.length; i++) {
+            // add the horizontal doors
             for (int j = 0; j < myRooms[0].length; j++) {
-                s.append(myRoom[j].toChar());
+                s.append(space + space + space);
+                if (myRooms[i][j].getDoor(Direction.NORTH) == null) {
+                    s.append("=");
+                } else {
+                    s.append(myRooms[i][j].getDoor(Direction.NORTH));
+                }
+            }
+            s.append(" \n");
+            // add the vertical doors
+            for (int j = 0; j < myRooms[0].length; j++) {
+                if (myRooms[i][j].getDoor(Direction.WEST) == null) {
+                    s.append(" | ");
+                } else {
+                    s.append(space + myRooms[i][j].getDoor(Direction.WEST) + space);
+                }
+                s.append(myRooms[i][j]);
+            }
+            // add last vertical door
+            if (myRooms[i][myRooms[0].length - 1].
+                    getDoor(Direction.EAST) == null) {
+                s.append(" | ");
+            } else {
+                s.append(space + myRooms[i][myRooms[0].length - 1].
+                        getDoor(Direction.EAST));
             }
             s.append("\n");
         }
+        // bottom row
+        for (int k = 0; k < myRooms[0].length; k++) {
+            s.append(space + space + space);
+            if (myRooms[myRooms.length - 1][k].
+                    getDoor(Direction.SOUTH) == null) {
+                s.append("=");
+            } else {
+                s.append(myRooms[myRooms.length - 1][k].
+                        getDoor(Direction.SOUTH) + space);
+            }
+        }
+
         return s.toString();
     }
 }

@@ -3,12 +3,10 @@ public class Door {
     private String myAnswer;
     private boolean myIsLocked;
     private boolean myIsAttempted;
-    private Direction myDirection;
 
-    public Door(final Direction theDirection) {
-        myDirection = theDirection;
-        setIsLocked(true);
-        setIsAttempted(true);
+    public Door() {
+        setIsLocked(false);
+        setIsAttempted(false);
     }
 
     private void setIsLocked(final boolean theIsLocked) {
@@ -23,15 +21,19 @@ public class Door {
         return !myIsLocked && myIsAttempted;
     }
 
-    private char getDoorChar() {
+    public boolean getIsLocked() {
+        return myIsLocked;
+    }
+
+    @Override
+    public String toString() {
         if (myIsLocked) {
-            if (myIsAttempted) {
-                return 'X';
-            } else {
-                return '?';
-            }
+            return "t";
+        } else if (myIsAttempted) {
+            return "o";
         }
-        return 'O';
+
+        return "?";
     }
 }
 
@@ -41,6 +43,5 @@ JUST SOME NOTES WHILE WRITING THE CODE:
 in the 2d array, the door may need its own int or char to be represented
 so the door can have a wall state, which is:
     myIsLocked is true
-    myIsAttempted is true
 
  */

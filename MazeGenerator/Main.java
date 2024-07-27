@@ -7,7 +7,7 @@
  * Generates a number of mazes and prints them.
  *
  * @author Abbygaile Yrojo
- * @version July 22, 2024
+ * @version July 27, 2024
  */
 public class Main {
     /**
@@ -15,11 +15,11 @@ public class Main {
      * @param theArgs String[];
      */
     public static void main(final String[] theArgs) {
-        Maze maze = new Maze(9, 9);
-        final int times = 5;
+        Maze maze = new Maze(4, 4);
+        final int times = 1;
         for (int i = 0; i < times; i++) {
             maze.assembleMaze();
-            System.out.println(maze);
+            System.out.println(maze + "\n");
         }
     }
 }

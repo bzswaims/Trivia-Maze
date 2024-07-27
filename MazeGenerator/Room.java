@@ -13,14 +13,17 @@ public class Room {
         myDoors = new Door[4];
         setBlock(true);
         setStart(false);
-        setIsEnd(false);
+        setEnd(false);
     }
 
     public Room(final Room theRoom) {
         this(theRoom.getRow(), theRoom.getCol());
+        setBlock(theRoom.isBlock());
+        setStart(theRoom.isStart());
+        setEnd(theRoom.isEnd());
     }
 
-    public void setIsEnd(final boolean theBool) {
+    public void setEnd(final boolean theBool) {
         myIsEnd = theBool;
     }
 
@@ -40,15 +43,23 @@ public class Room {
         return myCol;
     }
 
-    public boolean getIsEnd() {
+    public boolean isEnd() {
         return myIsEnd;
+    }
+
+    public boolean isBlock() {
+        return myIsBlock;
+    }
+
+    public boolean isStart() {
+        return myIsStart;
     }
 
     public void addDoor(final Direction theDirection) {
         if (myIsBlock) {
             setBlock(false);
         }
-        Door door = new Door(theDirection);
+        Door door = new Door();
         switch (theDirection) {
             case NORTH:
                 myDoors[0] = door;
@@ -65,6 +76,22 @@ public class Room {
         }
     }
 
+    public Door getDoor(final Direction theDirection) {
+        switch (theDirection) {
+            case NORTH:
+                return myDoors[0];
+            case EAST:
+                return myDoors[1];
+            case SOUTH:
+                return myDoors[2];
+            case WEST:
+                return myDoors[3];
+            default:
+                break;
+        }
+        return null;
+    }
+
     public void setStart(final boolean theBool) {
         myIsStart = theBool;
     }
@@ -73,20 +100,17 @@ public class Room {
         myIsBlock = theBool;
     }
 
-    public char toChar() {
+    @Override
+    public String toString() {
         if (myIsStart) {
-            return 'S';
+            return "s";
         } else if (myIsBlock) {
-            return 'B';
+            return "w";
         } else if (myIsEnd) { // REMOVE THIS LATER. WILL ADD DOORS TO MAZE STRING
-            return 'E';
+            return "e";
         } else {
-            return '+';
+            return "+";
         }
-    }
-
-    public boolean isBlock() {
-        return myIsBlock;
     }
 }
 
