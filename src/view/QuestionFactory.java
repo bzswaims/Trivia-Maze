@@ -124,4 +124,25 @@ public class QuestionFactory {
             System.exit( 0 );
         }
     }
+
+    public void buildQuestion() {
+        //This needs to build questions
+        //I need to build an object called question I imagine
+        //Said object needs to contain the following:
+        //the type of question it is
+        //The question proper
+        //the correct answer
+        //the incorrect answers in the case of multiple choice
+
+        //Probably store them all into an array to be randomly selected from
+
+        //to do this, I plan to make an abstract data thingy for questions in general, then make an interfacey thingy
+        //for the 3 different types of questions
+        //then build all the questions that way, that is likely what I will do tomorrow, mostly following the same
+        //series of steps I did in project 4 in 305. (the filter thingies)
+
+        //I plan to store them in an array list or some kinda struct like that, as I intend to randomly select questions
+        //from the array list thingy to attach to the doors (still need to work on that aspect of the game, sounds like
+        //a next week mes pronblem)
+    }
 }
