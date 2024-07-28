@@ -1,4 +1,8 @@
 package model;
 
-public class Question {
+public interface Question {
+
+    String getQuestion();
+
+    String getCorrectAnswer();
 }
