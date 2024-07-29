@@ -1,5 +1,4 @@
 //TODO Make an actual icon for the game.
-//TODO fix the way I am making the help screen. currently causes 2 way dependendencies with the method setScreen.
 
 //What I need to do is create panels, the panels will each house the different classes.
 //trivia mazegui will pass the frame down to the mainmenu class, and well pretty much pass the jframe around the program

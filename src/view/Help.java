@@ -1,5 +1,3 @@
-//TODO make the help button redraw the screen.
-
 package view;
 
 import javax.swing.*;

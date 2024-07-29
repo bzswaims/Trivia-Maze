@@ -22,13 +22,13 @@ import java.util.List;
  * @version 0.2
  */
 public class MainMenu {
-    /* To add to buttons. */
+    /** To add to buttons. */
     private final ActionListener[] myListeners;
 
     /** To store buttons in. */
     private final List<JButton> myMenuButtons;
 
-    /* To show buttons in. */
+    /** To show buttons in. */
     private final JPanel myMenuBar;
 
     /**

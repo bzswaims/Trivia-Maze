@@ -1,5 +1,15 @@
 package model;
 
+/**
+ * Abstract data type for the Question objects.
+ * The question proper is stored in a String, as is
+ * the correct answer.
+ *
+ * @author Zane Swaims (bzswaims@uw.edu)
+ *         Abby Yrojo
+ *         Mahammod
+ * @version 0.1
+ */
 public class AbstractQuestion implements Question {
 
     String myQuestion;

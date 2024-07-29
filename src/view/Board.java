@@ -1,5 +1,5 @@
 //TODO remove the array of 4 boards, and actually use a different class to compile the maze proper.
-//TODO make pov a better field, for now it is testing
+//TODO make pov a better field, for now it is for testing
 
 package view;
 
@@ -8,7 +8,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeSupport;
-import java.util.concurrent.TimeUnit;
 import javax.swing.*;
 
 /**
@@ -68,12 +67,18 @@ public class Board extends JPanel{
 
     }
 
+    /**
+     * Starts displaying the board.
+     */
     private void start () {
         setBackground(Color.WHITE);
         add(myCurrentImage);
         setVisible(true);
     }
 
+    /**
+     * Faces the user to the left.
+     */
     public void left() {
         if(pov == 0) {
             pov = 3;
@@ -85,6 +90,9 @@ public class Board extends JPanel{
         turn();
     }
 
+    /**
+     * Faces the user to the right.
+     */
     public void right() {
         if(pov == 3) {
             pov = 0;
@@ -96,11 +104,17 @@ public class Board extends JPanel{
         turn();
     }
 
+    /**
+     * Turns the board with animation.
+     */
     private void turn() {
         myCurrentImage.setIcon(myRoom[4]);
         myTimer.start();
     }
 
+    /**
+     * Moves through/towards the door infront of the user.
+     */
     public void up() {
         //this method will go up to the door
         //if unlocked go thro the door
@@ -109,10 +123,18 @@ public class Board extends JPanel{
         //if there is nothign there do nothing
     }
 
+    /**
+     * Interacts with what is infront of the user.
+     * In the case of an item in the room, picks it up
+     * In the case of a door, opens the question
+     */
     public void interact() {
         //
     }
 
+    /**
+     * Opens the inventory for the user to see what they have.
+     */
     public void inventory() {
         //
     }

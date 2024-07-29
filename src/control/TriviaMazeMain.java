@@ -9,6 +9,8 @@ import view.TriviaMazeGui;
  * Starts the trivia maze. Still has not been tested
  *
  * @author Zane Swaims (bzswaims@uw.edu)
+ *         Abby Yrojo
+ *         Mahammod
  * @version 0.1
  */
 public final class TriviaMazeMain {
