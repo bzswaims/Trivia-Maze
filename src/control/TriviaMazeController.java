@@ -5,23 +5,38 @@
 
 package control;
 
-import model.Maze;
-import view.TriviaMazeGui;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import model.Maze;
+import view.TriviaMazeGui;
 
 /**
  * Controls data flow between model and view.
  *
  * @author Abbygaile Yrojo
- * @version July 29, 2024
+ * @version July 30, 2024
  */
 public class TriviaMazeController {
+    /**
+     * To update view.
+     */
     private TriviaMazeGui myView;
+
+    /**
+     * To use data in Maze.
+     */
     private Maze myMaze;
+
+    /**
+     * Listener for view.
+     */
     private PropertyChangeListener myListener;
 
+    /**
+     * Construct the controller.
+     * @param theMaze Maze for model.
+     * @param theView TriviaMazeGui for view.
+     */
     public TriviaMazeController(final Maze theMaze,
                                 final TriviaMazeGui theView) {
         myMaze = theMaze;
@@ -30,12 +45,19 @@ public class TriviaMazeController {
         myView.addPropertyChangeListener(myListener);
     }
 
+    /**
+     * Start the game.
+     */
     public void start() {
         myMaze.assembleMaze(4, 4);
         myView.start();
         System.out.println(myMaze);
     }
 
+    /**
+     * Creates listener for GUI.
+     * @return PropertyChangeListener.
+     */
     private PropertyChangeListener createListener() {
         return new PropertyChangeListener() {
             @Override
@@ -56,9 +78,3 @@ public class TriviaMazeController {
         };
     }
 }
-
-/*
-NOTES:
-Controller should *use* the model/maze to *update* view
-
- */

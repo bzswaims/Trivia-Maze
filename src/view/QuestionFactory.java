@@ -1,3 +1,8 @@
+/*
+ * TCSS 360 Software Development and Quality Assurance Techniques
+ * Summer 2024
+ */
+
 //TODO actually make question factory work
 
 package view;
@@ -9,6 +14,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import model.Question;
 
+/**
+ * Gathers questions from database.
+ *
+ * @author Zane Swaims (bzswaims@uw.edu)
+ * @version 0.1
+ */
 public class QuestionFactory {
 
     /**

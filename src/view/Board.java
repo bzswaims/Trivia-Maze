@@ -1,13 +1,14 @@
+/*
+ * TCSS 360 Software Development and Quality Assurance Techniques
+ * Summer 2024
+ */
+
 //TODO remove the array of 4 boards, and actually use a different class to compile the maze proper.
 //TODO make pov a better field, for now it is for testing
 
 package view;
 
-//These need to be reorganized later
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.beans.PropertyChangeSupport;
 import java.lang.reflect.InvocationTargetException;
 import javax.swing.*;
 
@@ -19,19 +20,20 @@ import javax.swing.*;
  * @version 0.2
  */
 public class Board extends JPanel{
-
-    //testing fields
+    /**
+     * Array of player POVs.
+     */
     private ImageIcon[] myRoom;
-    //pov is what board we are looking at in the array.
-    int myPov = 0;
 
     /**
-     * Property change support object.
-     * I do not know if we will need this, but just in case.
+     * Index of current POV.
      */
-    private final PropertyChangeSupport myPCS = new PropertyChangeSupport(this);
+    private int myPov;
+
+    /**
+     * For updating player POV.
+     */
     private JLabel myCurrentImage;
-    // private Timer myTimer;
 
     /**
      * Constructor.
@@ -45,15 +47,8 @@ public class Board extends JPanel{
         myRoom[3] = new ImageIcon("boards/west.png");
         myRoom[4] = new ImageIcon("boards/turn.png");
         myRoom[5] = new ImageIcon("boards/enterdoor.png");
-
+        myPov = 0;
         myCurrentImage = new JLabel(myRoom[myPov]);
-        // delay, then performs action
-//        myTimer = new Timer(500, new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                myCurrentImage.setIcon(myRoom[myPov]);
-//            }
-//        });
         start();
   ;  }
 
@@ -144,16 +139,14 @@ public class Board extends JPanel{
                 SwingUtilities.invokeAndWait(() -> {
                     myCurrentImage.setIcon(myRoom[myPov]);
                 });
-            } catch (InterruptedException ex) {
-                throw new RuntimeException(ex);
-            } catch (InvocationTargetException ex) {
+            } catch (InterruptedException | InvocationTargetException ex) {
                 throw new RuntimeException(ex);
             }
         })).start();
     }
 
     /**
-     * Interacts with what is infront of the user.
+     * Interacts with what is in front of the user.
      * In the case of an item in the room, picks it up
      * In the case of a door, opens the question
      */

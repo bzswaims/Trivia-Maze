@@ -100,6 +100,10 @@ public class TriviaMazeGui {
         myNavBar.addPropertyChangeListener(myPCListener);
     }
 
+    /**
+     * Create listener for player input.
+     * @return PropertyChangeListener
+     */
     private PropertyChangeListener createPCListener() {
         return new PropertyChangeListener() {
             @Override
@@ -132,6 +136,10 @@ public class TriviaMazeGui {
         myFrame.setVisible(true);
     }
 
+    /**
+     * Adds PropertyChangeListener to PropertyChangeSupport.
+     * @param theListener PropertyChangeListener.
+     */
     public void addPropertyChangeListener(
             final PropertyChangeListener theListener) {
         myPCSupport.addPropertyChangeListener(theListener);
@@ -147,6 +155,10 @@ public class TriviaMazeGui {
                 oldValue, theNewValue);
     }
 
+    /**
+     * Update board.
+     * @param theChange String.
+     */
     public void updateView(String theChange) {
         if (theChange == "up") {
             myBoard.up();

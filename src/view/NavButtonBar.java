@@ -1,3 +1,8 @@
+/*
+ * TCSS 360 Software Development and Quality Assurance Techniques
+ * Summer 2024
+ */
+
 //TODO make buttons actually do things
 //TODO make images a decent size, or variable (small medium large depending on screen size)
 //I find 150px or 200x square work well proabbly
