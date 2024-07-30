@@ -8,6 +8,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeSupport;
+import java.lang.reflect.InvocationTargetException;
 import javax.swing.*;
 
 /**
@@ -22,7 +23,7 @@ public class Board extends JPanel{
     //testing fields
     private ImageIcon[] myRoom;
     //pov is what board we are looking at in the array.
-    int pov = 0;
+    int myPov = 0;
 
     /**
      * Property change support object.
@@ -30,28 +31,29 @@ public class Board extends JPanel{
      */
     private final PropertyChangeSupport myPCS = new PropertyChangeSupport(this);
     private JLabel myCurrentImage;
-    private Timer myTimer;
+    // private Timer myTimer;
 
     /**
      * Constructor.
      */
     Board() {
         super();
-        myRoom = new ImageIcon[5];
+        myRoom = new ImageIcon[6];
         myRoom[0] = new ImageIcon("boards/north.png");
         myRoom[1] = new ImageIcon("boards/east.png");
         myRoom[2] = new ImageIcon("boards/south.png");
         myRoom[3] = new ImageIcon("boards/west.png");
         myRoom[4] = new ImageIcon("boards/turn.png");
+        myRoom[5] = new ImageIcon("boards/enterdoor.png");
 
-        myCurrentImage = new JLabel(myRoom[pov]);
+        myCurrentImage = new JLabel(myRoom[myPov]);
         // delay, then performs action
-        myTimer = new Timer(500, new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                myCurrentImage.setIcon(myRoom[pov]);
-            }
-        });
+//        myTimer = new Timer(500, new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                myCurrentImage.setIcon(myRoom[myPov]);
+//            }
+//        });
         start();
   ;  }
 
@@ -80,11 +82,11 @@ public class Board extends JPanel{
      * Faces the user to the left.
      */
     public void left() {
-        if(pov == 0) {
-            pov = 3;
+        if(myPov == 0) {
+            myPov = 3;
         }
         else {
-            pov--;
+            myPov--;
         }
 
         turn();
@@ -94,11 +96,11 @@ public class Board extends JPanel{
      * Faces the user to the right.
      */
     public void right() {
-        if(pov == 3) {
-            pov = 0;
+        if(myPov == 3) {
+            myPov = 0;
         }
         else {
-            pov++;
+            myPov++;
         }
 
         turn();
@@ -109,7 +111,11 @@ public class Board extends JPanel{
      */
     private void turn() {
         myCurrentImage.setIcon(myRoom[4]);
-        myTimer.start();
+        delay();
+    }
+
+    public int getPov() {
+        return myPov;
     }
 
     /**
@@ -121,6 +127,29 @@ public class Board extends JPanel{
         //if locked, prompt player
         //if have not been answered, prompt with question
         //if there is nothign there do nothing
+
+        myCurrentImage.setIcon(myRoom[5]);
+        delay();
+    }
+
+    private void delay() {
+        (new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            try {
+                SwingUtilities.invokeAndWait(() -> {
+                    myCurrentImage.setIcon(myRoom[myPov]);
+                });
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            } catch (InvocationTargetException ex) {
+                throw new RuntimeException(ex);
+            }
+        })).start();
     }
 
     /**

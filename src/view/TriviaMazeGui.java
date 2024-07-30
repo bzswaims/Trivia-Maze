@@ -11,8 +11,10 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -22,7 +24,7 @@ import javax.swing.JFrame;
  * @author Zane Swaims (bzswaims@uw.edu)
  * @version 0.1
  */
-public class TriviaMazeGui implements PropertyChangeListener {
+public class TriviaMazeGui {
 
     /**
      * Title of the game.
@@ -62,12 +64,22 @@ public class TriviaMazeGui implements PropertyChangeListener {
     /**
      * The navigation bar.
      */
-    //private final NavButtonBar myNavBar;
+    private final NavButtonBar myNavBar;
 
     /**
      * The main menu.
      */
     private final MainMenu myMainMenu;
+
+    /**
+     * Used to load game.
+     */
+    private final PropertyChangeListener myPCListener;
+
+    /**
+     * To communicate with Controller.
+     */
+    private final PropertyChangeSupport myPCSupport;
 
     /**
      * Constructor.
@@ -78,18 +90,40 @@ public class TriviaMazeGui implements PropertyChangeListener {
         myFrame = new JFrame(myTitle);
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myFrame.setIconImage(myIcon.getImage());
-
         myBoard = new Board();
         myMainMenu = new MainMenu();
-        //myNavBar = new NavButtonBar();
+        myNavBar = new NavButtonBar(myBoard);
+        myPCListener = createPCListener();
+        myPCSupport = new PropertyChangeSupport(this);
 
-        start();
+        myMainMenu.addPropertyChangeListener(myPCListener);
+        myNavBar.addPropertyChangeListener(myPCListener);
+    }
+
+    private PropertyChangeListener createPCListener() {
+        return new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent theEvt) {
+                String value = theEvt.getNewValue().toString();
+                if (value == "New game") {
+                    myFrame.remove(myMainMenu.getMenu());
+                    myFrame.add(myNavBar.getNavBar());
+                    myFrame.revalidate();
+                    myFrame.repaint();
+                    myFrame.pack();
+                    myFrame.setLocationRelativeTo(null);
+                } else if (value == "forward" ||
+                           value == "left" || value == "right") {
+                    setValue(value);
+                }
+            }
+        };
     }
 
     /**
      * Performs all tasks necessary to display the UI.
      */
-    private void start() {
+    public void start() {
         myFrame.add(myMainMenu.getMenu(), BorderLayout.CENTER);
 
         myFrame.setSize(new Dimension(myWidth, myHeight));
@@ -98,9 +132,24 @@ public class TriviaMazeGui implements PropertyChangeListener {
         myFrame.setVisible(true);
     }
 
-    //place holder because I do not know if I am using it yet.
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
+    public void addPropertyChangeListener(
+            final PropertyChangeListener theListener) {
+        myPCSupport.addPropertyChangeListener(theListener);
+    }
 
+    /**
+     * Changes the menu by notifying listener.
+     * @param theNewValue String.
+     */
+    public void setValue(String theNewValue) {
+        String oldValue = "Still";
+        this.myPCSupport.firePropertyChange("Movement",
+                oldValue, theNewValue);
+    }
+
+    public void updateView(String theChange) {
+        if (theChange == "up") {
+            myBoard.up();
+        }
     }
 }

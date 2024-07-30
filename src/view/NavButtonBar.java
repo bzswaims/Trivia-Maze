@@ -13,6 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +54,11 @@ public class NavButtonBar {
     private final ActionListener myListeners[];
 
     /**
+     * To notify listener of forward movement.
+     */
+    private PropertyChangeSupport myPCSupport;
+
+    /**
      * Constructor.
      */
     NavButtonBar(Board theBoard)
@@ -61,6 +68,7 @@ public class NavButtonBar {
         myNavBar = new JPanel();
         myBoard = theBoard;
         myNavBar.add(myBoard);
+        myPCSupport = new PropertyChangeSupport(this);
 
         myListeners = createListeners();
         createButtons();
@@ -101,17 +109,20 @@ public class NavButtonBar {
             public void actionPerformed(final ActionEvent theEvent) {
                 //left button
                 myBoard.left();
+                setValue("left");
             }
         }, new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
                 // up button
+                setValue("forward");
             }
         }, new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
                 // right button
                 myBoard.right();
+                setValue("right");
             }
         }, new ActionListener() {
             @Override
@@ -152,5 +163,24 @@ public class NavButtonBar {
         for (int i = 0; i < myNavButtons.size(); i++) {
             myNavBar.add(myNavButtons.get(i));
         }
+    }
+
+    /**
+     * Add property change listener.
+     * @param theListener
+     */
+    public void addPropertyChangeListener(
+            final PropertyChangeListener theListener) {
+        myPCSupport.addPropertyChangeListener(theListener);
+    }
+
+    /**
+     * Notifies listener of upward movement.
+     * @param theNewValue String.
+     */
+    public void setValue(String theNewValue) {
+        String oldValue = "Still";
+        myPCSupport.firePropertyChange("Movement",
+                oldValue, theNewValue);
     }
 }

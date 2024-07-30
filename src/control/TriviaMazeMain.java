@@ -3,6 +3,8 @@ package control;
 import java.awt.EventQueue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
+import model.Maze;
 import view.TriviaMazeGui;
 
 /**
@@ -11,7 +13,7 @@ import view.TriviaMazeGui;
  * @author Zane Swaims (bzswaims@uw.edu)
  *         Abby Yrojo
  *         Mahammod
- * @version 0.1
+ * @version 0.2
  */
 public final class TriviaMazeMain {
 
@@ -48,11 +50,15 @@ public final class TriviaMazeMain {
      * @param theArgs command line arguments - ignored in this program
      */
     public static void main(final String[] theArgs) {
+        Maze maze = new Maze();
+        TriviaMazeGui view = new TriviaMazeGui();
+        TriviaMazeController controller = new TriviaMazeController(maze, view);
+
         EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
                 setLookAndFeel();
-                new TriviaMazeGui();
+                controller.start();
             }
         });
     }

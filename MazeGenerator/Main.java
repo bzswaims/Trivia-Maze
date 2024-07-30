@@ -16,7 +16,7 @@ public class Main {
      */
     public static void main(final String[] theArgs) {
         Maze maze = new Maze(4, 4);
-        final int times = 1;
+        final int times = 6;
         for (int i = 0; i < times; i++) {
             maze.assembleMaze();
             System.out.println(maze + "\n");

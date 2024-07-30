@@ -10,8 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +31,12 @@ public class MainMenu {
 
     /** To show buttons in. */
     private final JPanel myMenuBar;
+
+    /**
+     * For notifying changes to listeners.
+     */
+    private final PropertyChangeSupport myPCSupport =
+            new PropertyChangeSupport(this);
 
     /**
      * Constructor.
@@ -58,12 +65,7 @@ public class MainMenu {
         return new ActionListener[]{new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
-                //newgame, this feels weird to have it all run from the main menu class instead of the
-                //triviamaze gui class, i will work on this
-                myMenuBar.removeAll();
-                myMenuBar.add(new NavButtonBar(new Board()).getNavBar());
-                myMenuBar.revalidate();
-                myMenuBar.repaint();
+                setValue("New game");
             }
         }, new ActionListener() {
             @Override
@@ -133,5 +135,24 @@ public class MainMenu {
         button.setEnabled(true);
 
         return button;
+    }
+
+    /**
+     * Add property change listener.
+     * @param theListener
+     */
+    public void addPropertyChangeListener(
+            final PropertyChangeListener theListener) {
+        this.myPCSupport.addPropertyChangeListener(theListener);
+    }
+
+    /**
+     * Changes the menu by notifying listener.
+     * @param theNewValue String.
+     */
+    public void setValue(String theNewValue) {
+        String oldValue = "Main menu";
+        this.myPCSupport.firePropertyChange("Change view",
+                oldValue, theNewValue);
     }
 }

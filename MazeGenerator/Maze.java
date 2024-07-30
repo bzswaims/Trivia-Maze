@@ -26,6 +26,8 @@ public class Maze {
     private List<Room> myPathRooms;
     /** The beginning of the maze. */
     private Room myStartRoom;
+    /** The room with the exit. */
+    private Room myEndRoom;
 
     /**
      * Constructs the Maze.
@@ -84,6 +86,7 @@ public class Maze {
         }
         myStartRoom = myRooms[index[0]][index[1]];
         myStartRoom.setStart(true);
+        myStartRoom.setBlock(false);
         myPathRooms.add(myStartRoom);
     }
 
@@ -162,8 +165,8 @@ public class Maze {
     private void createDoors() {
         Room room;
         for (int i = 0; i < myPathRooms.size(); i++) {
+            room = myPathRooms.get(i);
             for (Direction d : Direction.values()) {
-                room = myPathRooms.get(i);
                 if (isOpenRoom(room, d)) {
                     room.addDoor(d);
                 }

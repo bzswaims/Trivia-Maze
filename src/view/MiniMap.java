@@ -3,4 +3,8 @@
 package view;
 
 public class MiniMap {
+
+    public MiniMap() {
+
+    }
 }
