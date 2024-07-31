@@ -15,18 +15,20 @@ package model;
  *         Mahammod
  * @version 0.1
  */
-public class MutliQuestion extends AbstractQuestion {
+public class MultiQuestion extends AbstractQuestion {
     /**
      * Array of incorrect answers.
      */
-    String[] myIncorrectAnswers;
+    private String[] myIncorrectAnswers;
+
+    //array list incase longer than 3 ^^
 
     /**
      * Constructs MultiQuestion.
      * @param theQuestion String question.
      * @param theCorrectAnswer String correct answer.
      */
-    public MutliQuestion(String theQuestion, String theCorrectAnswer) {
+    public MultiQuestion(final String theQuestion, final String theCorrectAnswer) {
         super(theQuestion, theCorrectAnswer);
 
         myIncorrectAnswers = new String[3];

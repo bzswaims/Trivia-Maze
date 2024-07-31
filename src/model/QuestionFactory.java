@@ -5,14 +5,9 @@
 
 //TODO actually make question factory work
 
-package view;
+package model;
 
 import org.sqlite.SQLiteDataSource;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import model.Question;
 
 /**
  * Gathers questions from database.

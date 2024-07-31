@@ -85,8 +85,6 @@ public class TriviaMazeGui {
      * Constructor.
      */
     public TriviaMazeGui() {
-        super();
-
         myFrame = new JFrame(myTitle);
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         myFrame.setIconImage(myIcon.getImage());

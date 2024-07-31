@@ -3,6 +3,9 @@
  * Summer 2024
  */
 
+
+//potentially drop quesiton interface
+
 package model;
 
 /**
@@ -19,12 +22,12 @@ public class AbstractQuestion implements Question {
     /**
      * Question.
      */
-    String myQuestion;
+    private String myQuestion;
 
     /**
      * Correct answer.
      */
-    String myCorrectAnswer;
+    private String myCorrectAnswer;
 
     /**
      * Constructs AbstractQuestion.

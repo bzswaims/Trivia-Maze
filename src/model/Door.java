@@ -27,6 +27,8 @@ public class Door {
     public Door() {
         setIsLocked(false);
         setIsAttempted(false);
+
+        //call question factory to grab a question to slap onto this door!
     }
 
     /**

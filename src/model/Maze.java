@@ -49,6 +49,9 @@ public class Maze {
     public Maze() {
         myPathRooms = new ArrayList<>();
         myDirIndex = 0;
+
+        //call assemble maze here probably
+        //if called here, change assemble to private
     }
 
     /**
@@ -57,6 +60,8 @@ public class Maze {
      * @param theHeight int.
      */
     public void assembleMaze(final int theWidth, final int theHeight) {
+        //defensivly check the width and height being passed int
+
         myRooms = new Room[theWidth][theHeight];
         Random random = new Random();
         // rooms default to "block" state
@@ -174,6 +179,13 @@ public class Maze {
 
     private void createDoors() {
         Room room;
+
+        //location 0,0 and 0,1 for example, door between the two.
+        //share a door, room 0,0 east door should be the same as room 0,1 west door (the opposite direction)
+        //room 0 <=> room 1
+        //one door to share between rooms, the door can store some kind of location between the two or something
+        //another look for north south after east west doors.
+
         for (int i = 0; i < myPathRooms.size(); i++) {
             room = myPathRooms.get(i);
             for (Direction d : Direction.values()) {
