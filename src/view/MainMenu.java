@@ -65,6 +65,7 @@ public class MainMenu {
         return new ActionListener[]{new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
+                myMenuBar.setVisible(false);
                 setValue("New game");
             }
         }, new ActionListener() {

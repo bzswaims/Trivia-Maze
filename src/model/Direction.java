@@ -9,7 +9,7 @@ import java.util.Random;
 
 /**
  * An enumeration (and associated functionality) for directions in which a
- * vehicle may travel.
+ * player may travel.
  *
  * @author Marty Stepp
  * @author Daniel M. Zimmerman

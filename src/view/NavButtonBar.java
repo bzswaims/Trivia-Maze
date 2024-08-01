@@ -49,11 +49,6 @@ public class NavButtonBar {
     private final JPanel myNavBar;
 
     /**
-     * The board that will display what the user sees.
-     */
-    private final Board myBoard;
-
-    /**
      * Array of listeners for the buttons.
      */
     private final ActionListener myListeners[];
@@ -61,18 +56,17 @@ public class NavButtonBar {
     /**
      * To notify listener of forward movement.
      */
-    private PropertyChangeSupport myPCSupport;
+    private final PropertyChangeSupport myPCSupport;
 
     /**
      * Constructor.
      */
-    NavButtonBar(Board theBoard)
+    public NavButtonBar()
     {
         myNavigation = new ArrayList<>();
         myNavButtons = new ArrayList<>();
         myNavBar = new JPanel();
-        myBoard = theBoard;
-        myNavBar.add(myBoard);
+
         myPCSupport = new PropertyChangeSupport(this);
 
         myListeners = createListeners();
@@ -109,42 +103,25 @@ public class NavButtonBar {
      * @return an array of action listeners for my buttons
      */
     private ActionListener[] createListeners() {
-        return new ActionListener[]{new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                //left button
-                myBoard.left();
-                setValue("left");
-            }
-        }, new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                // up button
-                setValue("forward");
-            }
-        }, new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                // right button
-                myBoard.right();
-                setValue("right");
-            }
-        }, new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                // interact
-            }
-        }, new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                // inventory
-                //Inventory should open inventory if it is not open, and close it if it is open i think
-                //or it could be implamented like help on the menus
-                myNavBar.removeAll();
-                //setUpMainMenu();
-                myNavBar.revalidate();
-                myNavBar.repaint();
-            }
+        return new ActionListener[] {theEvent -> {
+            //left button
+            setValue("left");
+        }, theEvent -> {
+            // up button
+            setValue("forward");
+        }, theEvent -> {
+            // right button
+            setValue("right");
+        }, theEvent -> {
+            // interact
+        }, theEvent -> {
+            // inventory
+            //Inventory should open inventory if it is not open, and close it if it is open i think
+            //or it could be implamented like help on the menus
+            myNavBar.removeAll();
+            //setUpMainMenu();
+            myNavBar.revalidate();
+            myNavBar.repaint();
         }};
     }
 

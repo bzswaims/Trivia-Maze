@@ -8,10 +8,7 @@
 
 package view;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.awt.event.ActionListener;
+import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -90,7 +87,7 @@ public class TriviaMazeGui {
         myFrame.setIconImage(myIcon.getImage());
         myBoard = new Board();
         myMainMenu = new MainMenu();
-        myNavBar = new NavButtonBar(myBoard);
+        myNavBar = new NavButtonBar();
         myPCListener = createPCListener();
         myPCSupport = new PropertyChangeSupport(this);
 
@@ -109,13 +106,17 @@ public class TriviaMazeGui {
                 String value = theEvt.getNewValue().toString();
                 if (value == "New game") {
                     myFrame.remove(myMainMenu.getMenu());
-                    myFrame.add(myNavBar.getNavBar());
-                    myFrame.revalidate();
-                    myFrame.repaint();
+                    myFrame.add(myBoard, BorderLayout.NORTH);
+                    myFrame.add(myNavBar.getNavBar(), BorderLayout.SOUTH);
                     myFrame.pack();
                     myFrame.setLocationRelativeTo(null);
                 } else if (value == "forward" ||
                            value == "left" || value == "right") {
+                    if (value == "left") {
+                        myBoard.left();
+                    } else if (value == "right") {
+                        myBoard.right();
+                    }
                     setValue(value);
                 }
             }
