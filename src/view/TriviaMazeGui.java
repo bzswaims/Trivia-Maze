@@ -8,6 +8,8 @@
 
 package view;
 
+import model.Room;
+
 import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
@@ -69,6 +71,11 @@ public class TriviaMazeGui {
     private final MainMenu myMainMenu;
 
     /**
+     * The minimap.
+     */
+    private final MiniMap myMinimap;
+
+    /**
      * Used to load game.
      */
     private final PropertyChangeListener myPCListener;
@@ -90,6 +97,7 @@ public class TriviaMazeGui {
         myNavBar = new NavButtonBar();
         myPCListener = createPCListener();
         myPCSupport = new PropertyChangeSupport(this);
+        myMinimap = new MiniMap();
 
         myMainMenu.addPropertyChangeListener(myPCListener);
         myNavBar.addPropertyChangeListener(myPCListener);
@@ -107,6 +115,7 @@ public class TriviaMazeGui {
                 if (value == "New game") {
                     myFrame.remove(myMainMenu.getMenu());
                     myFrame.add(myBoard, BorderLayout.NORTH);
+                    myNavBar.getNavBar().add(myMinimap);
                     myFrame.add(myNavBar.getNavBar(), BorderLayout.SOUTH);
                     myFrame.pack();
                     myFrame.setLocationRelativeTo(null);
@@ -162,5 +171,21 @@ public class TriviaMazeGui {
         if (theChange == "up") {
             myBoard.up();
         }
+    }
+
+    /**
+     * Sets minimap room
+     * @param rooms
+     */
+    public void setMinimapRooms(Room[][] rooms) {
+        myMinimap.setRooms(rooms);
+    }
+
+    /**
+     * Set the current room for the minimap
+     * @param room
+     */
+    public void setMinimapCurrentRoom(Room room) {
+        myMinimap.setCurrentRoom(room);
     }
 }

@@ -51,6 +51,8 @@ public class TriviaMazeController {
     public void start() {
         myMaze.assembleMaze(4, 4);
         myView.start();
+        myView.setMinimapRooms(myMaze.getRooms());
+        myView.setMinimapCurrentRoom(myMaze.getCurrentRoom());
         System.out.println(myMaze);
     }
 
@@ -73,6 +75,8 @@ public class TriviaMazeController {
                             myView.updateView("up");
                         }
                     }
+                    myView.setMinimapCurrentRoom(myMaze.getCurrentRoom());
+
                 }
             }
         };

@@ -382,4 +382,20 @@ public class Maze {
 
         return s.toString();
     }
+
+    /**
+     * Get the maze rooms
+     * @return Room[][] list of the maze rooms
+     */
+    public Room[][] getRooms() {
+        return myRooms;
+    }
+
+    /**
+     * Get the player current room
+     * @return Room player's current room
+     */
+    public Room getCurrentRoom() {
+        return myCurrentRoom;
+    }
 }
