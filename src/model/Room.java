@@ -42,6 +42,12 @@ public class Room {
      */
     private boolean myIsEnd;
 
+    //TODO: field for if you have visited the room
+    /**
+     * If Room has been visited.
+     */
+    private boolean myHasBeenVisited;
+
     /**
      * Constructs Room.
      * @param theRow Int row.
@@ -54,6 +60,7 @@ public class Room {
         setBlock(true);
         setStart(false);
         setEnd(false);
+        myHasBeenVisited = false;
     }
 
     /**
@@ -112,6 +119,13 @@ public class Room {
         return myIsBlock;
     }
 
+    //TODO: accessor for if youve visited the room
+    /**
+     * Returns if the room has been visited.
+     * @return if the room has been visited.
+     */
+    public boolean haveIBeen() { return myHasBeenVisited;}
+
     /**
      * Adds Door to Room based on direction.
      * @param theDirection Direction.
@@ -164,6 +178,11 @@ public class Room {
      */
     public void setStart(final boolean theBool) {
         myIsStart = theBool;
+
+        //TODO: added this in to set the start room as having been visited.
+        if(theBool) {
+            myHasBeenVisited = true;
+        }
     }
 
     /**
@@ -173,6 +192,13 @@ public class Room {
     public void setBlock(final boolean theBool) {
         myIsBlock = theBool;
     }
+
+    //TODO: mutator for if youve visited the room or not
+    /**
+     * Sets if Room has been visited.
+     * @param theBool boolean flag if the room has been visited.
+     */
+    public void setHasBeenVisited (final boolean theBool) { myHasBeenVisited = theBool;}
 
     /**
      * Returns String of Room (but not doors).

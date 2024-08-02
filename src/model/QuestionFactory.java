@@ -25,12 +25,12 @@ public class QuestionFactory {
     /**
      * The database.
      */
-    SQLiteDataSource ds;
+    private SQLiteDataSource ds;
 
     /**
      * The questions.
      */
-    Question[] myQuestions;
+    private Question[] myQuestions;
 
     /**
      * Constructor.
