@@ -30,13 +30,19 @@ public class AbstractQuestion implements Question {
     private String myCorrectAnswer;
 
     /**
+     * ID associated with the question
+     */
+    private int myID;
+
+    /**
      * Constructs AbstractQuestion.
      * @param theQuestion String question.
      * @param theCorrectAnswer String correct answer.
      */
-    public AbstractQuestion(String theQuestion, String theCorrectAnswer) {
+    public AbstractQuestion(final String theQuestion, final String theCorrectAnswer, final int theID) {
         myQuestion = theQuestion;
         myCorrectAnswer = theCorrectAnswer;
+        myID = theID;
     }
 
     /**
@@ -55,5 +61,13 @@ public class AbstractQuestion implements Question {
     @Override
     public String getCorrectAnswer() {
         return myCorrectAnswer;
+    }
+
+    /**
+     * Returns the question ID.
+     * @return the Question ID.
+     */
+    public int getID() {
+        return myID;
     }
 }

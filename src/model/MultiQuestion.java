@@ -28,8 +28,8 @@ public class MultiQuestion extends AbstractQuestion {
      * @param theQuestion String question.
      * @param theCorrectAnswer String correct answer.
      */
-    public MultiQuestion(final String theQuestion, final String theCorrectAnswer) {
-        super(theQuestion, theCorrectAnswer);
+    public MultiQuestion(final String theQuestion, final String theCorrectAnswer, final int theID) {
+        super(theQuestion, theCorrectAnswer, theID);
 
         myIncorrectAnswers = new String[3];
     }

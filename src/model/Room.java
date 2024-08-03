@@ -119,7 +119,7 @@ public class Room {
         return myIsBlock;
     }
 
-    //TODO: accessor for if youve visited the room
+    //TODO: accessor for if youve visited the room, feel free to change the name of it
     /**
      * Returns if the room has been visited.
      * @return if the room has been visited.

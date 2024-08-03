@@ -4,7 +4,7 @@ public class Door {
     /**
      * Question.
      */
-    private String myQuestion;
+    private AbstractQuestion myQuestion;
 
     /**
      * Correct answer to question.
@@ -51,7 +51,7 @@ public class Door {
      * Sets the question.
      * @param theQuestion String.
      */
-    private void setQuestion(final String theQuestion) {
+    private void setQuestion(final AbstractQuestion theQuestion) {
         myQuestion = theQuestion;
     }
 

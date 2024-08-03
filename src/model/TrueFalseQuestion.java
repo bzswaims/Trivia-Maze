@@ -11,7 +11,7 @@ package model;
  * @version 0.1
  */
 public class TrueFalseQuestion extends AbstractQuestion {
-    public TrueFalseQuestion(String theQuestion, String theCorrectAnswer) {
-        super(theQuestion, theCorrectAnswer);
+    public TrueFalseQuestion(final String theQuestion, final String theCorrectAnswer, final int theID) {
+        super(theQuestion, theCorrectAnswer, theID);
     }
 }

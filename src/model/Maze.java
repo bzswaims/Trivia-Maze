@@ -302,6 +302,11 @@ public class Maze {
         // IMPORTANT *****
         // Still have to check door state
         // Maybe return if door is locked, unanswered, or unlocked as int or smthn
+
+        //we have canPass in door, which returns if we can or cant pass thro, so we can check that,
+        //then check if question is not a dummy value (as in it does have a question),
+        //if it does have a question, check if it was answered
+
         if (isOpenRoom(myCurrentRoom, myDirections[myDirIndex])) {
             myCurrentRoom = myRooms[myCurrentRoom.getRow()
                     + myDirections[myDirIndex].dy()]
