@@ -13,7 +13,7 @@ package model;
  */
 public class Room {
     /**
-     * Array of Doors, ordered NESW.
+     * Array of Doors, ordered N-E-S-W.
      */
     private final Door[] myDoors;
 
@@ -89,7 +89,7 @@ public class Room {
 
     /**
      * Returns row.
-     * @return int.
+     * @return The row the room is in.
      */
     public int getRow() {
         return myRow;
@@ -97,7 +97,7 @@ public class Room {
 
     /**
      * Returns column.
-     * @return int.
+     * @return The column the room is in.
      */
     public int getCol() {
         return myCol;
@@ -105,7 +105,7 @@ public class Room {
 
     /**
      * Returns if Room has the end door.
-     * @return
+     * @return If this has the end door.
      */
     public boolean isEnd() {
         return myIsEnd;
@@ -113,13 +113,13 @@ public class Room {
 
     /**
      * Returns if Room is a blocked room.
-     * @return
+     * @return If this is a blocked room.
      */
     public boolean isBlock() {
         return myIsBlock;
     }
 
-    //TODO: accessor for if youve visited the room, feel free to change the name of it
+    //TODO: accessor for if you've visited the room, feel free to change the name of it
     /**
      * Returns if the room has been visited.
      * @return if the room has been visited.
@@ -193,7 +193,7 @@ public class Room {
         myIsBlock = theBool;
     }
 
-    //TODO: mutator for if youve visited the room or not
+    //TODO: mutator for if you've visited the room or not
     /**
      * Sets if Room has been visited.
      * @param theBool boolean flag if the room has been visited.
@@ -225,7 +225,7 @@ Door[] Index guide:
     1 - East
     2 - South
     3 - West
-I like to remember directions like "Never Eat Soggy Worms" or smthn lol
+I like to remember directions like "Never Eat Soggy Worms" or something lol
 
 
  */

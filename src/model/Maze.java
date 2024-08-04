@@ -6,12 +6,12 @@
 package model;
 
 // TO DO - in moveForward(), check door's state
-//          maybe have it return smthn too
-//          for controller to see we needa question or smthn
+//          maybe have it return something too
+//          for controller to see we need a question or something
 
 // Abby - also dunno what to do with String yet
 // might have it somehow used for map
-// by drawing image icons in a jpanel depending on the char
+// by drawing image icons in a JPanel depending on the char
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class Maze {
     /** The maze itself. */
     private Room[][] myRooms;
     /** Rooms that may be travelled through. */
-    private List<Room> myPathRooms;
+    private final List<Room> myPathRooms;
     /** The beginning of the maze. */
     private Room myStartRoom;
     /** The room with the exit. */
@@ -60,7 +60,7 @@ public class Maze {
      * @param theHeight int.
      */
     public void assembleMaze(final int theWidth, final int theHeight) {
-        //defensivly check the width and height being passed int
+        //defensively check the width and height being passed int
 
         myRooms = new Room[theWidth][theHeight];
         Random random = new Random();
@@ -124,7 +124,7 @@ public class Maze {
         double currentRatio = (double) myPathRooms.size() / size;
         Room currentRoom = myRooms[myPathRooms.get(0).getRow()]
                 [myPathRooms.get(0).getCol()];
-        List<Room> edgeRooms = new ArrayList<Room>();
+        List<Room> edgeRooms = new ArrayList<>();
         Direction dir = null;
         int i = 0;
         while (currentRatio <= MAX_RATIO) {
@@ -184,7 +184,7 @@ public class Maze {
         //share a door, room 0,0 east door should be the same as room 0,1 west door (the opposite direction)
         //room 0 <=> room 1
         //one door to share between rooms, the door can store some kind of location between the two or something
-        //another look for north south after east west doors.
+        //another look for north-south after east-west doors.
 
         for (int i = 0; i < myPathRooms.size(); i++) {
             room = myPathRooms.get(i);
@@ -267,7 +267,7 @@ public class Maze {
      * @return List of directions as Strings.
      */
     private List<String> getValidDirections(final Room theRoom) {
-        List<String> list = new ArrayList<String>();
+        List<String> list = new ArrayList<>();
         Direction[] directions = Direction.values();
         int change, bound;
         for (int i = 0; i < directions.length; i++) {
@@ -301,9 +301,9 @@ public class Maze {
     public boolean moveForward() {
         // IMPORTANT *****
         // Still have to check door state
-        // Maybe return if door is locked, unanswered, or unlocked as int or smthn
+        // Maybe return if door is locked, unanswered, or unlocked as int or something
 
-        //we have canPass in door, which returns if we can or cant pass thro, so we can check that,
+        //we have canPass in door, which returns if we can or cant pass through, so we can check that,
         //then check if question is not a dummy value (as in it does have a question),
         //if it does have a question, check if it was answered
 
@@ -321,9 +321,9 @@ public class Maze {
      * @param theS String of which way to turn.
      */
     public void setCurrentDirection(final String theS) {
-        if (theS.toLowerCase() == "left") {
+        if (theS.equalsIgnoreCase("left")) {
             myDirIndex--;
-        } else if (theS.toLowerCase() == "right") {
+        } else if (theS.equalsIgnoreCase("right")) {
             myDirIndex++;
         }
 

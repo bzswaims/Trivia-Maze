@@ -1,10 +1,10 @@
 //TODO Make an actual icon for the game.
 
 //What I need to do is create panels, the panels will each house the different classes.
-//trivia mazegui will pass the frame down to the mainmenu class, and well pretty much pass the jframe around the program
-//from there when main menu clicks a button i can pass the jframe into a new class and adjust it there.
+//trivia mazeGUI will pass the frame down to the mainMenu class, and well pretty much pass the JFrame around the program
+//from there when main menu clicks a button I can pass the JFrame into a new class and adjust it there.
 
-//instead I can pass in the jframe and return the jframe, and set the jframe into the returned jframe
+//instead I can pass in the JFrame and return the JFrame, and set the JFrame into the returned JFrame
 
 package view;
 
@@ -112,18 +112,18 @@ public class TriviaMazeGui {
             @Override
             public void propertyChange(PropertyChangeEvent theEvt) {
                 String value = theEvt.getNewValue().toString();
-                if (value == "New game") {
+                if (value.equals("New game")) {
                     myFrame.remove(myMainMenu.getMenu());
                     myFrame.add(myBoard, BorderLayout.NORTH);
                     myNavBar.getNavBar().add(myMinimap);
                     myFrame.add(myNavBar.getNavBar(), BorderLayout.SOUTH);
                     myFrame.pack();
                     myFrame.setLocationRelativeTo(null);
-                } else if (value == "forward" ||
-                           value == "left" || value == "right") {
-                    if (value == "left") {
+                } else if (value.equals("forward") ||
+                           value.equals("left") || value.equals("right")) {
+                    if (value.equals("left")) {
                         myBoard.left();
-                    } else if (value == "right") {
+                    } else if (value.equals("right")) {
                         myBoard.right();
                     }
                     setValue(value);
@@ -168,14 +168,14 @@ public class TriviaMazeGui {
      * @param theChange String.
      */
     public void updateView(String theChange) {
-        if (theChange == "up") {
+        if (theChange.equals("up")) {
             myBoard.up();
         }
     }
 
     /**
      * Sets minimap room
-     * @param rooms
+     * @param rooms the rooms in the maze
      */
     public void setMinimapRooms(Room[][] rooms) {
         myMinimap.setRooms(rooms);
@@ -183,7 +183,7 @@ public class TriviaMazeGui {
 
     /**
      * Set the current room for the minimap
-     * @param room
+     * @param room the current room we are in
      */
     public void setMinimapCurrentRoom(Room room) {
         myMinimap.setCurrentRoom(room);

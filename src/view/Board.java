@@ -23,7 +23,7 @@ public class Board extends JPanel{
     /**
      * Array of player POVs.
      */
-    private ImageIcon[] myRoom;
+    private final ImageIcon[] myRoom;
 
     /**
      * Index of current POV.
@@ -33,7 +33,7 @@ public class Board extends JPanel{
     /**
      * For updating player POV.
      */
-    private JLabel myCurrentImage;
+    private final JLabel myCurrentImage;
 
     /**
      * Constructor.
@@ -50,7 +50,7 @@ public class Board extends JPanel{
         myPov = 0;
         myCurrentImage = new JLabel(myRoom[myPov]);
         start();
-  ;  }
+    }
 
     /**
      * This will display the board proper.
@@ -114,14 +114,14 @@ public class Board extends JPanel{
     }
 
     /**
-     * Moves through/towards the door infront of the user.
+     * Moves through/towards the door in front of the user.
      */
     public void up() {
         //this method will go up to the door
-        //if unlocked go thro the door
+        //if unlocked go through the door
         //if locked, prompt player
         //if have not been answered, prompt with question
-        //if there is nothign there do nothing
+        //if there is nothing there do nothing
 
         myCurrentImage.setIcon(myRoom[5]);
         delay();
@@ -149,6 +149,8 @@ public class Board extends JPanel{
      * Interacts with what is in front of the user.
      * In the case of an item in the room, picks it up
      * In the case of a door, opens the question
+     *
+     * can be deleted since we have no items and just have up button do the same thing
      */
     public void interact() {
         //
@@ -156,6 +158,8 @@ public class Board extends JPanel{
 
     /**
      * Opens the inventory for the user to see what they have.
+     *
+     * can be deleted since no items
      */
     public void inventory() {
         //

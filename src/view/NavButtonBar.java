@@ -5,7 +5,7 @@
 
 //TODO make buttons actually do things
 //TODO make images a decent size, or variable (small medium large depending on screen size)
-//I find 150px or 200x square work well proabbly
+//I find 150px or 200x square work well probably
 //TODO potentially make the buttons their own object like filters from project 4 in 305
 //TODO remove the test object myNavigation.
 //TODO remove the test method buttonMaker.
@@ -16,7 +16,6 @@ package view;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -51,7 +50,7 @@ public class NavButtonBar {
     /**
      * Array of listeners for the buttons.
      */
-    private final ActionListener myListeners[];
+    private final ActionListener[] myListeners;
 
     /**
      * To notify listener of forward movement.
@@ -114,10 +113,17 @@ public class NavButtonBar {
             setValue("right");
         }, theEvent -> {
             // interact
+            //
+            //can delete this since no items
+            //
+            //TODO: replace with a save button
         }, theEvent -> {
-            // inventory
-            //Inventory should open inventory if it is not open, and close it if it is open i think
-            //or it could be implamented like help on the menus
+            //Inventory
+            //
+            //can delete this since no items
+            //
+            //this should open inventory if it is not open, and close it if it is open I think,
+            //or it could be implemented like help on the menus
             myNavBar.removeAll();
             //setUpMainMenu();
             myNavBar.revalidate();
@@ -149,7 +155,7 @@ public class NavButtonBar {
 
     /**
      * Add property change listener.
-     * @param theListener
+     * @param theListener the property change listener.
      */
     public void addPropertyChangeListener(
             final PropertyChangeListener theListener) {

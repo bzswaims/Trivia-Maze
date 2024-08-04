@@ -20,17 +20,17 @@ public class TriviaMazeController {
     /**
      * To update view.
      */
-    private TriviaMazeGui myView;
+    private final TriviaMazeGui myView;
 
     /**
      * To use data in Maze.
      */
-    private Maze myMaze;
+    private final Maze myMaze;
 
     /**
      * Listener for view.
      */
-    private PropertyChangeListener myListener;
+    private final PropertyChangeListener myListener;
 
     /**
      * Construct the controller.
@@ -66,11 +66,11 @@ public class TriviaMazeController {
             public void propertyChange(PropertyChangeEvent theEvt) {
                 // for when direction changes
                 String name = theEvt.getPropertyName();
-                if (name == "Movement") {
+                if (name.equals("Movement")) {
                     String value = theEvt.getNewValue().toString();
-                    if (value == "left" || value == "right") {
+                    if (value.equals("left") || value.equals("right")) {
                         myMaze.setCurrentDirection(value);
-                    } else if (value == "forward") {
+                    } else if (value.equals("forward")) {
                         if (myMaze.moveForward()) {
                             myView.updateView("up");
                         }

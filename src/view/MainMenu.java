@@ -140,7 +140,7 @@ public class MainMenu {
 
     /**
      * Add property change listener.
-     * @param theListener
+     * @param theListener the action listener.
      */
     public void addPropertyChangeListener(
             final PropertyChangeListener theListener) {

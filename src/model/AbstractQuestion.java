@@ -4,7 +4,7 @@
  */
 
 
-//potentially drop quesiton interface
+//potentially drop question interface
 
 package model;
 
@@ -22,7 +22,7 @@ public class AbstractQuestion implements Question {
     /**
      * Question.
      */
-    private String myQuestion;
+    private final String myQuestion;
 
     /**
      * Correct answer.
@@ -32,17 +32,31 @@ public class AbstractQuestion implements Question {
     /**
      * ID associated with the question
      */
-    private int myID;
+    private final int myID;
+
+    /**
+     * The type of question it is, 1 is multi, 2 is true/false, 3 is short answer
+     */
+    private final int myType;
 
     /**
      * Constructs AbstractQuestion.
      * @param theQuestion String question.
      * @param theCorrectAnswer String correct answer.
      */
-    public AbstractQuestion(final String theQuestion, final String theCorrectAnswer, final int theID) {
+    public AbstractQuestion(final String theQuestion, final String theCorrectAnswer, final int theID, final int theType) {
         myQuestion = theQuestion;
         myCorrectAnswer = theCorrectAnswer;
         myID = theID;
+        myType = theType;
+    }
+
+    public AbstractQuestion(final int theType) {
+        //default constructor
+        myQuestion = null;
+        myCorrectAnswer = null;
+        myID = -1;
+        myType = theType;
     }
 
     /**
@@ -69,5 +83,20 @@ public class AbstractQuestion implements Question {
      */
     public int getID() {
         return myID;
+    }
+
+    @Override
+    public void addIncorrectAnswer(String theString) {
+        //Place holder for multiple choice questions.
+        //TODO: need to find a better way.
+    }
+
+    public int getType() {
+        return myType;
+    }
+
+    public void setCorrectAnswer(final String theString)
+    {
+        myCorrectAnswer = theString;
     }
 }

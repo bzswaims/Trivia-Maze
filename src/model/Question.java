@@ -20,4 +20,6 @@ public interface Question {
     String getCorrectAnswer();
 
     int getID();
+
+    void addIncorrectAnswer(String theString);
 }

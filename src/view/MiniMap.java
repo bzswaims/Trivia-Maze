@@ -4,7 +4,6 @@ package view;
 
 import model.Direction;
 import model.Room;
-import model.Door;
 
 import javax.swing.*;
 import java.awt.*;
@@ -52,7 +51,7 @@ public class MiniMap extends JPanel {
                 g2d.drawRect(x, y, TILE_SIZE, TILE_SIZE);
 
                 g2d.setColor(Color.GREEN);
-                // Door is in this order NESW
+                // Door is in this order N-E-S-W
 
                 if(myCurrentRoom.equals(myMinimapRooms[row][col])){
                     g2d.setColor(Color.CYAN);
@@ -87,14 +86,14 @@ public class MiniMap extends JPanel {
     }
     /**
      * Sets minimap room
-     * @param theRooms
+     * @param theRooms the rooms of the maze
      */
     public void setRooms(Room[][] theRooms){
         myMinimapRooms = theRooms;
     }
     /**
      * Sets minimap current room
-     * @param theRoom
+     * @param theRoom the current room we are in
      */
     public void setCurrentRoom(Room theRoom){
         myCurrentRoom = theRoom;

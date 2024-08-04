@@ -5,6 +5,8 @@
 
 package model;
 
+import java.util.ArrayList;
+
 /**
  * Object for storing multiple choice questions.
  * The incorrect choices are stored in a String
@@ -19,26 +21,36 @@ public class MultiQuestion extends AbstractQuestion {
     /**
      * Array of incorrect answers.
      */
-    private String[] myIncorrectAnswers;
+    private final ArrayList<String> myIncorrectAnswers;
 
-    //array list incase longer than 3 ^^
+    //array list in case longer than 3 ^^
 
     /**
      * Constructs MultiQuestion.
      * @param theQuestion String question.
      * @param theCorrectAnswer String correct answer.
      */
-    public MultiQuestion(final String theQuestion, final String theCorrectAnswer, final int theID) {
-        super(theQuestion, theCorrectAnswer, theID);
+    public MultiQuestion(final String theQuestion, final String theCorrectAnswer, final int theID, final int theType) {
+        super(theQuestion, theCorrectAnswer, theID, theType);
 
-        myIncorrectAnswers = new String[3];
+        myIncorrectAnswers = new ArrayList<> ();
+    }
+
+    public MultiQuestion(final int theType) {
+        super(theType);
+
+        myIncorrectAnswers = new ArrayList<> ();
+    }
+
+    public void addIncorrectAnswer(final String theAnswer) {
+        myIncorrectAnswers.add(theAnswer);
     }
 
     /**
-     * Returns incorrect answers.
-     * @return String[].
+     * Returns incorrect answers in an arraylist
+     * @return ArrayList of answers.
      */
-    String[] getIncorrectAnswers() {
+    public ArrayList<String> getIncorrectAnswers() {
         return myIncorrectAnswers;
     }
 }
