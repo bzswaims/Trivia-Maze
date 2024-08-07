@@ -161,6 +161,8 @@ public class QuestionFactory {
                     tempQuestion.setQuestion(questionText);
                     tempQuestion.setID(questionID);
 
+                    myUsedQuestions[questionID] = 1;
+
                     break;
                 }
             }
