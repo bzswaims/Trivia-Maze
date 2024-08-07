@@ -204,6 +204,8 @@ public class QuestionFactory {
 
                 if(answerQuestionID == tempQuestion.getID() && isCorrect) {
                     tempQuestion.setCorrectAnswer(answerText);
+
+                    break;
                 }
             }
 
@@ -246,6 +248,8 @@ public class QuestionFactory {
 
                 if(answerQuestionID == tempQuestion.getID() && isCorrect) {
                     tempQuestion.setCorrectAnswer(answerText);
+
+                    break;
                 }
             }
 
