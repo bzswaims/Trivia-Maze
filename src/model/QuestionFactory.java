@@ -3,8 +3,6 @@
  * Summer 2024
  */
 
-//TODO actually make question factory work
-
 package model;
 
 import org.sqlite.SQLiteDataSource;
@@ -13,10 +11,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Random;
-
-//TODO: make it properly, mostly toying with database since I have never worked with one before.
 
 /**
  * Gathers questions from database. All question types should be kept together.
@@ -27,34 +22,39 @@ import java.util.Random;
 public class QuestionFactory {
 
     /**
+     * constant for total number of questions in database.
+     */
+    static final int TOTAL_QUESTIONS = 30;
+
+    /**
+     * constant for total number of multiple choice questions in database.
+     */
+    static final int TOTAL_MULTI_QUESTIONS = 10;
+
+    /**
+     * constant for total number of true false questions in database.
+     */
+    static final int TOTAL_TRUE_FALSE_QUESTIONS = 10;
+
+    /**
+     * constant for total number of short answer questions in database.
+     */
+    static final int TOTAL_SHORT_QUESTIONS = 10;
+
+    /**
      * The database.
      */
     private SQLiteDataSource ds;
 
     /**
-     * The questions.
+     * random number generator.
      */
-    ArrayList<AbstractQuestion> myQuestions;
+    Random myRand;
 
     /**
-     * random number generator
+     * arraylist to store IDs we have used already.
      */
-    private final Random myRand;
-
-    /**
-     * Amount of multiple choice questions
-     */
-    private int myMultiAmt;
-
-    /**
-     * Amount of true false choice questions
-     */
-    private int myTFAmt;
-
-    /**
-     * Amount of short choice questions
-     */
-    private int myShortAmt;
+    int[] myUsedQuestions;
 
     /**
      * Constructor.
@@ -69,32 +69,45 @@ public class QuestionFactory {
             System.exit(0);
         }
 
-        myMultiAmt = 0;
-        myTFAmt = 0;
-        myShortAmt = 0;
-
-        myQuestions = new ArrayList<>();
-
         myRand = new Random();
 
-        buildQuestion();
+        //This is +1 because our ID tags for questions start at 1 not 0.
+        myUsedQuestions = new int[TOTAL_QUESTIONS + 1];
+    }
+
+    public AbstractQuestion makeQuestion(final int theType) {
+
+        AbstractQuestion tempQuestion = null;
+
+        if(theType == 1) {
+            tempQuestion = buildMultiQuestion(theType);
+        } else if(theType == 2) {
+            tempQuestion = buildTrueFalseAnswer(theType);
+        } else if(theType == 3) {
+            tempQuestion = buildShortAnswer(theType);
+        }
+
+        return tempQuestion;
     }
 
     /**
-     * Builds a question from the database
+     * Builds a multiple choice question
      */
-    private void buildQuestion() {
-        //Go into database
-        //go into question table
-        //Pull a question and its ID
-        //go into answer table
-        //pull all answers associated with question ID
-        //Store the question into proper question type (1 multi, 2 t/f, 3 short)
-        //add question into array
+    private MultiQuestion buildMultiQuestion(final int theType) {
 
-        //now ive pulled data from the database, I need to store it into my question array list
+        MultiQuestion tempQuestion = (MultiQuestion) randomQuestion(theType);
 
-        String query = "SELECT * FROM Questions";
+            if(tempQuestion.getID() == -1)
+            {
+                //reflag all multi questions as having not been used.
+                for(int i = 1; i <= TOTAL_MULTI_QUESTIONS; i++){
+                    myUsedQuestions[i] = 0;
+                }
+
+                tempQuestion = (MultiQuestion) randomQuestion(theType);
+            }
+
+            String query = "SELECT * FROM Answers";
 
         try (Connection conn = ds.getConnection();
              Statement stmt = conn.createStatement();) {
@@ -102,51 +115,53 @@ public class QuestionFactory {
             ResultSet rs = stmt.executeQuery(query);
 
             while ( rs.next() ) {
-                int questionID = rs.getInt( "QuestionID" );
-                String questionText = rs.getString( "QuestionText" );
-                int questionType = rs.getInt( "QuestionType" );
-
-                switch(questionType)
-                {
-                    case 1:
-                        MultiQuestion questm = new MultiQuestion(questionText, "", questionID, questionType);
-                        myQuestions.add(questm);
-                        myMultiAmt++;
-                    case 2:
-                        TrueFalseQuestion questtf = new TrueFalseQuestion(questionText, "", questionID, questionType);
-                        myQuestions.add(questtf);
-                        myTFAmt++;
-                    case 3:
-                        ShortQuestion quests = new ShortQuestion(questionText, "", questionID, questionType);
-                        myQuestions.add(quests);
-                        myShortAmt++;
-                }
-            }
-
-            query = "SELECT * FROM Answers";
-
-            rs = stmt.executeQuery(query);
-
-            while ( rs.next() ) {
-                //we don't use this, but we need it to cycle past the answerID, I stored it in case we might want to use it
-                //if we end up not, we can delete the variable and just have the statement rs.getint
                 int answerID = rs.getInt( "AnswerID" );
-                int questionID = rs.getInt( "QuestionID" );
+                int answerQuestionID = rs.getInt( "QuestionID" );
                 String answerText = rs.getString( "AnswerText" );
                 boolean isCorrect = rs.getBoolean( "IsCorrect" );
 
-                int i = 0;
-                while(true) {
-                    if(myQuestions.get(i).getID() == questionID) {
-                        break;
-                    }
+                if(answerQuestionID == tempQuestion.getID() && isCorrect) {
+                    tempQuestion.setCorrectAnswer(answerText);
                 }
-                if(isCorrect) {
-                    myQuestions.get(i).setCorrectAnswer(answerText);
+                if(answerQuestionID == tempQuestion.getID() && !isCorrect) {
+                    tempQuestion.addIncorrectAnswer(answerText);
                 }
 
-                if(myQuestions.get(i).getType() == 1 && !isCorrect) {
-                    myQuestions.get(i).addIncorrectAnswer(answerText);
+                //This continually cycles through even after finding all pertinent information. Maybe fix that.
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+        return tempQuestion;
+    }
+
+    /**
+     * Pulls a random question of type desired from the database.
+     */
+    private AbstractQuestion randomQuestion(final int theType){
+        AbstractQuestion tempQuestion = new AbstractQuestion();
+
+        String query = "SELECT * FROM Questions ORDER BY RANDOM()";
+
+        try (Connection conn = ds.getConnection();
+             Statement stmt = conn.createStatement();) {
+
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                int questionID = rs.getInt("QuestionID");
+                String questionText = rs.getString("QuestionText");
+                int questionType = rs.getInt("QuestionType");
+
+                if (questionType == 1 && myUsedQuestions[questionID] == 0) {
+
+                    tempQuestion.setQuestion(questionText);
+                    tempQuestion.setID(questionID);
+
+                    break;
                 }
             }
 
@@ -154,53 +169,89 @@ public class QuestionFactory {
             e.printStackTrace();
             System.exit(0);
         }
+
+        return tempQuestion;
     }
 
     /**
-     * This will return a question, fully built, from the database of the type
-     * asked for
-     * @param theType
-     * @return
+     * Builds a short answer question
      */
-    public Question getQuestion(final int theType) {
-        //1 is multi, 2 is tf, 3 is short, im thinking 4 is just any.
+    private AbstractQuestion buildShortAnswer (final int theType) {
+        ShortQuestion tempQuestion = (ShortQuestion) randomQuestion(theType);
 
-        //my plan:
-        //Step one: Generate random number from 0 to 29.
-        //Step two: Mod random number by 3 (or just random number generate up to 3 since we have 3 question types)
-        //Step three: step through the list of questions start at 0, and go up by the random number until we find the
-        //            question type we need
-        //Step four: if we reach the end or past the end, off set by 1 and restart the process.
-        //Step five: if we find it, return the question, if we do not find it (IE the mod number is less than the offset)
-        //           return null.
+        if(tempQuestion.getID() == -1)
+        {
+            //reflag all short answer questions as having not been used.
+            for(int i = TOTAL_MULTI_QUESTIONS + TOTAL_TRUE_FALSE_QUESTIONS + 1; i <= TOTAL_MULTI_QUESTIONS + TOTAL_TRUE_FALSE_QUESTIONS + TOTAL_SHORT_QUESTIONS; i++){
+                myUsedQuestions[i] = 0;
+            }
 
-        //new plan, I have added amounts of each question in the array list, they are stored in the following order:
-        //multi, then tf, then short answer.
+            tempQuestion = (ShortQuestion) randomQuestion(theType);
+        }
 
-        //TODO: lastly, I need a way to flag a question as having been pulled from the list once.
-        // So we do not reuse questions, I have steps to figure out one that has not been used yet, but need a flag.
-        // I will likely add a flag to the question, boolean ifUsed and check that one, set them all as false
-        // then if all have been used, I do not know what to do from there
+        String query = "SELECT * FROM Answers";
 
-        int randomQuestion;
+        try (Connection conn = ds.getConnection();
+             Statement stmt = conn.createStatement();) {
 
-        AbstractQuestion tempQuestion;
+            ResultSet rs = stmt.executeQuery(query);
 
-        switch(theType) {
-            case 1:
-                randomQuestion = myRand.nextInt(myMultiAmt);
-                tempQuestion = myQuestions.get(randomQuestion);
-            case 2:
-                randomQuestion = myRand.nextInt(myTFAmt);
-                tempQuestion = myQuestions.get(randomQuestion + myMultiAmt);
-            case 3:
-                randomQuestion = myRand.nextInt(myShortAmt);
-                tempQuestion = myQuestions.get(randomQuestion + myMultiAmt + myTFAmt);
-            case 4:
-                randomQuestion = myRand.nextInt(myQuestions.size());
-                tempQuestion = myQuestions.get(randomQuestion);
-            default:
-                tempQuestion = null;
+            while ( rs.next() ) {
+                int answerID = rs.getInt( "AnswerID" );
+                int answerQuestionID = rs.getInt( "QuestionID" );
+                String answerText = rs.getString( "AnswerText" );
+                boolean isCorrect = rs.getBoolean( "IsCorrect" );
+
+                if(answerQuestionID == tempQuestion.getID() && isCorrect) {
+                    tempQuestion.setCorrectAnswer(answerText);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+
+        return tempQuestion;
+    }
+
+    /**
+     * Builds a short answer question
+     */
+    private AbstractQuestion buildTrueFalseAnswer (final int theType) {
+        ShortQuestion tempQuestion = (ShortQuestion) randomQuestion(theType);
+
+        if(tempQuestion.getID() == -1)
+        {
+            //reflag all true false questions as having not been used.
+            for(int i =TOTAL_MULTI_QUESTIONS + 1; i <= TOTAL_MULTI_QUESTIONS + TOTAL_TRUE_FALSE_QUESTIONS; i++){
+                myUsedQuestions[i] = 0;
+            }
+
+            tempQuestion = (ShortQuestion) randomQuestion(theType);
+        }
+
+        String query = "SELECT * FROM Answers";
+
+        try (Connection conn = ds.getConnection();
+             Statement stmt = conn.createStatement();) {
+
+            ResultSet rs = stmt.executeQuery(query);
+
+            while ( rs.next() ) {
+                int answerID = rs.getInt( "AnswerID" );
+                int answerQuestionID = rs.getInt( "QuestionID" );
+                String answerText = rs.getString( "AnswerText" );
+                boolean isCorrect = rs.getBoolean( "IsCorrect" );
+
+                if(answerQuestionID == tempQuestion.getID() && isCorrect) {
+                    tempQuestion.setCorrectAnswer(answerText);
+                }
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+            System.exit(0);
         }
 
         return tempQuestion;

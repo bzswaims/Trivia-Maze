@@ -27,18 +27,8 @@ public class MultiQuestion extends AbstractQuestion {
 
     /**
      * Constructs MultiQuestion.
-     * @param theQuestion String question.
-     * @param theCorrectAnswer String correct answer.
      */
-    public MultiQuestion(final String theQuestion, final String theCorrectAnswer, final int theID, final int theType) {
-        super(theQuestion, theCorrectAnswer, theID, theType);
-
-        myIncorrectAnswers = new ArrayList<> ();
-    }
-
-    public MultiQuestion(final int theType) {
-        super(theType);
-
+    public MultiQuestion() {
         myIncorrectAnswers = new ArrayList<> ();
     }
 

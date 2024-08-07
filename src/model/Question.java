@@ -15,11 +15,16 @@ package model;
  */
 public interface Question {
 
+    void setQuestion(String theQuestion);
+
+    void setCorrectAnswer(String theAnswer);
+
+    void setID(int theID);
+
     String getQuestion();
 
     String getCorrectAnswer();
 
     int getID();
 
-    void addIncorrectAnswer(String theString);
 }

@@ -22,7 +22,7 @@ public class AbstractQuestion implements Question {
     /**
      * Question.
      */
-    private final String myQuestion;
+    private String myQuestion;
 
     /**
      * Correct answer.
@@ -32,31 +32,39 @@ public class AbstractQuestion implements Question {
     /**
      * ID associated with the question
      */
-    private final int myID;
-
-    /**
-     * The type of question it is, 1 is multi, 2 is true/false, 3 is short answer
-     */
-    private final int myType;
+    private int myID;
 
     /**
      * Constructs AbstractQuestion.
-     * @param theQuestion String question.
-     * @param theCorrectAnswer String correct answer.
      */
-    public AbstractQuestion(final String theQuestion, final String theCorrectAnswer, final int theID, final int theType) {
-        myQuestion = theQuestion;
-        myCorrectAnswer = theCorrectAnswer;
-        myID = theID;
-        myType = theType;
+    public AbstractQuestion() {
+        myQuestion = "";
+        myCorrectAnswer = "";
+        myID = -1;
     }
 
-    public AbstractQuestion(final int theType) {
-        //default constructor
-        myQuestion = null;
-        myCorrectAnswer = null;
-        myID = -1;
-        myType = theType;
+    /**
+     * Sets the question text.
+     */
+    public void setQuestion (final String theQuestionText) {
+        myQuestion = theQuestionText;
+    }
+
+    /**
+     * Sets the correct answer.
+     * @param theString the Correct answer.
+     */
+    public void setCorrectAnswer(final String theString)
+    {
+        myCorrectAnswer = theString;
+    }
+
+    /**
+     * Sets the Question ID. Might be superfluous data.
+     * @param theID the number to associate with the Question.
+     */
+    public void setID (final int theID) {
+        myID = theID;
     }
 
     /**
@@ -83,20 +91,5 @@ public class AbstractQuestion implements Question {
      */
     public int getID() {
         return myID;
-    }
-
-    @Override
-    public void addIncorrectAnswer(String theString) {
-        //Place holder for multiple choice questions.
-        //TODO: need to find a better way.
-    }
-
-    public int getType() {
-        return myType;
-    }
-
-    public void setCorrectAnswer(final String theString)
-    {
-        myCorrectAnswer = theString;
     }
 }
