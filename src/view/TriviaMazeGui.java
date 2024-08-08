@@ -14,8 +14,7 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
+import javax.swing.*;
 
 /**
  * Starts the GUI for the Trivia Maze.
@@ -117,6 +116,7 @@ public class TriviaMazeGui {
                     myFrame.add(myBoard, BorderLayout.NORTH);
                     myNavBar.getNavBar().add(myMinimap);
                     myFrame.add(myNavBar.getNavBar(), BorderLayout.SOUTH);
+                    myFrame.add(new JLabel(new ImageIcon("boards/treasure.png")), BorderLayout.EAST);
                     myFrame.pack();
                     myFrame.setLocationRelativeTo(null);
                 } else if (value.equals("forward") ||

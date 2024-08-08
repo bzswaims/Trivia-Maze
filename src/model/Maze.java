@@ -22,7 +22,7 @@ import java.util.Random;
  * horizontally or vertically.
  *
  * @author Abbygaile Yrojo
- * @version July 29, 2024
+ * @version August 7, 2024
  */
 public class Maze {
     /** To control how filled the maze is with Rooms. */
@@ -170,7 +170,7 @@ public class Maze {
         // open up the right door for exit
         for (Direction d : Direction.values()) {
             if (!canGo(room, d)) {
-                room.addDoor(d);
+                room.addDoor(d, null);
                 break;
             }
         }
@@ -189,8 +189,17 @@ public class Maze {
         for (int i = 0; i < myPathRooms.size(); i++) {
             room = myPathRooms.get(i);
             for (Direction d : Direction.values()) {
+                // if the room is open in a certain d
+                // isOpenRoom also handles if there is a room in a certain d
                 if (isOpenRoom(room, d)) {
-                    room.addDoor(d);
+                    Room neighbor = myRooms[room.getRow() + d.dy()][room.getCol() + d.dx()];
+                    // neighbor room's direction would be opposite
+                    Door neighborDoor = neighbor.getDoor(d.flip(d));
+                    if (neighborDoor != null) {
+                        room.addDoor(d, neighborDoor);
+                    } else {
+                        room.addDoor(d, null);
+                    }
                 }
             }
         }

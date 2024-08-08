@@ -130,11 +130,13 @@ public class Room {
      * Adds Door to Room based on direction.
      * @param theDirection Direction.
      */
-    public void addDoor(final Direction theDirection) {
-        if (myIsBlock) {
-            setBlock(false);
+    public void addDoor(final Direction theDirection, final Door theDoor) {
+        Door door;
+        if (theDoor != null) {
+            door = theDoor;
+        } else {
+            door = new Door();
         }
-        Door door = new Door();
         switch (theDirection) {
             case NORTH:
                 myDoors[0] = door;
