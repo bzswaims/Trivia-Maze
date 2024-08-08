@@ -50,8 +50,7 @@ public class Maze {
         myPathRooms = new ArrayList<>();
         myDirIndex = 0;
 
-        //call assemble maze here probably
-        //if called here, change assemble to private
+        assembleMaze(4, 4);
     }
 
     /**
@@ -59,8 +58,11 @@ public class Maze {
      * @param theWidth int.
      * @param theHeight int.
      */
-    public void assembleMaze(final int theWidth, final int theHeight) {
-        //defensively check the width and height being passed int
+    private void assembleMaze(final int theWidth, final int theHeight) {
+        if (theWidth < 4 || theHeight < 4) {
+            throw new IllegalArgumentException("One of the passed lengths " +
+                                                "are less than 4.");
+        }
 
         myRooms = new Room[theWidth][theHeight];
         Random random = new Random();
@@ -192,7 +194,8 @@ public class Maze {
                 // if the room is open in a certain d
                 // isOpenRoom also handles if there is a room in a certain d
                 if (isOpenRoom(room, d)) {
-                    Room neighbor = myRooms[room.getRow() + d.dy()][room.getCol() + d.dx()];
+                    Room neighbor = myRooms[room.getRow() + d.dy()]
+                                            [room.getCol() + d.dx()];
                     // neighbor room's direction would be opposite
                     Door neighborDoor = neighbor.getDoor(d.flip(d));
                     if (neighborDoor != null) {
@@ -305,17 +308,21 @@ public class Maze {
     }
 
     /**
+     * Returns the door's locked state.
+     * 0 = locked, 1 = unattempted, 2 = unlocked
+     * @return int.
+     */
+    public int getDoorLockState() {
+        if (isOpenRoom(myCurrentRoom, myDirections[myDirIndex])) {
+            myCurrentRoom.getDoor(myDirections[myDirIndex]).getLockState();
+        }
+        return -1;
+    }
+
+    /**
      * Attempts to move to the room player is facing.
      */
     public boolean moveForward() {
-        // IMPORTANT *****
-        // Still have to check door state
-        // Maybe return if door is locked, unanswered, or unlocked as int or something
-
-        //we have canPass in door, which returns if we can or cant pass through, so we can check that,
-        //then check if question is not a dummy value (as in it does have a question),
-        //if it does have a question, check if it was answered
-
         if (isOpenRoom(myCurrentRoom, myDirections[myDirIndex])) {
             myCurrentRoom = myRooms[myCurrentRoom.getRow()
                     + myDirections[myDirIndex].dy()]

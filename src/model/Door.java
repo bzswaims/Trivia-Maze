@@ -12,39 +12,29 @@ public class Door {
     private String myAnswer;
 
     /**
-     * If Door is locked.
+     * Current door state, 0 = locked
+     *             1 = unattempted
+     *             2 = unlocked
      */
-    private boolean myIsLocked;
-
-    /**
-     * If Door's question has been attempted.
-     */
-    private boolean myIsAttempted;
+    private int myLockState;
 
     /**
      * Constructs Door.
      */
     public Door() {
-        setIsLocked(false);
-        setIsAttempted(false);
+        setLockState(1);
 
         //call question factory to grab a question to slap onto this door!
     }
 
     /**
-     * Sets if Door is locked.
-     * @param theIsLocked boolean.
+     * Sets the lock state.
      */
-    private void setIsLocked(final boolean theIsLocked) {
-        myIsLocked = theIsLocked;
-    }
-
-    /**
-     * Sets if Door's question has been attempted.
-     * @param theIsAttempted boolean.
-     */
-    private void setIsAttempted(final boolean theIsAttempted) {
-        myIsAttempted = theIsAttempted;
+    public void setLockState(final int theState) {
+        if (theState < 0 || theState > 2) {
+            throw new IllegalArgumentException("State must be 0, 1, or 2!");
+        }
+        myLockState = theState;
     }
 
     /**
@@ -59,16 +49,8 @@ public class Door {
      * Returns if Door can be passed.
      * @return boolean.
      */
-    private boolean canPass() {
-        return !myIsLocked && myIsAttempted;
-    }
-
-    /**
-     * Returns if Door is locked.
-     * @return boolean.
-     */
-    public boolean getIsLocked() {
-        return myIsLocked;
+    public int getLockState() {
+        return myLockState;
     }
 
     /**
@@ -77,12 +59,12 @@ public class Door {
      */
     @Override
     public String toString() {
-        if (myIsLocked) {
+        if (myLockState == 0) {
             return "t";
-        } else if (myIsAttempted) {
-            return "o";
+        } else if (myLockState == 1) {
+            return "?";
         }
 
-        return "?";
+        return "o";
     }
 }
