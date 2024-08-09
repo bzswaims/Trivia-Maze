@@ -9,6 +9,8 @@ import java.awt.EventQueue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import model.Direction;
+import model.Door;
 import model.Maze;
 import view.TriviaMazeGui;
 
@@ -58,6 +60,16 @@ public final class TriviaMazeMain {
         Maze maze = new Maze();
         TriviaMazeGui view = new TriviaMazeGui();
         TriviaMazeController controller = new TriviaMazeController(maze, view);
+
+        // TESTING PURPOSES
+//        System.out.println("Has player lost? : " + maze.hasLost());
+//        Direction direction[] = Direction.values();
+//        for (int i = 0; i < 4; i++) {
+//            if (maze.getCurrentRoom().getDoor(direction[i]) != null) {
+//                maze.getCurrentRoom().getDoor(direction[i]).setLockState(0);
+//            }
+//        }
+//        System.out.println("Has player lost? : " + maze.hasLost());
 
         EventQueue.invokeLater(new Runnable() {
             @Override

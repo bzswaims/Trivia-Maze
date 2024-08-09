@@ -71,13 +71,16 @@ public class TriviaMazeController {
                         myMaze.setCurrentDirection(value);
                     } else if (value.equals("forward")) {
                         final int state = myMaze.getDoorLockState();
-                        if (state == 0) {
-                            // say the door is locked somewhere
-                        } else if (state == 1) {
-                            // prompt question!!
-                        } else if (state == 2) {
-                            myView.updateView("up");
-                        }
+                        // ignoring state for testing, for now
+                        myView.updateView("up");
+
+//                        if (state == 0) {
+//                            // say the door is locked somewhere
+//                        } else if (state == 1) {
+//                            // prompt question!!
+//                        } else if (state == 2) {
+//                            myView.updateView("up");
+//                        }
                     }
                     myView.setMinimapCurrentRoom(myMaze.getCurrentRoom());
 

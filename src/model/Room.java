@@ -49,6 +49,11 @@ public class Room {
     private boolean myHasBeenVisited;
 
     /**
+     * For checking game state.
+     */
+    private boolean myMazeVisited;
+
+    /**
      * Constructs Room.
      * @param theRow Int row.
      * @param theCol Int col.
@@ -61,6 +66,7 @@ public class Room {
         setStart(false);
         setEnd(false);
         myHasBeenVisited = false;
+        myMazeVisited = false;
     }
 
     /**
@@ -201,6 +207,23 @@ public class Room {
      * @param theBool boolean flag if the room has been visited.
      */
     public void setHasBeenVisited (final boolean theBool) { myHasBeenVisited = theBool;}
+
+    /**
+     * Return if Maze has searched here.
+     * @return boolean.
+     */
+    public boolean getMazeVisited() {
+        return myMazeVisited;
+    }
+
+    /**
+     * Sets if Maze has searched here.
+     * @param theBool
+     */
+    public void setMazeVisited(final boolean theBool) {
+        myMazeVisited = theBool;
+    }
+
 
     /**
      * Returns String of Room (but not doors).

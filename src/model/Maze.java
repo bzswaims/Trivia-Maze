@@ -5,13 +5,10 @@
 
 package model;
 
-// TO DO - in moveForward(), check door's state
-//          maybe have it return something too
-//          for controller to see we need a question or something
-
-// Abby - also dunno what to do with String yet
-// might have it somehow used for map
-// by drawing image icons in a JPanel depending on the char
+// TO DO - write method getGameProgress()
+//      0 = game over = no path to the end cuz of locked doors
+//      1 = in progress
+//      2 = won = player unlocked the exit door
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,13 +19,13 @@ import java.util.Random;
  * horizontally or vertically.
  *
  * @author Abbygaile Yrojo
- * @version August 7, 2024
+ * @version August 8, 2024
  */
 public class Maze {
     /** To control how filled the maze is with Rooms. */
     private final static double MAX_RATIO = 0.6;
     /** For turning directions. */
-    private final static Direction[] myDirections = {Direction.NORTH,
+    private final static Direction[] DIRECTIONS = {Direction.NORTH,
                     Direction.EAST, Direction.SOUTH, Direction.WEST};
     /** The maze itself. */
     private Room[][] myRooms;
@@ -42,6 +39,10 @@ public class Maze {
     private Room myCurrentRoom;
     /** Int representation of player's current direction. */
     private int myDirIndex;
+    /** Int representation of player's game progress.
+     *  0 is game lost. 1 is in progress. 2 is game win.
+     */
+    private int myGameProgress;
 
     /**
      * Constructs the Maze.
@@ -49,6 +50,7 @@ public class Maze {
     public Maze() {
         myPathRooms = new ArrayList<>();
         myDirIndex = 0;
+        myGameProgress = 1;
 
         assembleMaze(4, 4);
     }
@@ -131,7 +133,7 @@ public class Maze {
         int i = 0;
         while (currentRatio <= MAX_RATIO) {
             // pick a valid direction
-            if (!canGo(currentRoom, dir) || i == 2) {
+            if (!doesRoomExist(currentRoom, dir) || i == 2) {
                 dir = chooseDirection(currentRoom, theRandom);
                 i = 0;
             }
@@ -171,14 +173,18 @@ public class Maze {
         }
         // open up the right door for exit
         for (Direction d : Direction.values()) {
-            if (!canGo(room, d)) {
+            if (!doesRoomExist(room, d)) {
                 room.addDoor(d, null);
+                room.getDoor(d).setExit(true);
                 break;
             }
         }
         myEndRoom = room;
     }
 
+    /**
+     * Creates doors for every path room.
+     */
     private void createDoors() {
         Room room;
 
@@ -192,8 +198,8 @@ public class Maze {
             room = myPathRooms.get(i);
             for (Direction d : Direction.values()) {
                 // if the room is open in a certain d
-                // isOpenRoom also handles if there is a room in a certain d
-                if (isOpenRoom(room, d)) {
+                // canEnter also handles if there is a room in a certain d
+                if (canEnter(room, d)) {
                     Room neighbor = myRooms[room.getRow() + d.dy()]
                                             [room.getCol() + d.dx()];
                     // neighbor room's direction would be opposite
@@ -226,10 +232,10 @@ public class Maze {
      * @return boolean.
      */
     private boolean isAlongEdge(final Room theRoom) {
-        return !(canGo(theRoom, Direction.NORTH)
-                && canGo(theRoom, Direction.EAST)
-                && canGo(theRoom, Direction.SOUTH)
-                && canGo(theRoom, Direction.WEST));
+        return !(doesRoomExist(theRoom, Direction.NORTH)
+                && doesRoomExist(theRoom, Direction.EAST)
+                && doesRoomExist(theRoom, Direction.SOUTH)
+                && doesRoomExist(theRoom, Direction.WEST));
     }
 
     /**
@@ -238,7 +244,7 @@ public class Maze {
      * @param theDirection Direction.
      * @return boolean.
      */
-    private boolean canGo(final Room theRoom, final Direction theDirection) {
+    private boolean doesRoomExist(final Room theRoom, final Direction theDirection) {
         return theDirection != null &&
                 isInBounds(theRoom.getCol() +
                         theDirection.dx(), myRooms[0].length) &&
@@ -252,8 +258,8 @@ public class Maze {
      * @param theDirection Direction.
      * @return boolean.
      */
-    private boolean isOpenRoom(final Room theRoom, final Direction theDirection) {
-        return canGo(theRoom, theDirection) &&
+    private boolean canEnter(final Room theRoom, final Direction theDirection) {
+        return doesRoomExist(theRoom, theDirection) &&
                 (!myRooms[theRoom.getRow()]
                         [theRoom.getCol() + theDirection.dx()].isBlock() &&
                         !myRooms[theRoom.getRow() + theDirection.dy()][theRoom.getCol()]
@@ -313,8 +319,8 @@ public class Maze {
      * @return int.
      */
     public int getDoorLockState() {
-        if (isOpenRoom(myCurrentRoom, myDirections[myDirIndex])) {
-            myCurrentRoom.getDoor(myDirections[myDirIndex]).getLockState();
+        if (canEnter(myCurrentRoom, DIRECTIONS[myDirIndex])) {
+            myCurrentRoom.getDoor(DIRECTIONS[myDirIndex]).getLockState();
         }
         return -1;
     }
@@ -323,13 +329,26 @@ public class Maze {
      * Attempts to move to the room player is facing.
      */
     public boolean moveForward() {
-        if (isOpenRoom(myCurrentRoom, myDirections[myDirIndex])) {
-            myCurrentRoom = myRooms[myCurrentRoom.getRow()
-                    + myDirections[myDirIndex].dy()]
-                    [myCurrentRoom.getCol() + myDirections[myDirIndex].dx()];
+        Room room = getNextRoom(myCurrentRoom, DIRECTIONS[myDirIndex]);
+        if (room != null) {
+            myCurrentRoom = room;
             return true;
         }
         return false;
+    }
+
+    /**
+     * Gets the Room in a certain Direction.
+     * @param theRoom Room.
+     * @param theD Direction.
+     * @return Room.
+     */
+    private Room getNextRoom(final Room theRoom, final Direction theD) {
+        if (canEnter(theRoom, theD)) {
+            return myRooms[theRoom.getRow() + theD.dy()]
+                    [theRoom.getCol() + theD.dx()];
+        }
+        return null;
     }
 
     /**
@@ -402,6 +421,47 @@ public class Maze {
         }
 
         return s.toString();
+    }
+
+    /**
+     * Returns if player has no path to the exit.
+     * @return boolean.
+     */
+    public boolean hasLost() {
+        for (int i = 0; i < myPathRooms.size(); i++) {
+            myPathRooms.get(i).setMazeVisited(false);
+        }
+        return hasLost(myCurrentRoom);
+    }
+
+    /**
+     * Helper method for hasLost.
+     * @param theCurrent Room.
+     * @return boolean.
+     */
+    private boolean hasLost(final Room theCurrent) {
+        theCurrent.setMazeVisited(true);
+        final boolean lostDirections[] = new boolean[4];
+        // check if each door exists and not locked
+        for (int i = 0; i < DIRECTIONS.length; i++) {
+            final Door door = theCurrent.getDoor(DIRECTIONS[i]);
+            lostDirections[i] = true;
+            if (door != null && door.getLockState() != 0) {
+                Room neighborRoom = getNextRoom(theCurrent, DIRECTIONS[i]);
+                if (neighborRoom != null && !neighborRoom.getMazeVisited()) {
+                    lostDirections[i] = hasLost(neighborRoom);
+                } else if (door.getExit()) {
+                    return false;
+                }
+            }
+        }
+        // if there is an open path in a certain direction, then not lost
+        for (int i = 0; i < lostDirections.length; i++) {
+            if (!lostDirections[i]) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**

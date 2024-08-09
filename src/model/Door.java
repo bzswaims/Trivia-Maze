@@ -19,10 +19,16 @@ public class Door {
     private int myLockState;
 
     /**
+     * If the Door is the exit.
+     */
+    private boolean myExit;
+
+    /**
      * Constructs Door.
      */
     public Door() {
         setLockState(1);
+        setExit(false);
 
         //call question factory to grab a question to slap onto this door!
     }
@@ -51,6 +57,18 @@ public class Door {
      */
     public int getLockState() {
         return myLockState;
+    }
+
+    /**
+     * Sets if Door is the exit.
+     * @param theBool boolean.
+     */
+    public void setExit(final boolean theBool) {
+        myExit = theBool;
+    }
+
+    public boolean getExit() {
+        return myExit;
     }
 
     /**
