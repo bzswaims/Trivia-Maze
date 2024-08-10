@@ -25,6 +25,11 @@ import javax.swing.*;
  * @version 0.1
  */
 public class TriviaMazeGui {
+    /**
+     * Background image with title.
+     */
+    private static final ImageIcon BACKGROUND =
+            new ImageIcon("files/title_screen.png");
 
     /**
      * Color of inner components.
@@ -49,17 +54,17 @@ public class TriviaMazeGui {
     /**
      * Fetches the screen size.
      */
-    private final Dimension myScreenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
 
     /**
      * Finds 1/3 of the width of the screen.
      */
-    private final int myWidth = (int) myScreenSize.getWidth() / 3;
+    private static final int WIDTH = (int) SCREEN_SIZE.getWidth() / 3;
 
     /**
      * Finds 1/3 of the height of the screen.
      */
-    private final int myHeight = (int) myScreenSize.getHeight() / 3;
+    private static final int HEIGHT = (int) SCREEN_SIZE.getHeight() / 3;
 
     /**
      * The window.
@@ -97,6 +102,16 @@ public class TriviaMazeGui {
     private final PropertyChangeSupport myPCSupport;
 
     /**
+     * Main panel with menu and background.
+     */
+    private final JPanel myMainPanel;
+
+    /**
+     * Panel with background image.
+     */
+    private final JPanel myBackgroundPanel;
+
+    /**
      * Constructor.
      */
     public TriviaMazeGui() {
@@ -109,6 +124,38 @@ public class TriviaMazeGui {
         myPCListener = createPCListener();
         myPCSupport = new PropertyChangeSupport(this);
         myMinimap = new MiniMap();
+        myMainPanel = new JPanel() {
+            public boolean isOptimizedDrawingEnabled() {
+                return false;
+            }
+        };
+        myBackgroundPanel = new JPanel() {
+            /**
+             * Draws the background image.
+             * @param g the <code>Graphics</code> object to protect.
+             */
+            @Override
+            protected void paintComponent(Graphics g) {
+                super.paintComponent(g);
+                Image image = BACKGROUND.getImage();
+                // Draw the image at its original size centered
+                int x = (getWidth() - BACKGROUND.getIconWidth()) / 2;
+                int y = (getHeight() - BACKGROUND.getIconHeight()) / 2;
+
+                g.drawImage(image, x, y, this);
+            }
+
+            /**
+             * Prevents image from being scaled.
+             * @return Dimension.
+             */
+            @Override
+            public Dimension getPreferredSize() {
+                // Set preferred size to the image size
+                return new Dimension(BACKGROUND.getIconWidth(),
+                                    BACKGROUND.getIconHeight());
+            }
+        };
 
         myMainMenu.addPropertyChangeListener(myPCListener);
         myNavBar.addPropertyChangeListener(myPCListener);
@@ -124,11 +171,12 @@ public class TriviaMazeGui {
             public void propertyChange(PropertyChangeEvent theEvt) {
                 String value = theEvt.getNewValue().toString();
                 if (value.equals("New game")) {
-                    myFrame.remove(myMainMenu.getMenu());
+                    myFrame.remove(myMainPanel);
                     myFrame.add(myBoard, BorderLayout.NORTH);
                     myNavBar.getNavBar().add(myMinimap);
                     myFrame.add(myNavBar.getNavBar(), BorderLayout.SOUTH);
-                    myFrame.add(new JLabel(new ImageIcon("boards/treasure.png")), BorderLayout.EAST);
+                    myFrame.add(new JLabel(new ImageIcon
+                            ("boards/treasure.png")), BorderLayout.EAST);
                     myFrame.pack();
                     myFrame.setLocationRelativeTo(null);
                 } else if (value.equals("forward") ||
@@ -150,11 +198,21 @@ public class TriviaMazeGui {
     public void start() {
         usingCustomFonts();
         myFrame.setBackground(DARK);
-        myFrame.add(myMainMenu.getMenu(), BorderLayout.CENTER);
-        myMainMenu.setColors(PURPLE, DARK);
-        myFrame.setSize(new Dimension(myWidth, myHeight));
-        myFrame.setLocationRelativeTo(null);
+        myMainPanel.setBackground(DARK);
+        // when using ol layout, last added component is in the back
+        myMainPanel.setLayout(new OverlayLayout(myMainPanel));
+        myBackgroundPanel.setOpaque(false);
+        myBackgroundPanel.setMaximumSize(new Dimension(BACKGROUND.getIconWidth(),
+                                                BACKGROUND.getIconHeight()));
 
+        myMainMenu.setColors(PURPLE, DARK);
+        myMainPanel.add(myMainMenu.getMenu());
+        myMainPanel.add(myBackgroundPanel);
+        myMainMenu.setColors(PURPLE, DARK);
+        myFrame.add(myMainPanel);
+        myFrame.setSize(new Dimension(BACKGROUND.getIconWidth(),
+                BACKGROUND.getIconHeight()));
+        myFrame.setLocationRelativeTo(null);
         myFrame.setVisible(true);
     }
 
