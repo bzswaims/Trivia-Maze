@@ -14,6 +14,8 @@ import java.awt.*;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.io.File;
+import java.io.IOException;
 import javax.swing.*;
 
 /**
@@ -25,14 +27,24 @@ import javax.swing.*;
 public class TriviaMazeGui {
 
     /**
+     * Color of inner components.
+     */
+    private static final Color PURPLE = new Color(173, 38, 194);
+
+    /**
+     * Color of background.
+     */
+    private static final Color DARK = new Color(7, 0, 47);
+
+    /**
      * Title of the game.
      */
-    private final String myTitle = "Trivia Maze Title Placeholder";
+    private static final String TITLE = "Trivia Maze Title Placeholder";
 
     /**
      * The icon for the window. bag is a placeholder.
      */
-    private final ImageIcon myIcon = new ImageIcon("files/bag.png");
+    private static final ImageIcon BAG = new ImageIcon("files/bag.png");
 
     /**
      * Fetches the screen size.
@@ -88,9 +100,9 @@ public class TriviaMazeGui {
      * Constructor.
      */
     public TriviaMazeGui() {
-        myFrame = new JFrame(myTitle);
+        myFrame = new JFrame(TITLE);
         myFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        myFrame.setIconImage(myIcon.getImage());
+        myFrame.setIconImage(BAG.getImage());
         myBoard = new Board();
         myMainMenu = new MainMenu();
         myNavBar = new NavButtonBar();
@@ -136,15 +148,32 @@ public class TriviaMazeGui {
      * Performs all tasks necessary to display the UI.
      */
     public void start() {
+        usingCustomFonts();
+        myFrame.setBackground(DARK);
         myFrame.add(myMainMenu.getMenu(), BorderLayout.CENTER);
-
+        myMainMenu.setColors(PURPLE, DARK);
         myFrame.setSize(new Dimension(myWidth, myHeight));
         myFrame.setLocationRelativeTo(null);
 
         myFrame.setVisible(true);
     }
 
-    /**
+    private void usingCustomFonts() {
+        GraphicsEnvironment ge;
+        try {
+            ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            Font font = Font.createFont(Font.TRUETYPE_FONT,
+                    new File("files/Tomorrow-Regular.ttf")).deriveFont(12f);
+            ge.registerFont(font);
+            font = Font.createFont(Font.TRUETYPE_FONT,
+                    new File("files/Tomorrow-SemiBold.ttf")).deriveFont(24f);
+            ge.registerFont(font);
+        } catch (FontFormatException | IOException exception) {
+            JOptionPane.showMessageDialog(null, exception.getMessage());
+        }
+    }
+
+        /**
      * Adds PropertyChangeListener to PropertyChangeSupport.
      * @param theListener PropertyChangeListener.
      */

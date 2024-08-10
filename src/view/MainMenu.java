@@ -8,9 +8,7 @@ package view;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -23,6 +21,12 @@ import java.util.List;
  * @version 0.2
  */
 public class MainMenu {
+    /**
+     * Title screen.
+     */
+    private static final Image TITLE_SCREEN =
+            Toolkit.getDefaultToolkit().createImage("boards/title_screen");
+
     /** To add to buttons. */
     private final ActionListener[] myListeners;
 
@@ -106,10 +110,13 @@ public class MainMenu {
      * Methods that compiles the buttons into the panel.
      */
     private void createButtons() {
-        final String[] imageNames = {"new", "load", "help", "exit", "back"};
-        for (int i = 0; i < imageNames.length; i++) {
-            JButton button = buttonMaker(new ImageIcon(
-                    String.format("files/%s.png", imageNames[i])));
+        final String[] names = {"New Game", "Continue", "Help", "Exit", "Back"};
+        for (int i = 0; i < names.length; i++) {
+            JButton button = new JButton(names[i]);
+            button.setEnabled(true);
+            button.setFont(new Font("Tomorrow SemiBold", Font.PLAIN, 24));
+//            JButton button = buttonMaker(new ImageIcon(
+//                    String.format("files/%s.png", imageNames[i])));
             button.addActionListener(myListeners[i]);
             myMenuButtons.add(button);
         }
@@ -119,9 +126,12 @@ public class MainMenu {
      * Populates the menu bar.
      */
     private void setUpMainMenu() {
+        myMenuBar.setLayout(new GridLayout(4, 1, 2, 2));
         for (int i = 0; i < myMenuButtons.size() - 1; i++) {
-            myMenuBar.add(myMenuButtons.get(i));
+            final JButton button = myMenuButtons.get(i);
+            myMenuBar.add(button);
         }
+        myMenuBar.setBorder(BorderFactory.createEmptyBorder(100, 2, 2, 2));
     }
 
     /**
@@ -155,5 +165,14 @@ public class MainMenu {
         String oldValue = "Main menu";
         this.myPCSupport.firePropertyChange("Change view",
                 oldValue, theNewValue);
+    }
+
+    public void setColors(final Color thePurple, final Color theDark) {
+        for (int i = 0; i < myMenuButtons.size(); i++) {
+            JButton button = myMenuButtons.get(i);
+            button.setForeground(thePurple);
+            button.setBackground(theDark);
+        }
+        myMenuBar.setBackground(theDark);
     }
 }
