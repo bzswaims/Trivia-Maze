@@ -76,10 +76,14 @@ public class MainMenu {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
                 //help
-                // this and action on the back button could go in a method hmmm
                 myMenuBar.removeAll();
-                myMenuBar.add(new Help());
-                myMenuBar.add(myMenuButtons.get(4));
+                JScrollPane scrollPane = new JScrollPane(new Help());
+                // set size?
+                myMenuBar.add(scrollPane);
+                JButton button = myMenuButtons.get(4);
+                myMenuBar.add(button);
+                button.setAlignmentX(Component.CENTER_ALIGNMENT);
+                button.setMaximumSize(new Dimension(200, 40));
                 myMenuBar.revalidate();
                 myMenuBar.repaint();
             }

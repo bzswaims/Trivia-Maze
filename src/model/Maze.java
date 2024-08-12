@@ -320,7 +320,7 @@ public class Maze {
      */
     public int getDoorLockState() {
         if (canEnter(myCurrentRoom, DIRECTIONS[myDirIndex])) {
-            myCurrentRoom.getDoor(DIRECTIONS[myDirIndex]).getLockState();
+            return myCurrentRoom.getDoor(DIRECTIONS[myDirIndex]).getLockState();
         }
         return -1;
     }
