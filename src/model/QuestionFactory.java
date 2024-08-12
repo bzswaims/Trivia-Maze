@@ -160,6 +160,7 @@ public class QuestionFactory {
 
                     tempQuestion.setQuestion(questionText);
                     tempQuestion.setID(questionID);
+                    tempQuestion.setType(questionType);
 
                     myUsedQuestions[questionID] = 1;
 
