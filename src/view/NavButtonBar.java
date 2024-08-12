@@ -3,7 +3,6 @@
  * Summer 2024
  */
 
-//TODO make buttons actually do things
 //TODO make images a decent size, or variable (small medium large depending on screen size)
 //I find 150px or 200x square work well probably
 //TODO potentially make the buttons their own object like filters from project 4 in 305
@@ -83,7 +82,7 @@ public class NavButtonBar {
     }
 
     /**
-     * Creates the buttons proper, this is for testing and should be removed.
+     * Creates the buttons proper.
      *
      * @param theIcon The icon attached to the button.
      *

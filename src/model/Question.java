@@ -21,10 +21,14 @@ public interface Question {
 
     void setID(int theID);
 
+    void setType(int theType);
+
     String getQuestion();
 
     String getCorrectAnswer();
 
     int getID();
+
+    int getType();
 
 }

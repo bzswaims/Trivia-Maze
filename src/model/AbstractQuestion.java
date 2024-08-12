@@ -35,12 +35,18 @@ public class AbstractQuestion implements Question {
     private int myID;
 
     /**
+     * Value associated with what type of question it is.
+     */
+    private int myType;
+
+    /**
      * Constructs AbstractQuestion.
      */
     public AbstractQuestion() {
         myQuestion = "";
         myCorrectAnswer = "";
         myID = -1;
+        myType = -1;
     }
 
     /**
@@ -68,6 +74,16 @@ public class AbstractQuestion implements Question {
     }
 
     /**
+     * Sets the question type value:
+     * 1 multiple choice
+     * 2 true or false
+     * 3 short answer
+     */
+    public void setType(final int theType) {
+        myType = theType;
+    }
+
+    /**
      * Returns question.
      * @return String.
      */
@@ -91,5 +107,13 @@ public class AbstractQuestion implements Question {
      */
     public int getID() {
         return myID;
+    }
+
+    /**
+     * Returns the question type.
+     * @return the question type.
+     */
+    public int getType() {
+        return myType;
     }
 }
