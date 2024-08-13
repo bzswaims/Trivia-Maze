@@ -17,6 +17,7 @@ import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.*;
+import javax.swing.text.html.Option;
 
 /**
  * Starts the GUI for the Trivia Maze.
@@ -87,6 +88,16 @@ public class TriviaMazeGui {
     private final MiniMap myMinimap;
 
     /**
+     * The panel containing the save help and quit buttons ingame.
+     */
+    private final OptionsPanel myOptionsPanel;
+
+    /**
+     * The Question info panel.
+     */
+    private final QuestionDisplay myQuestionDisplay;
+
+    /**
      * Used to load game.
      */
     private final PropertyChangeListener myPCListener;
@@ -109,6 +120,8 @@ public class TriviaMazeGui {
         myPCListener = createPCListener();
         myPCSupport = new PropertyChangeSupport(this);
         myMinimap = new MiniMap();
+        myQuestionDisplay = new QuestionDisplay();
+        myOptionsPanel = new OptionsPanel();
 
         myMainMenu.addPropertyChangeListener(myPCListener);
         myNavBar.addPropertyChangeListener(myPCListener);
@@ -125,12 +138,24 @@ public class TriviaMazeGui {
                 String value = theEvt.getNewValue().toString();
                 if (value.equals("New game")) {
                     myFrame.remove(myMainMenu.getMenu());
-                    myFrame.add(myBoard, BorderLayout.NORTH);
-                    myNavBar.getNavBar().add(myMinimap);
-                    myFrame.add(myNavBar.getNavBar(), BorderLayout.SOUTH);
-                    myFrame.add(new JLabel(new ImageIcon("boards/treasure.png")), BorderLayout.EAST);
+
+                    JPanel gamePanel = new JPanel();
+                    JPanel viewPanel = new JPanel();
+                    viewPanel.add(myBoard, BorderLayout.CENTER);
+                    viewPanel.add(myOptionsPanel, BorderLayout.EAST);
+                    gamePanel.add(myNavBar.getNavBar(), BorderLayout.SOUTH);
+                    myFrame.add(viewPanel, BorderLayout.CENTER);
+                    myFrame.add(gamePanel, BorderLayout.SOUTH);
+
+                    JPanel informationPanel = new JPanel();
+                    informationPanel.add(myQuestionDisplay);
+                    informationPanel.add(myMinimap);
+                    myFrame.add(informationPanel, BorderLayout.EAST);
+
+                    //myFrame.add(new JLabel(new ImageIcon("boards/treasure.png")), BorderLayout.EAST);
                     myFrame.pack();
                     myFrame.setLocationRelativeTo(null);
+                    myFrame.repaint();
                 } else if (value.equals("forward") ||
                            value.equals("left") || value.equals("right")) {
                     if (value.equals("left")) {

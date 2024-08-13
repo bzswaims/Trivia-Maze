@@ -31,12 +31,6 @@ import java.util.List;
 public class NavButtonBar {
 
     /**
-     * This is for storing the icons used by the buttons.
-     * This is for testing and should be removed.
-     */
-    private final List<ImageIcon> myNavigation;
-
-    /**
      * List for storing the buttons.
      */
     private final List<JButton> myNavButtons;
@@ -61,7 +55,6 @@ public class NavButtonBar {
      */
     public NavButtonBar()
     {
-        myNavigation = new ArrayList<>();
         myNavButtons = new ArrayList<>();
         myNavBar = new JPanel();
 
