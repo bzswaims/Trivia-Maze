@@ -11,6 +11,8 @@ package view;
 import model.Room;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -107,6 +109,8 @@ public class TriviaMazeGui {
      */
     private final PropertyChangeSupport myPCSupport;
 
+    private JButton myBackButton;
+
     /**
      * Constructor.
      */
@@ -122,9 +126,33 @@ public class TriviaMazeGui {
         myMinimap = new MiniMap();
         myQuestionDisplay = new QuestionDisplay();
         myOptionsPanel = new OptionsPanel();
-
+        //I hope this is working, this shit is like magic to me.
         myMainMenu.addPropertyChangeListener(myPCListener);
         myNavBar.addPropertyChangeListener(myPCListener);
+
+        myBackButton = null;
+        createBackButton();
+    }
+
+    /**
+     * Methods that creates the back button.
+     */
+    private void createBackButton() {
+        myBackButton = new JButton("Back");
+        myBackButton.setEnabled(true);
+        myBackButton.setFont(new Font("Tomorrow SemiBold", Font.PLAIN, 24));
+//            JButton button = buttonMaker(new ImageIcon(
+//                    String.format("files/%s.png", imageNames[i])));
+        myBackButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(final ActionEvent theEvent) {
+                    // back
+                    myFrame.removeAll();
+                    myFrame.add(myBoard);
+                    myFrame.revalidate();
+                    myFrame.repaint();
+                }
+            });
     }
 
     /**
