@@ -109,25 +109,26 @@ public class NavButtonBar {
             //can delete this since no items
             //
             //TODO: replace with a save button
-        }, theEvent -> {
+        }//, theEvent -> {
             //Inventory
             //
             //can delete this since no items
             //
             //this should open inventory if it is not open, and close it if it is open I think,
             //or it could be implemented like help on the menus
-            myNavBar.removeAll();
+        //    myNavBar.removeAll();
             //setUpMainMenu();
-            myNavBar.revalidate();
-            myNavBar.repaint();
-        }};
+        //    myNavBar.revalidate();
+        //    myNavBar.repaint();
+        //}
+        };
     }
 
     /**
      * Methods that compiles the buttons into the panel.
      */
     private void createButtons() {
-        final String[] imageNames = {"left", "up", "right", "hand", "bag"};
+        final String[] imageNames = {"left", "up", "right", "hand"}; //, "bag"
         for (int i = 0; i < imageNames.length; i++) {
             JButton button = buttonMaker(new ImageIcon(
                     String.format("files/%s.png", imageNames[i])));

@@ -77,7 +77,7 @@ public class QuestionDisplay extends JPanel {
      * Default constructor.
      */
     public QuestionDisplay() {
-        setLayout(new GridBagLayout());
+        //setLayout(new GridBagLayout());
 
         myQuestion = null;
         myQuestionText = new JLabel(" ");
@@ -90,7 +90,8 @@ public class QuestionDisplay extends JPanel {
         myAnswers = null;
         myAnswerBlock = new JPanel();
 
-
+        setLayout (new BoxLayout (this, BoxLayout.Y_AXIS));
+        myAnswerBlock.setLayout (new BoxLayout (myAnswerBlock, BoxLayout.Y_AXIS));
 
         //TODO: need to make the screen blank or something by default.
     }
@@ -161,6 +162,8 @@ public class QuestionDisplay extends JPanel {
 
         setUpAnswerBlock();
         createScreen();
+
+        this.repaint();
     }
 
     /**
