@@ -19,6 +19,11 @@ public class QuestionDisplay extends JPanel {
     //Default state should just be a black screen. after going thro the door it should go back to a black screen
 
     /**
+     * Size of panel in pixels.
+     */
+    public static final int SIZE_OF_PANEL = 200;
+
+    /**
      * The question to display.
      */
     private AbstractQuestion myQuestion;
@@ -84,6 +89,8 @@ public class QuestionDisplay extends JPanel {
         myIsCorrect = false;
         myAnswers = null;
         myAnswerBlock = new JPanel();
+
+
 
         //TODO: need to make the screen blank or something by default.
     }
