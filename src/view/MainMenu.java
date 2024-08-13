@@ -9,7 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.*;
-import javax.swing.border.Border;
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
@@ -22,6 +22,12 @@ import java.util.List;
  * @version 0.2
  */
 public class MainMenu {
+    /**
+     * Title screen.
+     */
+    private static final Image TITLE_SCREEN =
+            Toolkit.getDefaultToolkit().createImage("boards/title_screen");
+
     /** To add to buttons. */
     private final ActionListener[] myListeners;
 
@@ -41,8 +47,8 @@ public class MainMenu {
      * Constructor.
      */
     public MainMenu() {
-        myMenuBar = new JPanel();
         myMenuButtons = new ArrayList<>();
+        myMenuBar = new JPanel(new GridLayout(0, 1));
         myListeners = createListeners();
         createButtons();
         setUpMainMenu();
@@ -76,14 +82,10 @@ public class MainMenu {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
                 //help
+                // this and action on the back button could go in a method hmmm
                 myMenuBar.removeAll();
-                JScrollPane scrollPane = new JScrollPane(new Help());
-                // set size?
-                myMenuBar.add(scrollPane);
-                JButton button = myMenuButtons.get(4);
-                myMenuBar.add(button);
-                button.setAlignmentX(Component.CENTER_ALIGNMENT);
-                button.setMaximumSize(new Dimension(200, 40));
+                myMenuBar.add(new Help());
+                myMenuBar.add(myMenuButtons.get(4));
                 myMenuBar.revalidate();
                 myMenuBar.repaint();
             }
@@ -125,20 +127,12 @@ public class MainMenu {
      * Populates the menu bar.
      */
     private void setUpMainMenu() {
-        myMenuBar.setLayout(null);
-        myMenuBar.setVisible(true);
-        myMenuBar.setVisible(true);
-        myMenuBar.setLayout(new BoxLayout(myMenuBar, BoxLayout.Y_AXIS));
-        myMenuBar.setOpaque(false);
-        myMenuBar.add(Box.createVerticalGlue());
+        myMenuBar.setLayout(new GridLayout(4, 1, 2, 2));
         for (int i = 0; i < myMenuButtons.size() - 1; i++) {
             final JButton button = myMenuButtons.get(i);
-            button.setAlignmentX(Component.CENTER_ALIGNMENT);
-            button.setMaximumSize(new Dimension(200, 40));
             myMenuBar.add(button);
-            myMenuBar.add(Box.createVerticalStrut(10));
         }
-        myMenuBar.add(Box.createVerticalStrut(20));
+        myMenuBar.setBorder(BorderFactory.createEmptyBorder(100, 2, 2, 2));
     }
 
     /**

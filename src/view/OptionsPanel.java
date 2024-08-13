@@ -2,6 +2,8 @@ package view;
 
 import javax.swing.*;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,11 +24,18 @@ public class OptionsPanel extends JPanel {
     private final ActionListener[] myListeners;
 
     /**
+     * To communicate with Controller.
+     */
+    private final PropertyChangeSupport myPCSupport;
+
+    /**
      * Constructor.
      */
     public OptionsPanel() {
         myOptionButtons = new ArrayList<>();
         myListeners = createListeners();
+
+        myPCSupport = new PropertyChangeSupport(this);
 
         createButtons();
         setUpOptionsPanel();
@@ -46,17 +55,11 @@ public class OptionsPanel extends JPanel {
      */
     private ActionListener[] createListeners() {
         return new ActionListener[] {theEvent -> {
-            //Help button
-            //need to repaint the screen with help.
-        }, theEvent -> {
             //Save button
             //TODO
         }, theEvent -> {
             //Quit button
             System.exit(0);
-        }, theEvent -> {
-            //Back button (for help)
-
         }};
     }
 
@@ -64,7 +67,7 @@ public class OptionsPanel extends JPanel {
      * Creates the buttons.
      */
     private void createButtons() {
-        final String[] imageNames = {"helpicon", "saveicon", "quiticon"};
+        final String[] imageNames = {"saveicon", "quiticon"};
         for (int i = 0; i < imageNames.length; i++) {
             JButton button = buttonMaker(new ImageIcon(
                     String.format("files/%s.png", imageNames[i])));
@@ -85,5 +88,14 @@ public class OptionsPanel extends JPanel {
         button.setEnabled(true);
 
         return button;
+    }
+
+    /**
+     * Adds PropertyChangeListener to PropertyChangeSupport.
+     * @param theListener PropertyChangeListener.
+     */
+    public void addPropertyChangeListener(
+            final PropertyChangeListener theListener) {
+        myPCSupport.addPropertyChangeListener(theListener);
     }
 }
