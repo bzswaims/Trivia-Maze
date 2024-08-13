@@ -1,21 +1,22 @@
+//TODO: need to make short answer work
+
 package view;
 
 import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.*;
+
 import model.AbstractQuestion;
+import model.MultiQuestion;
+import model.ShortQuestion;
+import model.TrueFalseQuestion;
+import java.util.Random;
 
 public class QuestionDisplay extends JPanel {
-    //I need to create a panel that shows question to the north and answers to the south
-    //In the case of short answer it needs to be a text box
-    //in the case of multi it needs to be 4 radio buttons
-    //in the case of true false it needs to be 2 radio buttons
-
     //Default state should just be a black screen. after going thro the door it should go back to a black screen
-
-
 
     /**
      * The question to display.
@@ -35,7 +36,37 @@ public class QuestionDisplay extends JPanel {
     /**
      * List for answers for multi questions.
      */
-    private JLabel[] myMultiAnswers;
+    private List<String> myMultiAnswers;
+
+    /**
+     * List of listeners to use for the buttons.
+     */
+    private ActionListener[] myListeners;
+
+    /**
+     * random number generator.
+     */
+    private final Random myRand;
+
+    /**
+     * list to store the buttons with the answers on them.
+     */
+    private final List<JButton> myAnswerButtons;
+
+    /**
+     * Value to return if correct answer is selected.
+     */
+    private boolean myIsCorrect;
+
+    /**
+     * String array to store the answers for the multi questions.
+     */
+    private String[] myAnswers;
+
+    /**
+     * JPanel to store the answers in.
+     */
+    private final JPanel myAnswerBlock;
 
     /**
      * Default constructor.
@@ -46,6 +77,15 @@ public class QuestionDisplay extends JPanel {
         myQuestion = null;
         myQuestionText = new JLabel(" ");
         myShortAnswer = new JTextField(20);
+        myMultiAnswers = new ArrayList<>();
+        myListeners = null;
+        myRand = new Random();
+        myAnswerButtons = new ArrayList<>();
+        myIsCorrect = false;
+        myAnswers = null;
+        myAnswerBlock = new JPanel();
+
+        //TODO: need to make the screen blank or something by default.
     }
 
     /**
@@ -56,49 +96,156 @@ public class QuestionDisplay extends JPanel {
     public void setQuestion(AbstractQuestion theQuestion) {
         myQuestion = theQuestion;
         myQuestionText.setText(myQuestion.getQuestion());
+
+        if(myQuestion instanceof MultiQuestion) {
+            myMultiAnswers = ((MultiQuestion) myQuestion).getIncorrectAnswers();
+            myMultiAnswers.add(myQuestion.getCorrectAnswer());
+
+            int size = myMultiAnswers.size();
+            int option1 = myRand.nextInt(size);
+
+            int option2 = myRand.nextInt(size);
+            while(option2 == option1){
+                if(option2 < 3) {
+                    option2++;
+                }
+                else{
+                    option2 = 0;
+                }
+            }
+
+            int option3 = myRand.nextInt(size);
+            while(option3 == option1 || option3 == option2){
+                if(option3 < 3) {
+                    option3++;
+                }
+                else{
+                    option3 = 0;
+                }
+            }
+
+            int option4 = myRand.nextInt(size);
+            while(option4 == option1 || option4 == option2 || option4 == option3){
+                if(option4 < 3) {
+                    option4++;
+                }
+                else{
+                    option4 = 0;
+                }
+            }
+
+            myAnswers = new String[myMultiAnswers.size()];
+            myAnswers[option1] = myMultiAnswers.getFirst();
+            myAnswers[option2] = myMultiAnswers.get(1);
+            myAnswers[option3] = myMultiAnswers.get(2);
+            myAnswers[option4] = myMultiAnswers.get(3);
+
+            myListeners = createMultiListeners();
+            createButtons(myAnswers);
+
+        } else if (myQuestion instanceof TrueFalseQuestion) {
+            myListeners = createTrueFalseListeners();
+
+            String[] temp = {"True", "False"};
+            createButtons(temp);
+        } else if (myQuestion instanceof ShortQuestion) {
+            //TODO need to work on shortquestion part.
+        }
+
+        setUpAnswerBlock();
+        createScreen();
     }
 
     /**
      * Creates the screen proper with question to the north and answers to the bottom.
      */
-    private void CreateScreen() {
+    private void createScreen() {
         add(myQuestionText, BorderLayout.NORTH);
-        //need to find a way to add the answers to the bottom.
-        add(CreateAnswerBlock(), BorderLayout.SOUTH);
-    }
+        add(myAnswerBlock, BorderLayout.SOUTH);
 
-    private JPanel CreateAnswerBlock() {
-        JPanel temp = new JPanel();
-
-        if(myQuestion.getType() == 1) {
-            //need to create buttons here.
-            //I have an array of 4 answers that could be right or wrong
-            //I want each button to just have the text of the answer, and to be centered.
-        }
-        else if(myQuestion.getType() == 2) {
-            //similar to the top, I want just two though, true or false.
-
-
-        }
-        else if(myQuestion.getType() == 3) {
-            temp.add(myShortAnswer);
-        }
-
-        return temp;
+        //TODO: need to update question screen to display.
     }
 
     /**
-     * Returns a flag if the question is answered correctly or not.
+     * Populates the menu bar.
+     */
+    private void setUpAnswerBlock() {
+        for (int i = 0; i < myAnswerButtons.size(); i++) {
+            myAnswerBlock.add(myAnswerButtons.get(i));
+        }
+    }
+
+    /**
+     * returns if the correct answer was selected.
      *
      * @return True if the answer is correct, false if the answer is incorrect.
      */
-    private boolean isCorrect() {
-        boolean isCorrect = false;
+    public boolean isCorrect() {
+        return myIsCorrect;
+        //TODO: need to update screen to go back to blank
+    }
 
-        if(myQuestion.getType() == 3) {
-            //compare the input text to correct answer and set isCorrect to that.
+    /**
+     * Creates the buttons proper.
+     *
+     * @param theText The text attached to the button.
+     *
+     * @return The button proper.
+     */
+    public JButton buttonMaker(String theText) {
+        final JButton button = new JButton(theText);
+        button.setEnabled(true);
+
+        return button;
+    }
+
+    /**
+     * This creates an array of action listeners.
+     *
+     * @return an array of action listeners for my buttons
+     */
+    private ActionListener[] createMultiListeners() {
+        return new ActionListener[] {theEvent -> {
+            //Option 1
+            myIsCorrect = myAnswers[0].equals(myQuestion.getCorrectAnswer());
+            //compare the array at point 1 to correct answer.
+        }, theEvent -> {
+            //Option 2
+            myIsCorrect = myAnswers[1].equals(myQuestion.getCorrectAnswer());
+        }, theEvent -> {
+            //Option 3
+            myIsCorrect = myAnswers[2].equals(myQuestion.getCorrectAnswer());
+        }, theEvent -> {
+            //Option 4
+            myIsCorrect = myAnswers[3].equals(myQuestion.getCorrectAnswer());
+        }, theEvent -> {
+            //Cheat, always correct.
+            //This will always be correct, and will be deleted in the final cut.
+            myIsCorrect = true;
+        }};
+    }
+
+    private ActionListener[] createTrueFalseListeners() {
+        return new ActionListener[] {theEvent -> {
+            //Option True
+            myIsCorrect = myQuestion.getCorrectAnswer().equals("True");
+        }, theEvent -> {
+            //Option False
+            myIsCorrect = myQuestion.getCorrectAnswer().equals("False");
+        }, theEvent -> {
+            //Cheat, always correct.
+            myIsCorrect = true;
+        }};
+    }
+
+    /**
+     * Methods that compiles the buttons into the panel.
+     */
+    private void createButtons(final String[] theNames) {
+        for (int i = 0; i < theNames.length; i++) {
+            JButton button = buttonMaker(theNames[i]); //need to add in correct answer string.
+            button.addActionListener(myListeners[i]);
+            myAnswerButtons.add(button);
         }
-
-        return isCorrect;
     }
 }
