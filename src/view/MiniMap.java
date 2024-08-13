@@ -1,101 +1,190 @@
+/*
+ * TCSS 360 Software Development and Quality Assurance Techniques
+ * Summer 2024
+ */
+
 //TODO all of it
 
 package view;
 
-import model.Direction;
-import model.Room;
-
 import javax.swing.*;
 import java.awt.*;
+import java.awt.geom.Ellipse2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MiniMap extends JPanel {
-    private static final int TILE_SIZE = 50; // Size of each tile in pixels
-    private static final int GRID_SIZE = 4;  // Number of tiles in each row/column
-    private static final int CIRCLE_DIAMETER = 10; // Diameter of the circle
+    /** Length of map. */
+    private static final int MAP_LENGTH = 100;
+    /** Scaled size of tile. */
+    private double myTileSize;
+    /** List of room tiles with shapes and coordinates. */
+    private List<MyRoomTile> myRoomTiles;
+    /** List of doors with shapes, coordinates, and directions. */
+    private List<Shape> myDoorTiles;
+    /** Representation of player. */
+    private Ellipse2D.Double myPlayerSpot;
 
-
-    private Room[][] myMinimapRooms;
-    private Room myCurrentRoom;
-
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        drawMinimap(g);
+    /**
+     * Constructs MiniMap.
+     */
+    public MiniMap() {
+        // setPreferredSize(new Dimension(TILE_SIZE * GRID_SIZE, TILE_SIZE * GRID_SIZE));
+        myRoomTiles = new ArrayList<MyRoomTile>();
+        myTileSize = 0;
+        setPreferredSize(new Dimension(MAP_LENGTH, MAP_LENGTH));
     }
 
-    private void drawMinimap(Graphics g) {
-        Graphics2D g2d = (Graphics2D) g;
-        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+    /**
+     * Set up the map for adding shapes.
+     * @param theRows int rows of maze.
+     * @param theCols int columns of maze.
+     */
+    public void setUpMap(final int theRows, final int theCols) {
+        myTileSize = (double) MAP_LENGTH / theRows;
+        myPlayerSpot = new Ellipse2D.Double();
+        setBackground(Color.BLACK);
+    }
 
-        for (int row = 0; row < myMinimapRooms.length; row++) {
-            for (int col = 0; col < myMinimapRooms.length; col++) {
-
-                // Calculate the position of the tile
-                int x = col * TILE_SIZE;
-                int y = row * TILE_SIZE;
-
-                g2d.setColor(Color.WHITE);
-
-                if(myMinimapRooms[row][col].isEnd()){
-                    g2d.setColor(Color.RED);
-                }
-                if(myMinimapRooms[row][col].isBlock()){
-                    g2d.setColor(Color.LIGHT_GRAY);
-                }
-                // Draw the tile
-                g2d.fillRect(x, y, TILE_SIZE, TILE_SIZE);
-
-                // Optionally, draw the border of the tile
-                g2d.setColor(Color.BLACK);
-                g2d.drawRect(x, y, TILE_SIZE, TILE_SIZE);
-
-                g2d.setColor(Color.GREEN);
-                // Door is in this order N-E-S-W
-
-                if(myCurrentRoom.equals(myMinimapRooms[row][col])){
-                    g2d.setColor(Color.CYAN);
-                    drawCircle(g2d, x + TILE_SIZE / 2 - CIRCLE_DIAMETER / 2, y + TILE_SIZE / 2 - CIRCLE_DIAMETER / 2);
-                }
-                g2d.setColor(Color.GREEN);
-                // Draw circles centered on each side of the tile
-                Room myRoom = myMinimapRooms[row][col];
-                if(myRoom.getDoor(Direction.NORTH) != null){
-                    drawCircle(g2d, x + TILE_SIZE / 2 - CIRCLE_DIAMETER / 2, y - CIRCLE_DIAMETER / 2); // Top side
-                }
-                if(myRoom.getDoor(Direction.SOUTH) != null) {
-                    drawCircle(g2d, x + TILE_SIZE / 2 - CIRCLE_DIAMETER / 2, y + TILE_SIZE - CIRCLE_DIAMETER / 2); // Bottom side
-                }
-                if(myRoom.getDoor(Direction.WEST) != null) {
-
-                    drawCircle(g2d, x - CIRCLE_DIAMETER / 2, y + TILE_SIZE / 2 - CIRCLE_DIAMETER / 2); // Left side
-                }
-                if(myRoom.getDoor(Direction.EAST) != null) {
-                    drawCircle(g2d, x + TILE_SIZE - CIRCLE_DIAMETER / 2, y + TILE_SIZE / 2 - CIRCLE_DIAMETER / 2); // Right side
-
-                }
+    /**
+     * Attempt to add new room tile.
+     * @param theRow int row.
+     * @param theCol int col.
+     */
+    public void addRoomTile(final int theRow, final int theCol) {
+        if (!hasRoomTile(theRow, theCol)) {
+            MyRoomTile tile = new MyRoomTile(theRow, theCol);
+            if (myRoomTiles.isEmpty()) {
+                setPlayerSpot((double) theCol * myTileSize,
+                        (double) theRow * myTileSize);
             }
+            myRoomTiles.add(tile);
+            repaint();
         }
     }
-    public MiniMap() {
-        setPreferredSize(new Dimension(TILE_SIZE * GRID_SIZE, TILE_SIZE * GRID_SIZE));
-        setBackground(Color.WHITE);
-    }
-    private void drawCircle(Graphics2D g2d, int x, int y) {
-        g2d.fillOval(x, y, CIRCLE_DIAMETER, CIRCLE_DIAMETER);
-    }
+
     /**
-     * Sets minimap room
-     * @param theRooms the rooms of the maze
+     * Used to check if room tiles already has shape of room.
+     * @param theRow int row.
+     * @param theCol int col.
+     * @return boolean.
      */
-    public void setRooms(Room[][] theRooms){
-        myMinimapRooms = theRooms;
+    private boolean hasRoomTile(final int theRow, final int theCol) {
+        for (int i = 0; i < myRoomTiles.size(); i++) {
+            MyRoomTile tile = myRoomTiles.get(i);
+            if (tile.myCol == theCol && tile.myRow == theRow) {
+                return true;
+            }
+        }
+        return false;
     }
+
     /**
-     * Sets minimap current room
-     * @param theRoom the current room we are in
+     * Draws the map.
+     * @param theG the <code>Graphics</code> object to protect
      */
-    public void setCurrentRoom(Room theRoom){
-        myCurrentRoom = theRoom;
+    @Override
+    protected void paintComponent(final Graphics theG) {
+        super.paintComponent(theG);
+        final Graphics2D g2d = (Graphics2D) theG;
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
+        for (int i = 0; i < myRoomTiles.size(); i++) {
+            MyRoomTile tile = myRoomTiles.get(i);
+            g2d.setColor(Color.WHITE);
+            g2d.fill(tile.myRectangle);
+            g2d.setColor(Color.GREEN);
+            g2d.draw(tile.myRectangle);
+        }
+        g2d.setColor(Color.CYAN);
+        g2d.fill(myPlayerSpot);
     }
+
+    /**
+     * Changes player spot.
+     * @param theX double x.
+     * @param theY double y.
+     */
+    private void setPlayerSpot(final double theX, final double theY) {
+        myPlayerSpot.setFrameFromDiagonal(theX, theY, theX + myTileSize, theY + myTileSize);
+        repaint();
+    }
+
+    /**
+     * Moves player spot.
+     * @param theDirection int direction.
+     */
+    public void movePlayerSpot(final int theDirection) {
+        if (theDirection < 0 || theDirection > 3) {
+            throw new IllegalArgumentException("Out of bounds! [0, 3]");
+        }
+
+        double x = myPlayerSpot.getX();
+        double y = myPlayerSpot.getY();
+        switch (theDirection) {
+            case 0: // N
+                y -= myTileSize;
+                break;
+            case 1: // E
+                x += myTileSize;
+                break;
+            case 2: // S
+                y += myTileSize;
+                break;
+            case 3: // W
+                x -= myTileSize;
+                break;
+            default:
+        }
+
+        setPlayerSpot(x, y);
+    }
+
+    /**
+     * JUST FOR TEST PURPOSES!!
+     * @return String.
+     */
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("TILES [\n");
+        for (int i = 0; i < myRoomTiles.size(); i++) {
+            MyRoomTile tile = myRoomTiles.get(i);
+            sb.append("ROOM: " + tile.myRow + " " + tile.myCol);
+        }
+        sb.append("\n]");
+        return sb.toString();
+    }
+
+    /**
+     * Room tile with data necessary for drawing room correctly.
+     */
+    private class MyRoomTile {
+        /** Room's row. */
+        int myRow;
+        /** Room's column. */
+        int myCol;
+        /** Tile's x coord. */
+        double myX;
+        /** Tile's y coord. */
+        double myY;
+        /** Shape of room tile. */
+        Rectangle2D myRectangle;
+
+        /**
+         * Constructs room tile.
+         * @param theRow int row.
+         * @param theCol int col.
+         */
+        public MyRoomTile(final int theRow, final int theCol) {
+            myRow = theRow;
+            myCol = theCol;
+            myX = theCol * myTileSize;
+            myY = theRow * myTileSize;
+            myRectangle = new Rectangle2D.Double(myX, myY, myTileSize, myTileSize);
+        }
+    }
+
+    // may add DoorShape class here
 }

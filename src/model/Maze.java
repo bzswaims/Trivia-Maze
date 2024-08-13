@@ -26,7 +26,7 @@ public class Maze {
     private final static double MAX_RATIO = 0.6;
     /** For turning directions. */
     private final static Direction[] DIRECTIONS = {Direction.NORTH,
-                    Direction.EAST, Direction.SOUTH, Direction.WEST};
+            Direction.EAST, Direction.SOUTH, Direction.WEST};
     /** The maze itself. */
     private Room[][] myRooms;
     /** Rooms that may be travelled through. */
@@ -63,7 +63,7 @@ public class Maze {
     private void assembleMaze(final int theWidth, final int theHeight) {
         if (theWidth < 4 || theHeight < 4) {
             throw new IllegalArgumentException("One of the passed lengths " +
-                                                "are less than 4.");
+                    "are less than 4.");
         }
 
         myRooms = new Room[theWidth][theHeight];
@@ -201,7 +201,7 @@ public class Maze {
                 // canEnter also handles if there is a room in a certain d
                 if (canEnter(room, d)) {
                     Room neighbor = myRooms[room.getRow() + d.dy()]
-                                            [room.getCol() + d.dx()];
+                            [room.getCol() + d.dx()];
                     // neighbor room's direction would be opposite
                     Door neighborDoor = neighbor.getDoor(d.flip(d));
                     if (neighborDoor != null) {
@@ -465,18 +465,22 @@ public class Maze {
     }
 
     /**
-     * Get the maze rooms
-     * @return Room[][] list of the maze rooms
-     */
-    public Room[][] getRooms() {
-        return myRooms;
-    }
-
-    /**
      * Get the player current room
      * @return Room player's current room
      */
     public Room getCurrentRoom() {
         return myCurrentRoom;
+    }
+
+    public int getRows() {
+        return myRooms.length;
+    }
+
+    public int getCols() {
+        return myRooms[0].length;
+    }
+
+    public int getCurrentDirection() {
+        return myDirIndex;
     }
 }

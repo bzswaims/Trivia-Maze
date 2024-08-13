@@ -157,7 +157,7 @@ public class TriviaMazeGui {
                     myFrame.add(gamePanel, BorderLayout.SOUTH);
 
                     JPanel informationPanel = new JPanel();
-                    informationPanel.setLayout(new GridLayout(2, 1));
+                    informationPanel.setLayout(new GridLayout(2, 1, 2, 2));
                     informationPanel.add(myQuestionDisplay);
                     informationPanel.add(myMinimap);
                     myFrame.add(informationPanel, BorderLayout.EAST);
@@ -189,7 +189,6 @@ public class TriviaMazeGui {
         myMainMenu.setColors(PURPLE, DARK);
         myFrame.setSize(new Dimension(myWidth, myHeight));
         myFrame.setLocationRelativeTo(null);
-
         myFrame.setVisible(true);
     }
 
@@ -237,19 +236,19 @@ public class TriviaMazeGui {
         }
     }
 
-    /**
-     * Sets minimap room
-     * @param rooms the rooms in the maze
-     */
-    public void setMinimapRooms(Room[][] rooms) {
-        myMinimap.setRooms(rooms);
+    public void setMapValues(final int theRows, final int theCols) {
+        myMinimap.setUpMap(theRows, theCols);
     }
 
-    /**
-     * Set the current room for the minimap
-     * @param room the current room we are in
-     */
-    public void setMinimapCurrentRoom(Room room) {
-        myMinimap.setCurrentRoom(room);
+    public void showRoom(final int theRow, final int theCol) {
+        myMinimap.addRoomTile(theRow, theCol);
+    }
+
+    public void getMapToString() {
+        System.out.println(myMinimap.toString());
+    }
+
+    public void movePlayer(final int theDirection) {
+        myMinimap.movePlayerSpot(theDirection);
     }
 }

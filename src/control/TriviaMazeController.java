@@ -50,9 +50,12 @@ public class TriviaMazeController {
      */
     public void start() {
         myView.start();
-        myView.setMinimapRooms(myMaze.getRooms());
-        myView.setMinimapCurrentRoom(myMaze.getCurrentRoom());
+        myView.setMapValues(myMaze.getRows(), myMaze.getCols());
+        myView.showRoom(myMaze.getCurrentRoom().getRow(), myMaze.getCurrentRoom().getCol());
+        myView.getMapToString();
+
         System.out.println(myMaze);
+        // myView.getMapToString();
     }
 
     /**
@@ -72,8 +75,12 @@ public class TriviaMazeController {
                     } else if (value.equals("forward")) {
                         final int state = myMaze.getDoorLockState();
                         if (state != -1) {
+                            // THIS SHOULD BE STATE == 2 LATER!!
                             myMaze.moveForward();
-                            myView.setMinimapCurrentRoom(myMaze.getCurrentRoom());
+                            myView.showRoom(myMaze.getCurrentRoom().getRow(), myMaze.getCurrentRoom().getCol());
+                            myView.movePlayer(myMaze.getCurrentDirection());
+                            myView.getMapToString();
+
                             myView.updateView("up");
                         }
 
