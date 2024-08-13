@@ -7,6 +7,9 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
+// TODO - Get the font working and colors not flashbanging
+//          aka get it to fit the theme
+
 /**
  * Displays the help screen.
  *
@@ -33,7 +36,7 @@ public class Help extends JPanel {
      * Constructs the help screen.
      */
     public Help() {
-        setPreferredSize(new Dimension(200, 100));
+        setPreferredSize(new Dimension(200, 400));
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
         JTextArea text = new JTextArea(TEXT);

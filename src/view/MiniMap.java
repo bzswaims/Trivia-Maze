@@ -30,7 +30,6 @@ public class MiniMap extends JPanel {
      * Constructs MiniMap.
      */
     public MiniMap() {
-        // setPreferredSize(new Dimension(TILE_SIZE * GRID_SIZE, TILE_SIZE * GRID_SIZE));
         myRoomTiles = new ArrayList<MyRoomTile>();
         myTileSize = 0;
         setPreferredSize(new Dimension(MAP_LENGTH, MAP_LENGTH));
