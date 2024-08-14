@@ -47,8 +47,17 @@ public class Door {
      * Sets the question.
      * @param theQuestion String.
      */
-    private void setQuestion(final AbstractQuestion theQuestion) {
+    public void setQuestion(final AbstractQuestion theQuestion) {
         myQuestion = theQuestion;
+    }
+
+    /**
+     * Returns the question attached to the door.
+     *
+     * @return the question attached to the door.
+     */
+    public AbstractQuestion getQuestion() {
+        return myQuestion;
     }
 
     /**
