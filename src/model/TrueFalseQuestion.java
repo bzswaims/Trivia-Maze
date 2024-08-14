@@ -11,6 +11,6 @@ package model;
  * @version 0.1
  */
 public class TrueFalseQuestion extends AbstractQuestion {
-    public TrueFalseQuestion(final int theType) {
+    public TrueFalseQuestion() {
     }
 }

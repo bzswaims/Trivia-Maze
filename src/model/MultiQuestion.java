@@ -28,7 +28,7 @@ public class MultiQuestion extends AbstractQuestion {
     /**
      * Constructs MultiQuestion.
      */
-    public MultiQuestion(final int theType) {
+    public MultiQuestion() {
         myIncorrectAnswers = new ArrayList<> ();
     }
 
