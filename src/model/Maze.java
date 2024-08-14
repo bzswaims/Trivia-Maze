@@ -498,20 +498,24 @@ public class Maze {
         for (int i = 0; i < myRooms.length; i++) {
             for (int j = 0; j < myRooms[i].length; j++) {
                 if (myRooms[i][j].getDoor(Direction.NORTH) != null &&
-                        myRooms[i][j].getDoor(Direction.NORTH).getQuestion() != null) {
+                        myRooms[i][j].getDoor(Direction.NORTH).getQuestion() == null) {
                     myRooms[i][j].getDoor(Direction.NORTH).setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
+                    System.out.println(myRooms[i][j].getDoor(Direction.NORTH).getQuestion().getQuestion());
                 }
                 if (myRooms[i][j].getDoor(Direction.EAST) != null &&
-                        myRooms[i][j].getDoor(Direction.EAST).getQuestion() != null) {
+                        myRooms[i][j].getDoor(Direction.EAST).getQuestion() == null) {
                     myRooms[i][j].getDoor(Direction.EAST).setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
+                    System.out.println(myRooms[i][j].getDoor(Direction.EAST).getQuestion().getQuestion());
                 }
                 if (myRooms[i][j].getDoor(Direction.SOUTH) != null &&
-                        myRooms[i][j].getDoor(Direction.SOUTH).getQuestion() != null) {
+                        myRooms[i][j].getDoor(Direction.SOUTH).getQuestion() == null) {
                     myRooms[i][j].getDoor(Direction.SOUTH).setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
+                    System.out.println(myRooms[i][j].getDoor(Direction.SOUTH).getQuestion().getQuestion());
                 }
                 if (myRooms[i][j].getDoor(Direction.WEST) != null &&
-                        myRooms[i][j].getDoor(Direction.WEST).getQuestion() != null) {
+                        myRooms[i][j].getDoor(Direction.WEST).getQuestion() == null) {
                     myRooms[i][j].getDoor(Direction.WEST).setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
+                    System.out.println(myRooms[i][j].getDoor(Direction.WEST).getQuestion().getQuestion());
                 }
             }
         }

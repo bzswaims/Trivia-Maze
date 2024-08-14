@@ -94,8 +94,32 @@ public class QuestionFactory {
      * Builds a multiple choice question
      */
     private MultiQuestion buildMultiQuestion(final int theType) {
+        //TODO
+        MultiQuestion tempQuestion = new MultiQuestion();
 
-        MultiQuestion tempQuestion = (MultiQuestion) randomQuestion(theType);
+        String query = "SELECT * FROM Questions ORDER BY RANDOM()";
+
+        try (Connection conn = ds.getConnection();
+             Statement stmt = conn.createStatement();) {
+
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                int questionID = rs.getInt("QuestionID");
+                String questionText = rs.getString("QuestionText");
+                int questionType = rs.getInt("QuestionType");
+
+                if (questionType == theType && myUsedQuestions[questionID] == 0) {
+
+                    tempQuestion.setQuestion(questionText);
+                    tempQuestion.setID(questionID);
+                    tempQuestion.setType(questionType);
+
+                    myUsedQuestions[questionID] = 1;
+
+                    break;
+                }
+            }
 
             if(tempQuestion.getID() == -1)
             {
@@ -104,15 +128,29 @@ public class QuestionFactory {
                     myUsedQuestions[i] = 0;
                 }
 
-                tempQuestion = (MultiQuestion) randomQuestion(theType);
+                rs = stmt.executeQuery(query);
+
+                while (rs.next()) {
+                    int questionID = rs.getInt("QuestionID");
+                    String questionText = rs.getString("QuestionText");
+                    int questionType = rs.getInt("QuestionType");
+
+                    if (questionType == theType && myUsedQuestions[questionID] == 0) {
+
+                        tempQuestion.setQuestion(questionText);
+                        tempQuestion.setID(questionID);
+                        tempQuestion.setType(questionType);
+
+                        myUsedQuestions[questionID] = 1;
+
+                        break;
+                    }
+                }
             }
 
-            String query = "SELECT * FROM Answers";
+            query = "SELECT * FROM Answers";
 
-        try (Connection conn = ds.getConnection();
-             Statement stmt = conn.createStatement();) {
-
-            ResultSet rs = stmt.executeQuery(query);
+            rs = stmt.executeQuery(query);
 
             while ( rs.next() ) {
                 int answerID = rs.getInt( "AnswerID" );
@@ -126,8 +164,6 @@ public class QuestionFactory {
                 if(answerQuestionID == tempQuestion.getID() && !isCorrect) {
                     tempQuestion.addIncorrectAnswer(answerText);
                 }
-
-                //This continually cycles through even after finding all pertinent information. Maybe fix that.
             }
 
         } catch (SQLException e) {
@@ -156,7 +192,7 @@ public class QuestionFactory {
                 String questionText = rs.getString("QuestionText");
                 int questionType = rs.getInt("QuestionType");
 
-                if (questionType == 1 && myUsedQuestions[questionID] == 0) {
+                if (questionType == theType && myUsedQuestions[questionID] == 0) {
 
                     tempQuestion.setQuestion(questionText);
                     tempQuestion.setID(questionID);
@@ -180,7 +216,31 @@ public class QuestionFactory {
      * Builds a short answer question
      */
     private AbstractQuestion buildShortAnswer (final int theType) {
-        ShortQuestion tempQuestion = (ShortQuestion) randomQuestion(theType);
+        ShortQuestion tempQuestion = new ShortQuestion();
+
+        String query = "SELECT * FROM Questions ORDER BY RANDOM()";
+
+        try (Connection conn = ds.getConnection();
+             Statement stmt = conn.createStatement();) {
+
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                int questionID = rs.getInt("QuestionID");
+                String questionText = rs.getString("QuestionText");
+                int questionType = rs.getInt("QuestionType");
+
+                if (questionType == theType && myUsedQuestions[questionID] == 0) {
+
+                    tempQuestion.setQuestion(questionText);
+                    tempQuestion.setID(questionID);
+                    tempQuestion.setType(questionType);
+
+                    myUsedQuestions[questionID] = 1;
+
+                    break;
+                }
+            }
 
         if(tempQuestion.getID() == -1)
         {
@@ -189,15 +249,29 @@ public class QuestionFactory {
                 myUsedQuestions[i] = 0;
             }
 
-            tempQuestion = (ShortQuestion) randomQuestion(theType);
+            rs = stmt.executeQuery(query);
+
+                while (rs.next()) {
+                    int questionID = rs.getInt("QuestionID");
+                    String questionText = rs.getString("QuestionText");
+                    int questionType = rs.getInt("QuestionType");
+
+                    if (questionType == theType && myUsedQuestions[questionID] == 0) {
+
+                        tempQuestion.setQuestion(questionText);
+                        tempQuestion.setID(questionID);
+                        tempQuestion.setType(questionType);
+
+                        myUsedQuestions[questionID] = 1;
+
+                        break;
+                    }
+                }
         }
 
-        String query = "SELECT * FROM Answers";
+        query = "SELECT * FROM Answers";
 
-        try (Connection conn = ds.getConnection();
-             Statement stmt = conn.createStatement();) {
-
-            ResultSet rs = stmt.executeQuery(query);
+            rs = stmt.executeQuery(query);
 
             while ( rs.next() ) {
                 int answerID = rs.getInt( "AnswerID" );
@@ -221,10 +295,35 @@ public class QuestionFactory {
     }
 
     /**
-     * Builds a short answer question
+     * Builds a true false answer question
      */
     private AbstractQuestion buildTrueFalseAnswer (final int theType) {
-        ShortQuestion tempQuestion = (ShortQuestion) randomQuestion(theType);
+        //TODO
+        TrueFalseQuestion tempQuestion = new TrueFalseQuestion();
+
+        String query = "SELECT * FROM Questions ORDER BY RANDOM()";
+
+        try (Connection conn = ds.getConnection();
+             Statement stmt = conn.createStatement();) {
+
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                int questionID = rs.getInt("QuestionID");
+                String questionText = rs.getString("QuestionText");
+                int questionType = rs.getInt("QuestionType");
+
+                if (questionType == theType && myUsedQuestions[questionID] == 0) {
+
+                    tempQuestion.setQuestion(questionText);
+                    tempQuestion.setID(questionID);
+                    tempQuestion.setType(questionType);
+
+                    myUsedQuestions[questionID] = 1;
+
+                    break;
+                }
+            }
 
         if(tempQuestion.getID() == -1)
         {
@@ -233,15 +332,29 @@ public class QuestionFactory {
                 myUsedQuestions[i] = 0;
             }
 
-            tempQuestion = (ShortQuestion) randomQuestion(theType);
+            rs = stmt.executeQuery(query);
+
+                while (rs.next()) {
+                    int questionID = rs.getInt("QuestionID");
+                    String questionText = rs.getString("QuestionText");
+                    int questionType = rs.getInt("QuestionType");
+
+                    if (questionType == theType && myUsedQuestions[questionID] == 0) {
+
+                        tempQuestion.setQuestion(questionText);
+                        tempQuestion.setID(questionID);
+                        tempQuestion.setType(questionType);
+
+                        myUsedQuestions[questionID] = 1;
+
+                        break;
+                    }
+                }
         }
 
-        String query = "SELECT * FROM Answers";
+        query = "SELECT * FROM Answers";
 
-        try (Connection conn = ds.getConnection();
-             Statement stmt = conn.createStatement();) {
-
-            ResultSet rs = stmt.executeQuery(query);
+        rs = stmt.executeQuery(query);
 
             while ( rs.next() ) {
                 int answerID = rs.getInt( "AnswerID" );
