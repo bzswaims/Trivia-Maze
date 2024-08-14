@@ -1,3 +1,8 @@
+/*
+ * TCSS 360 Software Development and Quality Assurance Techniques
+ * Summer 2024
+ */
+
 package view;
 
 import javax.swing.*;
@@ -8,17 +13,34 @@ import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 
+/**
+ * Panel to display question and answers.
+ *
+ * @author Abbygaile Yrojo
+ * @version August 14, 2024
+ */
 public class QAPanel extends JPanel {
+    /** Dimension of this panel. */
     private static final Dimension DIMENSION = new Dimension(200, 400);
+    /** True and false buttons. */
     private static final JButton[] TF_BUTTONS = {new JButton("True"),
                                                 new JButton("False")};
+    /** Pane to display question. */
     private final JTextPane myQuestionText;
+    /** Panel to display answers */
     private final JPanel myAnswerPanel;
+    /** Multi-choice question buttons */
     private final JButton[] myMCButtons;
+    /** Text field to receive short answer. */
     private final JTextField myTextField;
+    /** Info to guide player in short answer. */
     private final JLabel myTextInfo;
+    /** To send answer string to listener. */
     private final PropertyChangeSupport myPCS;
 
+    /**
+     * Constructs QAPanel.
+     */
     public QAPanel() {
         myQuestionText = new JTextPane();
         myAnswerPanel = new JPanel();
@@ -29,6 +51,9 @@ public class QAPanel extends JPanel {
         setUp();
     }
 
+    /**
+     * Sets up QAPanel.
+     */
     private void setUp() {
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.setPreferredSize(DIMENSION);
@@ -123,6 +148,12 @@ public class QAPanel extends JPanel {
         myPCS.firePropertyChange("Answer", "No answer", theValue);
     }
 
+    /**
+     * Displays the question and any answers.
+     * @param theType int types of question.
+     * @param theQuestion String question.
+     * @param theAnswers String array of answers for multi-choice question.
+     */
     public void setQuestion(final int theType, final String theQuestion,
                              final String[] theAnswers) {
         final String html = "<html><body style='width: %1spx'>%1s";
@@ -147,6 +178,9 @@ public class QAPanel extends JPanel {
         }
     }
 
+    /**
+     * Clears the question and answers.
+     */
     public void clearQuestion() {
         myQuestionText.setText("");
         myAnswerPanel.removeAll();

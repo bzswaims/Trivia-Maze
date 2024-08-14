@@ -17,7 +17,7 @@ import java.util.*;
  * horizontally or vertically.
  *
  * @author Abbygaile Yrojo
- * @version August 8, 2024
+ * @version August 14, 2024
  */
 public class Maze {
     /** To control how filled the maze is with Rooms. */
@@ -480,14 +480,26 @@ public class Maze {
         return myCurrentRoom;
     }
 
+    /**
+     * Gets number of rows.
+     * @return int.
+     */
     public int getRows() {
         return myRooms.length;
     }
 
+    /**
+     * Gets number of columns.
+     * @return int.
+     */
     public int getCols() {
         return myRooms[0].length;
     }
 
+    /**
+     * Returns current direction index.
+     * @return int.
+     */
     public int getCurrentDirection() {
         return myDirIndex;
     }

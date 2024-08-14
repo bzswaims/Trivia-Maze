@@ -8,18 +8,14 @@
 
 package view;
 
-import model.*;
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.*;
-import javax.swing.text.html.Option;
 
 /**
  * Starts the GUI for the Trivia Maze.
