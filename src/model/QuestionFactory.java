@@ -49,12 +49,12 @@ public class QuestionFactory {
     /**
      * random number generator.
      */
-    Random myRand;
+    private Random myRand;
 
     /**
      * arraylist to store IDs we have used already.
      */
-    int[] myUsedQuestions;
+    private int[] myUsedQuestions;
 
     /**
      * Constructor.

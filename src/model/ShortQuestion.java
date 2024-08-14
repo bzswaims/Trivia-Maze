@@ -9,6 +9,6 @@ package model;
  * @version 0.1
  */
 public class ShortQuestion extends AbstractQuestion{
-    public ShortQuestion(final int theType) {
+    public ShortQuestion() {
     }
 }
