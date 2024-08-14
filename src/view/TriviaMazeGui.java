@@ -124,6 +124,8 @@ public class TriviaMazeGui {
      */
     private final JPanel myBackgroundPanel;
 
+    private final JPanel myQAPanel;
+
     /**
      * Constructor.
      */
@@ -137,6 +139,7 @@ public class TriviaMazeGui {
         myPCListener = createPCListener();
         myPCSupport = new PropertyChangeSupport(this);
         myMinimap = new MiniMap();
+        myQAPanel = new QAPanel();
         myMainPanel = new JPanel() {
             public boolean isOptimizedDrawingEnabled() {
                 return false;
@@ -191,18 +194,49 @@ public class TriviaMazeGui {
                     myFrame.remove(myMainPanel);
 
                     JPanel gamePanel = new JPanel();
-                    JPanel viewPanel = new JPanel();
-                    viewPanel.add(myBoard, BorderLayout.CENTER);
-                    viewPanel.add(myOptionsPanel, BorderLayout.EAST);
-                    gamePanel.add(myNavBar.getNavBar(), BorderLayout.SOUTH);
-                    myFrame.add(viewPanel, BorderLayout.CENTER);
-                    myFrame.add(gamePanel, BorderLayout.SOUTH);
+                    gamePanel.setLayout(new GridBagLayout());
+                    // this acts as the pointer for setting stuff
+                    GridBagConstraints c = new GridBagConstraints();
+                    c.weightx = 0.5;
+                    c.insets = new Insets(5,5,5,5);  // padding
 
-                    JPanel informationPanel = new JPanel();
-                    informationPanel.setLayout(new GridLayout(2, 1, 2, 2));
-                    informationPanel.add(myQuestionDisplay);
-                    informationPanel.add(myMinimap);
-                    myFrame.add(informationPanel, BorderLayout.EAST);
+                    // board
+                    c.gridx = 0;
+                    c.gridy = 0;
+                    myFrame.add(new Board(), c);
+
+                    // movement
+                    c.gridx = 0;
+                    c.gridy = 1;
+                    myFrame.add(myNavBar.getNavBar(), c);
+
+                    // status / interact-ables
+                    c.gridx = 1;
+                    c.gridy = 0;
+                    myFrame.add(myOptionsPanel, c);
+
+                    // question / answer boxes
+                    c.gridx = 2;
+                    c.gridy = 0;
+                    myFrame.add(myQAPanel, c);
+
+                    // map
+                    c.gridx = 2;
+                    c.gridy = 1;
+                    myFrame.add(myMinimap, c);
+
+//                    JPanel viewPanel = new JPanel();
+//                    viewPanel.add(myBoard, BorderLayout.CENTER);
+//                    viewPanel.add(myOptionsPanel, BorderLayout.EAST);
+//                    gamePanel.add(myNavBar.getNavBar(), BorderLayout.SOUTH);
+//                    myFrame.add(viewPanel, BorderLayout.CENTER);
+//                    myFrame.add(gamePanel, BorderLayout.SOUTH);
+//
+//                    JPanel informationPanel = new JPanel();
+//                    informationPanel.setLayout(new GridLayout(2, 1, 2, 2));
+//                    informationPanel.add(myQuestionDisplay);
+//                    informationPanel.add(myMinimap);
+//                    myFrame.add(informationPanel, BorderLayout.EAST);
 
                     //myFrame.add(new JLabel(new ImageIcon("boards/treasure.png")), BorderLayout.EAST);
                     myFrame.pack();
@@ -237,6 +271,8 @@ public class TriviaMazeGui {
         myMainPanel.add(myBackgroundPanel);
         myFrame.add(myMainPanel);
         myMainMenu.setColors(PURPLE, DARK);
+        myQAPanel.setC
+
         myFrame.setSize(new Dimension(BACKGROUND.getIconWidth(),
                 BACKGROUND.getIconHeight()));
         myFrame.setLocationRelativeTo(null);
@@ -301,5 +337,18 @@ public class TriviaMazeGui {
 
     public void movePlayer(final int theDirection) {
         myMinimap.movePlayerSpot(theDirection);
+    }
+
+    public void setUpQuestion(final int theType, final String theQuestion,
+                              final String[] theAnswers) {
+
+        if (theType == 1) { // multi choice
+            // add four buttons
+            // fill with 3 wrongs and 1 correct
+        } else if (theType == 2) { // t/f
+            // add true / false buttons
+        } else if (theType == 3) { // short answer
+            // show text box to enter stuff
+        }
     }
 }

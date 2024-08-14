@@ -512,4 +512,17 @@ public class Maze {
         }
         System.out.println("Question count: " + questionCount);
     }
+
+    public AbstractQuestion getCurrentQuestion() {
+        return myCurrentRoom.getDoor(DIRECTIONS[myDirIndex]).getQuestion();
+    }
+
+    public boolean isCorrect(final String theAnswer) {
+        return getCurrentQuestion().getCorrectAnswer()
+                .equalsIgnoreCase(theAnswer);
+    }
+
+    public void lockDoor() {
+        myCurrentRoom.getDoor(DIRECTIONS[myDirIndex]).setLockState(0);
+    }
 }

@@ -74,14 +74,15 @@ public class TriviaMazeController {
                         myMaze.setCurrentDirection(value);
                     } else if (value.equals("forward")) {
                         final int state = myMaze.getDoorLockState();
-                        if (state != -1) {
-                            // THIS SHOULD BE STATE == 2 LATER!!
+                        if (state == 2) {
                             myMaze.moveForward();
                             myView.showRoom(myMaze.getCurrentRoom().getRow(), myMaze.getCurrentRoom().getCol());
                             myView.movePlayer(myMaze.getCurrentDirection());
                             myView.getMapToString();
 
                             myView.updateView("up");
+                        } else if (state == 1) {
+                            
                         }
 
 //                        if (state == 0) {
