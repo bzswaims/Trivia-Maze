@@ -90,6 +90,7 @@ public class MiniMap extends JPanel {
      */
     public void setRooms(Room[][] theRooms){
         myMinimapRooms = theRooms;
+        repaint();
     }
     /**
      * Sets minimap current room
@@ -97,5 +98,6 @@ public class MiniMap extends JPanel {
      */
     public void setCurrentRoom(Room theRoom){
         myCurrentRoom = theRoom;
+        repaint();
     }
 }
