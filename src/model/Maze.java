@@ -26,7 +26,7 @@ public class Maze {
     private final static double MAX_RATIO = 0.6;
     /** For turning directions. */
     private final static Direction[] DIRECTIONS = {Direction.NORTH,
-            Direction.EAST, Direction.SOUTH, Direction.WEST};
+                    Direction.EAST, Direction.SOUTH, Direction.WEST};
     /** The maze itself. */
     private Room[][] myRooms;
     /** Rooms that may be travelled through. */
@@ -39,6 +39,12 @@ public class Maze {
     private Room myCurrentRoom;
     /** Int representation of player's current direction. */
     private int myDirIndex;
+
+    /**
+     * Question factory to build questions with.
+     */
+    QuestionFactory myQuestionFactory;
+
     /** Int representation of player's game progress.
      *  0 is game lost. 1 is in progress. 2 is game win.
      */
@@ -51,6 +57,7 @@ public class Maze {
         myPathRooms = new ArrayList<>();
         myDirIndex = 0;
         myGameProgress = 1;
+        myQuestionFactory = new QuestionFactory();
 
         assembleMaze(4, 4);
     }
@@ -63,7 +70,7 @@ public class Maze {
     private void assembleMaze(final int theWidth, final int theHeight) {
         if (theWidth < 4 || theHeight < 4) {
             throw new IllegalArgumentException("One of the passed lengths " +
-                    "are less than 4.");
+                                                "are less than 4.");
         }
 
         myRooms = new Room[theWidth][theHeight];
@@ -76,6 +83,8 @@ public class Maze {
         createPaths(random);
         // set up doors
         createDoors();
+        //apply questions to doors
+        setQuestions(random);
     }
 
     /**
@@ -201,7 +210,7 @@ public class Maze {
                 // canEnter also handles if there is a room in a certain d
                 if (canEnter(room, d)) {
                     Room neighbor = myRooms[room.getRow() + d.dy()]
-                            [room.getCol() + d.dx()];
+                                            [room.getCol() + d.dx()];
                     // neighbor room's direction would be opposite
                     Door neighborDoor = neighbor.getDoor(d.flip(d));
                     if (neighborDoor != null) {
@@ -320,7 +329,7 @@ public class Maze {
      */
     public int getDoorLockState() {
         if (canEnter(myCurrentRoom, DIRECTIONS[myDirIndex])) {
-            return myCurrentRoom.getDoor(DIRECTIONS[myDirIndex]).getLockState();
+            myCurrentRoom.getDoor(DIRECTIONS[myDirIndex]).getLockState();
         }
         return -1;
     }
@@ -465,6 +474,14 @@ public class Maze {
     }
 
     /**
+     * Get the maze rooms
+     * @return Room[][] list of the maze rooms
+     */
+    public Room[][] getRooms() {
+        return myRooms;
+    }
+
+    /**
      * Get the player current room
      * @return Room player's current room
      */
@@ -472,15 +489,35 @@ public class Maze {
         return myCurrentRoom;
     }
 
-    public int getRows() {
-        return myRooms.length;
-    }
-
-    public int getCols() {
-        return myRooms[0].length;
-    }
-
-    public int getCurrentDirection() {
-        return myDirIndex;
+    /**
+     * Sets questions to all doors in the maze.
+     *
+     * @param theRandom Random object to randomly select the questions.
+     */
+    private void setQuestions(Random theRandom) {
+        for (int i = 0; i < myRooms.length; i++) {
+            for (int j = 0; j < myRooms[i].length; j++) {
+                if (myRooms[i][j].getDoor(Direction.NORTH) != null &&
+                        myRooms[i][j].getDoor(Direction.NORTH).getQuestion() == null) {
+                    myRooms[i][j].getDoor(Direction.NORTH).setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
+                    System.out.println(myRooms[i][j].getDoor(Direction.NORTH).getQuestion().getQuestion());
+                }
+                if (myRooms[i][j].getDoor(Direction.EAST) != null &&
+                        myRooms[i][j].getDoor(Direction.EAST).getQuestion() == null) {
+                    myRooms[i][j].getDoor(Direction.EAST).setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
+                    System.out.println(myRooms[i][j].getDoor(Direction.EAST).getQuestion().getQuestion());
+                }
+                if (myRooms[i][j].getDoor(Direction.SOUTH) != null &&
+                        myRooms[i][j].getDoor(Direction.SOUTH).getQuestion() == null) {
+                    myRooms[i][j].getDoor(Direction.SOUTH).setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
+                    System.out.println(myRooms[i][j].getDoor(Direction.SOUTH).getQuestion().getQuestion());
+                }
+                if (myRooms[i][j].getDoor(Direction.WEST) != null &&
+                        myRooms[i][j].getDoor(Direction.WEST).getQuestion() == null) {
+                    myRooms[i][j].getDoor(Direction.WEST).setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
+                    System.out.println(myRooms[i][j].getDoor(Direction.WEST).getQuestion().getQuestion());
+                }
+            }
+        }
     }
 }
