@@ -79,7 +79,7 @@ public class Maze {
         fillDefaultRooms();
         // set start
         setStart(random);
-        // carve a "winning path"
+        // carve "path" rooms until full enough
         createPaths(random);
         // set up doors
         createDoors();
@@ -474,19 +474,23 @@ public class Maze {
     }
 
     /**
-     * Get the maze rooms
-     * @return Room[][] list of the maze rooms
-     */
-    public Room[][] getRooms() {
-        return myRooms;
-    }
-
-    /**
      * Get the player current room
      * @return Room player's current room
      */
     public Room getCurrentRoom() {
         return myCurrentRoom;
+    }
+
+    public int getRows() {
+        return myRooms.length;
+    }
+
+    public int getCols() {
+        return myRooms[0].length;
+    }
+
+    public int getCurrentDirection() {
+        return myDirIndex;
     }
 
     /**
@@ -495,29 +499,17 @@ public class Maze {
      * @param theRandom Random object to randomly select the questions.
      */
     private void setQuestions(Random theRandom) {
-        for (int i = 0; i < myRooms.length; i++) {
-            for (int j = 0; j < myRooms[i].length; j++) {
-                if (myRooms[i][j].getDoor(Direction.NORTH) != null &&
-                        myRooms[i][j].getDoor(Direction.NORTH).getQuestion() == null) {
-                    myRooms[i][j].getDoor(Direction.NORTH).setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
-                    System.out.println(myRooms[i][j].getDoor(Direction.NORTH).getQuestion().getQuestion());
-                }
-                if (myRooms[i][j].getDoor(Direction.EAST) != null &&
-                        myRooms[i][j].getDoor(Direction.EAST).getQuestion() == null) {
-                    myRooms[i][j].getDoor(Direction.EAST).setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
-                    System.out.println(myRooms[i][j].getDoor(Direction.EAST).getQuestion().getQuestion());
-                }
-                if (myRooms[i][j].getDoor(Direction.SOUTH) != null &&
-                        myRooms[i][j].getDoor(Direction.SOUTH).getQuestion() == null) {
-                    myRooms[i][j].getDoor(Direction.SOUTH).setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
-                    System.out.println(myRooms[i][j].getDoor(Direction.SOUTH).getQuestion().getQuestion());
-                }
-                if (myRooms[i][j].getDoor(Direction.WEST) != null &&
-                        myRooms[i][j].getDoor(Direction.WEST).getQuestion() == null) {
-                    myRooms[i][j].getDoor(Direction.WEST).setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
-                    System.out.println(myRooms[i][j].getDoor(Direction.WEST).getQuestion().getQuestion());
+        int questionCount = 0; // or door count
+        for (int i = 0; i < myPathRooms.size(); i++) {
+            Room room = myPathRooms.get(i);
+            for (int j = 0; j < DIRECTIONS.length; j++) {
+                Door door = room.getDoor(DIRECTIONS[j]);
+                if (door != null && door.getQuestion() == null) {
+                    door.setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
+                    System.out.println((++questionCount) + ": " + door.getQuestion().getQuestion());
                 }
             }
         }
+        System.out.println("Question count: " + questionCount);
     }
 }

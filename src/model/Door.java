@@ -57,7 +57,10 @@ public class Door {
      * @return the question attached to the door.
      */
     public AbstractQuestion getQuestion() {
-        return myQuestion;
+        if (myQuestion != null) {
+            return myQuestion;
+        }
+        return null;
     }
 
     /**
