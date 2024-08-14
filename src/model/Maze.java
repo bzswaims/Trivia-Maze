@@ -10,9 +10,7 @@ package model;
 //      1 = in progress
 //      2 = won = player unlocked the exit door
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * This represents a 2D Maze that is travelled
@@ -329,7 +327,8 @@ public class Maze {
      */
     public int getDoorLockState() {
         if (canEnter(myCurrentRoom, DIRECTIONS[myDirIndex])) {
-            myCurrentRoom.getDoor(DIRECTIONS[myDirIndex]).getLockState();
+            return myCurrentRoom.getDoor(DIRECTIONS[myDirIndex])
+                    .getLockState();
         }
         return -1;
     }
@@ -505,8 +504,16 @@ public class Maze {
             for (int j = 0; j < DIRECTIONS.length; j++) {
                 Door door = room.getDoor(DIRECTIONS[j]);
                 if (door != null && door.getQuestion() == null) {
+                    System.out.println("Door state: " + door.getLockState());
                     door.setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
-                    System.out.println((++questionCount) + ": " + door.getQuestion().getQuestion());
+                    AbstractQuestion question = door.getQuestion();
+                    System.out.println((++questionCount) + ": " + question.getQuestion() + " " + question.getCorrectAnswer());
+                    if (question.getType() == 1) {
+                        List<String> list = ((MultiQuestion) question).getIncorrectAnswers();
+                        for (int k = 0; k < 3; k++) {
+                            System.out.println("Incorrect answer: " + list.get(k));
+                        }
+                    }
                 }
             }
         }
@@ -517,12 +524,43 @@ public class Maze {
         return myCurrentRoom.getDoor(DIRECTIONS[myDirIndex]).getQuestion();
     }
 
+    /**
+     * Returns answers for multi-choice question.
+     * @return String array of answers.
+     */
+    public String[] getAnswers() {
+        AbstractQuestion question = getCurrentQuestion();
+        if (question.getType() == 1) {
+            List<String> list = ((MultiQuestion) question).getIncorrectAnswers();
+            list.add(question.getCorrectAnswer());
+            Collections.shuffle(list);
+            String[] answers = new String[4];
+            for (int i = 0; i < list.size(); i++) {
+                answers[i] = list.get(i);
+            }
+            return answers;
+        }
+        return null;
+    }
+
+    /**
+     * Checks if answer is correct.
+     * @param theAnswer String answer.
+     * @return boolean.
+     */
     public boolean isCorrect(final String theAnswer) {
         return getCurrentQuestion().getCorrectAnswer()
                 .equalsIgnoreCase(theAnswer);
     }
 
-    public void lockDoor() {
-        myCurrentRoom.getDoor(DIRECTIONS[myDirIndex]).setLockState(0);
+
+    /**
+     * Sets current door's state.
+     * @param theInt int state.
+     */
+    public void setDoorState(final int theInt) {
+        if (theInt > -1 && theInt < 3) {
+            myCurrentRoom.getDoor(DIRECTIONS[myDirIndex]).setLockState(theInt);
+        }
     }
 }

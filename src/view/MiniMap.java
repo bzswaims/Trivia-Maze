@@ -16,7 +16,7 @@ import java.util.List;
 
 public class MiniMap extends JPanel {
     /** Length of map. */
-    private static final int MAP_LENGTH = 100;
+    private static final int MAP_LENGTH = 200;
     /** Scaled size of tile. */
     private double myTileSize;
     /** List of room tiles with shapes and coordinates. */

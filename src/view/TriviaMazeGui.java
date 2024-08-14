@@ -124,7 +124,7 @@ public class TriviaMazeGui {
      */
     private final JPanel myBackgroundPanel;
 
-    private final JPanel myQAPanel;
+    private JPanel myQAPanel;
 
     /**
      * Constructor.
@@ -189,9 +189,10 @@ public class TriviaMazeGui {
         return new PropertyChangeListener() {
             @Override
             public void propertyChange(PropertyChangeEvent theEvt) {
-                String value = theEvt.getNewValue().toString();
-                if (value.equals("New game")) {
+                String newValue = theEvt.getNewValue().toString();
+                if (newValue.equals("New game")) {
                     myFrame.remove(myMainPanel);
+                    myFrame.setBackground(DARK);
 
                     JPanel gamePanel = new JPanel();
                     gamePanel.setLayout(new GridBagLayout());
@@ -203,27 +204,29 @@ public class TriviaMazeGui {
                     // board
                     c.gridx = 0;
                     c.gridy = 0;
-                    myFrame.add(new Board(), c);
+                    gamePanel.add(myBoard, c);
 
                     // movement
                     c.gridx = 0;
                     c.gridy = 1;
-                    myFrame.add(myNavBar.getNavBar(), c);
+                    gamePanel.add(myNavBar.getNavBar(), c);
 
                     // status / interact-ables
                     c.gridx = 1;
                     c.gridy = 0;
-                    myFrame.add(myOptionsPanel, c);
+                    gamePanel.add(myOptionsPanel, c);
 
                     // question / answer boxes
                     c.gridx = 2;
                     c.gridy = 0;
-                    myFrame.add(myQAPanel, c);
+                    gamePanel.add(myQAPanel, c);
 
                     // map
                     c.gridx = 2;
                     c.gridy = 1;
-                    myFrame.add(myMinimap, c);
+                    gamePanel.add(myMinimap, c);
+
+                    myFrame.add(gamePanel);
 
 //                    JPanel viewPanel = new JPanel();
 //                    viewPanel.add(myBoard, BorderLayout.CENTER);
@@ -242,14 +245,17 @@ public class TriviaMazeGui {
                     myFrame.pack();
                     myFrame.setLocationRelativeTo(null);
                     myFrame.repaint();
-                } else if (value.equals("forward") ||
-                           value.equals("left") || value.equals("right")) {
-                    if (value.equals("left")) {
+                } else if (newValue.equals("forward") ||
+                           newValue.equals("left") || newValue.equals("right")) {
+                    if (newValue.equals("left")) {
                         myBoard.left();
-                    } else if (value.equals("right")) {
+                    } else if (newValue.equals("right")) {
                         myBoard.right();
                     }
-                    setValue(value);
+                    setValue("Movement", newValue);
+                } else if (theEvt.getPropertyName().equals("Answer")) {
+                    System.out.println("TriviaMazeGui sending answer to Controller");
+                    setValue("Answer", newValue);
                 }
             }
         };
@@ -271,7 +277,8 @@ public class TriviaMazeGui {
         myMainPanel.add(myBackgroundPanel);
         myFrame.add(myMainPanel);
         myMainMenu.setColors(PURPLE, DARK);
-        myQAPanel.setC
+        ((QAPanel) myQAPanel).setColors(PURPLE, DARK);
+        ((QAPanel) myQAPanel).addPropertyChangeListener(myPCListener);
 
         myFrame.setSize(new Dimension(BACKGROUND.getIconWidth(),
                 BACKGROUND.getIconHeight()));
@@ -307,10 +314,10 @@ public class TriviaMazeGui {
      * Changes the menu by notifying listener.
      * @param theNewValue String.
      */
-    public void setValue(String theNewValue) {
-        String oldValue = "Still";
-        this.myPCSupport.firePropertyChange("Movement",
-                oldValue, theNewValue);
+    public void setValue(final String theProperty,
+                         final String theNewValue) {
+        this.myPCSupport.firePropertyChange(theProperty,
+                "TriviaMazeGui", theNewValue);
     }
 
     /**
@@ -341,14 +348,12 @@ public class TriviaMazeGui {
 
     public void setUpQuestion(final int theType, final String theQuestion,
                               final String[] theAnswers) {
+        myNavBar.getNavBar().setEnabled(false);
+        ((QAPanel) myQAPanel).setQuestion(theType, theQuestion, theAnswers);
+    }
 
-        if (theType == 1) { // multi choice
-            // add four buttons
-            // fill with 3 wrongs and 1 correct
-        } else if (theType == 2) { // t/f
-            // add true / false buttons
-        } else if (theType == 3) { // short answer
-            // show text box to enter stuff
-        }
+    public void stopQuestion() {
+        myNavBar.getNavBar().setEnabled(true);
+        ((QAPanel) myQAPanel).clearQuestion();
     }
 }

@@ -74,26 +74,38 @@ public class TriviaMazeController {
                         myMaze.setCurrentDirection(value);
                     } else if (value.equals("forward")) {
                         final int state = myMaze.getDoorLockState();
+                        System.out.println("Door state: " + state);
                         if (state == 2) {
                             myMaze.moveForward();
-                            myView.showRoom(myMaze.getCurrentRoom().getRow(), myMaze.getCurrentRoom().getCol());
+                            myView.showRoom(myMaze.getCurrentRoom().getRow(),
+                                            myMaze.getCurrentRoom().getCol());
                             myView.movePlayer(myMaze.getCurrentDirection());
                             myView.getMapToString();
 
                             myView.updateView("up");
                         } else if (state == 1) {
-                            
+                            // disable nav bar
+                            System.out.println("Show question");
+                            myView.setUpQuestion(
+                                    myMaze.getCurrentQuestion().getType(),
+                                    myMaze.getCurrentQuestion().getQuestion(),
+                                    myMaze.getAnswers());
                         }
-
-//                        if (state == 0) {
-//                            // say the door is locked somewhere
-//                        } else if (state == 1) {
-//                            // prompt question!!
-//                        } else if (state == 2) {
-//                            myView.updateView("up");
-//                        }
                     }
 
+                } else if (name.equals("Answer")) {
+                    System.out.println("Correct? : " + myMaze.isCorrect(theEvt.getNewValue().toString()));
+                    if (myMaze.isCorrect(theEvt.getNewValue().toString())) {
+                        myMaze.setDoorState(2);
+                        myView.stopQuestion();
+                        // myView.stopQuestion()
+                          // clear qapanel
+                          // re-enable navbar
+                          // update view
+                    } else {
+                        myMaze.setDoorState(0);
+                        myView.stopQuestion();
+                    }
                 }
             }
         };
