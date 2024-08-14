@@ -33,6 +33,7 @@ public class MiniMap extends JPanel {
         myRoomTiles = new ArrayList<MyRoomTile>();
         myTileSize = 0;
         setPreferredSize(new Dimension(MAP_LENGTH, MAP_LENGTH));
+        setMinimumSize(new Dimension(MAP_LENGTH, MAP_LENGTH));
     }
 
     /**
