@@ -1,11 +1,11 @@
-//TODO: need to make short answer work
+//TODO: need to make each fire off a PCL thingy to alert the model that the door needs to be unlocked or locked.
 
 package view;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -80,6 +80,11 @@ public class QuestionDisplay extends JPanel {
     private final JPanel myAnswerBlock;
 
     /**
+     * To communicate with Controller.
+     */
+    private final PropertyChangeSupport myPCSupport;
+
+    /**
      * Default constructor.
      */
     public QuestionDisplay() {
@@ -96,6 +101,8 @@ public class QuestionDisplay extends JPanel {
         myAnswers = null;
         myAnswerBlock = new JPanel();
 
+        myPCSupport = new PropertyChangeSupport(this);
+
         setLayout (new BoxLayout (this, BoxLayout.Y_AXIS));
 
         mySubmit = createSubmitButton();
@@ -111,6 +118,7 @@ public class QuestionDisplay extends JPanel {
         temp.addActionListener(new ActionListener(){
             public void actionPerformed(ActionEvent e) {
                 myIsCorrect = myShortAnswer.getText().equalsIgnoreCase(myQuestion.getCorrectAnswer());
+                fireAnswer();
             }
         });
 
@@ -221,6 +229,13 @@ public class QuestionDisplay extends JPanel {
     }
 
     /**
+     * Fires off boolean myIsCorrect
+     */
+    private void fireAnswer() {
+        this.myPCSupport.firePropertyChange(String.valueOf(myIsCorrect), 0, 1);
+    }
+
+    /**
      * Creates the buttons proper.
      *
      * @param theText The text attached to the button.
@@ -243,16 +258,20 @@ public class QuestionDisplay extends JPanel {
         return new ActionListener[] {theEvent -> {
             //Option 1
             myIsCorrect = myAnswers[0].equals(myQuestion.getCorrectAnswer());
+            fireAnswer();
             //compare the array at point 1 to correct answer.
         }, theEvent -> {
             //Option 2
             myIsCorrect = myAnswers[1].equals(myQuestion.getCorrectAnswer());
+            fireAnswer();
         }, theEvent -> {
             //Option 3
             myIsCorrect = myAnswers[2].equals(myQuestion.getCorrectAnswer());
+            fireAnswer();
         }, theEvent -> {
             //Option 4
             myIsCorrect = myAnswers[3].equals(myQuestion.getCorrectAnswer());
+            fireAnswer();
         }, theEvent -> {
             //Cheat, always correct.
             //This will always be correct, and will be deleted in the final cut.
@@ -264,9 +283,11 @@ public class QuestionDisplay extends JPanel {
         return new ActionListener[] {theEvent -> {
             //Option True
             myIsCorrect = myQuestion.getCorrectAnswer().equals("True");
+            fireAnswer();
         }, theEvent -> {
             //Option False
             myIsCorrect = myQuestion.getCorrectAnswer().equals("False");
+            fireAnswer();
         }, theEvent -> {
             //Cheat, always correct.
             myIsCorrect = true;
