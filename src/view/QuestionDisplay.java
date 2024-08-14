@@ -3,8 +3,9 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.*;
@@ -37,6 +38,11 @@ public class QuestionDisplay extends JPanel {
      * Single JTextField to take in the short answer.
      */
     private JTextField myShortAnswer;
+
+    /**
+     * Submit button for the short answer questions.
+     */
+    private JButton mySubmit;
 
     /**
      * List for answers for multi questions.
@@ -80,7 +86,7 @@ public class QuestionDisplay extends JPanel {
         //setLayout(new GridBagLayout());
 
         myQuestion = null;
-        myQuestionText = new JLabel(" ");
+        myQuestionText = new JLabel("Question Display");
         myShortAnswer = new JTextField(20);
         myMultiAnswers = new ArrayList<>();
         myListeners = null;
@@ -91,9 +97,24 @@ public class QuestionDisplay extends JPanel {
         myAnswerBlock = new JPanel();
 
         setLayout (new BoxLayout (this, BoxLayout.Y_AXIS));
-        myAnswerBlock.setLayout (new BoxLayout (myAnswerBlock, BoxLayout.Y_AXIS));
 
-        //TODO: need to make the screen blank or something by default.
+        mySubmit = createSubmitButton();
+
+        myAnswerBlock.add(new JLabel(new ImageIcon("files\\helpicon.png")));
+
+        createScreen();
+    }
+
+    private JButton createSubmitButton() {
+        JButton temp = buttonMaker("Submit");
+
+        temp.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent e) {
+                myIsCorrect = myShortAnswer.getText().equalsIgnoreCase(myQuestion.getCorrectAnswer());
+            }
+        });
+
+        return temp;
     }
 
     /**
@@ -102,6 +123,8 @@ public class QuestionDisplay extends JPanel {
      * @param theQuestion the Question we pull the text from.
      */
     public void setQuestion(AbstractQuestion theQuestion) {
+        myAnswerBlock.removeAll();
+
         myQuestion = theQuestion;
         myQuestionText.setText(myQuestion.getQuestion());
 
@@ -156,8 +179,6 @@ public class QuestionDisplay extends JPanel {
 
             String[] temp = {"True", "False"};
             createButtons(temp);
-        } else if (myQuestion instanceof ShortQuestion) {
-            //TODO need to work on shortquestion part.
         }
 
         setUpAnswerBlock();
@@ -172,16 +193,21 @@ public class QuestionDisplay extends JPanel {
     private void createScreen() {
         add(myQuestionText, BorderLayout.NORTH);
         add(myAnswerBlock, BorderLayout.SOUTH);
-
-        //TODO: need to update question screen to display.
     }
 
     /**
      * Populates the menu bar.
      */
     private void setUpAnswerBlock() {
-        for (int i = 0; i < myAnswerButtons.size(); i++) {
-            myAnswerBlock.add(myAnswerButtons.get(i));
+        if (myQuestion instanceof ShortQuestion) {
+            myAnswerBlock.add(myShortAnswer);
+            myAnswerBlock.add(mySubmit);
+        } else {
+            myAnswerBlock.setLayout (new BoxLayout (myAnswerBlock, BoxLayout.Y_AXIS));
+
+            for (int i = 0; i < myAnswerButtons.size(); i++) {
+                myAnswerBlock.add(myAnswerButtons.get(i));
+            }
         }
     }
 
@@ -192,7 +218,6 @@ public class QuestionDisplay extends JPanel {
      */
     public boolean isCorrect() {
         return myIsCorrect;
-        //TODO: need to update screen to go back to blank
     }
 
     /**

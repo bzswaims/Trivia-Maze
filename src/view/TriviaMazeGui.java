@@ -8,9 +8,7 @@
 
 package view;
 
-import model.AbstractQuestion;
-import model.Room;
-import model.TrueFalseQuestion;
+import model.*;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -129,10 +127,6 @@ public class TriviaMazeGui {
         //I hope this is working, this shit is like magic to me.
         myMainMenu.addPropertyChangeListener(myPCListener);
         myNavBar.addPropertyChangeListener(myPCListener);
-        AbstractQuestion temp = new TrueFalseQuestion(2);
-        temp.setQuestion("Testing");
-        temp.setCorrectAnswer("True");
-        myQuestionDisplay.setQuestion(temp);
     }
 
 
