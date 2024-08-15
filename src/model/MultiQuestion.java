@@ -18,6 +18,7 @@ import java.util.ArrayList;
  * @version 0.1
  */
 public class MultiQuestion extends AbstractQuestion {
+
     /**
      * Array of incorrect answers.
      */

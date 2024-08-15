@@ -8,7 +8,7 @@ package model;
  *         Mahammod
  * @version 0.1
  */
-public class ShortQuestion extends AbstractQuestion {
+public class ShortQuestion extends AbstractQuestion{
     public ShortQuestion() {
     }
 }

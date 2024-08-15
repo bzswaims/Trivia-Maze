@@ -70,6 +70,13 @@ public class MainMenu {
             @Override
             public void actionPerformed(final ActionEvent theEvent) {
                 // load
+                //TODO
+                //here I need to setup the game screen as per usual, but also trigger deserialization,
+                // deserialization should be happening where seralization happens, i believe in the controller?
+                //Either way I will just shoot off a boolean value.
+                myMenuBar.setVisible(false);
+                setValue("Load");
+                setValue("New game");
             }
         }, new ActionListener() {
             @Override

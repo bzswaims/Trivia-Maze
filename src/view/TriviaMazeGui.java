@@ -174,6 +174,7 @@ public class TriviaMazeGui {
         //I hope this is working, this shit is like magic to me.
         myMainMenu.addPropertyChangeListener(myPCListener);
         myNavBar.addPropertyChangeListener(myPCListener);
+        myOptionsPanel.addPropertyChangeListener(myPCListener);
     }
 
 
@@ -186,6 +187,11 @@ public class TriviaMazeGui {
             @Override
             public void propertyChange(PropertyChangeEvent theEvt) {
                 String newValue = theEvt.getNewValue().toString();
+                if(newValue.equals("Save")) {
+                    myPCSupport.firePropertyChange("Save", 0, 1);
+                } else if(newValue.equals("Load")) {
+                    myPCSupport.firePropertyChange("Load", 0, 1);
+                }
                 if (newValue.equals("New game")) {
                     myFrame.remove(myMainPanel);
                     myFrame.setBackground(DARK);

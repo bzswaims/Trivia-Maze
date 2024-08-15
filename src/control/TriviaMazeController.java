@@ -7,6 +7,8 @@ package control;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.io.*;
+
 import model.Maze;
 import view.TriviaMazeGui;
 
@@ -23,9 +25,14 @@ public class TriviaMazeController {
     private final TriviaMazeGui myView;
 
     /**
+     * File name for the save file.
+     */
+    private String myFileName;
+
+    /**
      * To use data in Maze.
      */
-    private final Maze myMaze;
+    private Maze myMaze;
 
     /**
      * Listener for view.
@@ -41,6 +48,7 @@ public class TriviaMazeController {
                                 final TriviaMazeGui theView) {
         myMaze = theMaze;
         myView = theView;
+        myFileName = "triviagame.sav";
         myListener = createListener();
         myView.addPropertyChangeListener(myListener);
     }
@@ -58,6 +66,44 @@ public class TriviaMazeController {
         // myView.getMapToString();
     }
 
+    private void createSave() {
+        try {
+            FileOutputStream file = new FileOutputStream(myFileName);
+            ObjectOutputStream out = new ObjectOutputStream(file);
+
+
+            out.writeObject(myMaze);
+
+            out.close();
+            file.close();
+        } catch (IOException ex) {
+            System.out.println("IOException is caught");
+            //Log.d("Save","IO exception");
+            // TODO Auto-generated catch block
+            ex.printStackTrace();
+        }
+    }
+
+    /**
+     * Loads in a save file and sets myMaze to the maze loaded in.
+     */
+    private void loadSave() {
+        try {
+            FileInputStream file = new FileInputStream(myFileName);
+            ObjectInputStream in = new ObjectInputStream(file);
+
+            myMaze = (Maze)in.readObject();
+
+            in.close();
+            file.close();
+        }
+        catch (IOException ex) {
+            System.out.println("IOException is caught");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Creates listener for GUI.
      * @return PropertyChangeListener.
@@ -68,7 +114,13 @@ public class TriviaMazeController {
             public void propertyChange(PropertyChangeEvent theEvt) {
                 // for when direction changes
                 String name = theEvt.getPropertyName();
-                if (name.equals("Movement")) {
+                if (name.equals("Save")) {
+                    //creates a save file
+                    createSave();
+                } else if (name.equals("Load")) {
+                    //loads a save file
+                    loadSave();
+                } else if (name.equals("Movement")) {
                     String value = theEvt.getNewValue().toString();
                     if (value.equals("left") || value.equals("right")) {
                         myMaze.setCurrentDirection(value);

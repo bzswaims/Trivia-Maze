@@ -57,6 +57,7 @@ public class OptionsPanel extends JPanel {
         return new ActionListener[] {theEvent -> {
             //Save button
             //TODO
+            myPCSupport.firePropertyChange("Save", 0, "Save");
         }, theEvent -> {
             //Quit button
             System.exit(0);

@@ -8,6 +8,9 @@
 
 package model;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Abstract data type for the Question objects.
  * The question proper is stored in a String, as is
@@ -18,7 +21,10 @@ package model;
  *         Mahammod
  * @version 0.1
  */
-public class AbstractQuestion implements Question {
+public class AbstractQuestion implements Serializable, Question {
+    @Serial
+    private static final long serialVersionUID = 7788337777844466666L;
+
     /**
      * Question.
      */

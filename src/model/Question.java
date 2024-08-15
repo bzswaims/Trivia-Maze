@@ -5,6 +5,8 @@
 
 package model;
 
+import java.io.Serializable;
+
 /**
  * Interface for the Question objects.
  *

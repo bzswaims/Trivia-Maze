@@ -17,6 +17,7 @@ import java.util.Random;
  * @version 1.2
  */
 public enum Direction {
+
     /**
      * North (which is up on the screen).
      */

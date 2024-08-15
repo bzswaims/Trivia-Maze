@@ -7,6 +7,8 @@ package model;
 
 import org.sqlite.SQLiteDataSource;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -19,7 +21,10 @@ import java.util.Random;
  * @author Zane Swaims (bzswaims@uw.edu)
  * @version 0.1
  */
-public class QuestionFactory {
+public class QuestionFactory implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 33322228666777999L;
 
     /**
      * constant for total number of questions in database.
@@ -44,7 +49,7 @@ public class QuestionFactory {
     /**
      * The database.
      */
-    private SQLiteDataSource ds;
+    private static SQLiteDataSource ds;
 
     /**
      * random number generator.

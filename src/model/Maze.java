@@ -10,6 +10,8 @@ package model;
 //      1 = in progress
 //      2 = won = player unlocked the exit door
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.*;
 
 /**
@@ -19,7 +21,13 @@ import java.util.*;
  * @author Abbygaile Yrojo
  * @version August 14, 2024
  */
-public class Maze {
+public class Maze implements Serializable {
+
+
+    @Serial
+    private static final long serialVersionUID = 62999933L;
+
+
     /** To control how filled the maze is with Rooms. */
     private final static double MAX_RATIO = 0.6;
     /** For turning directions. */

@@ -5,13 +5,19 @@
 
 package model;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Room in maze.
  *
  * @author Abbygaile Yrojo
  * @version July 30, 2024
  */
-public class Room {
+public class Room implements Serializable {
+
+    @Serial
+    private static final long serialVersionUID = 7776666666L;
     /**
      * Array of Doors, ordered N-E-S-W.
      */

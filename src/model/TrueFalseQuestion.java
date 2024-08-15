@@ -2,6 +2,9 @@
 
 package model;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 /**
  * Object for storing the true and false questions.
  *
@@ -10,7 +13,8 @@ package model;
  *         Mahammod
  * @version 0.1
  */
-public class TrueFalseQuestion extends AbstractQuestion {
+public class TrueFalseQuestion extends AbstractQuestion{
+
     public TrueFalseQuestion() {
     }
 }
