@@ -9,13 +9,13 @@ import java.util.ArrayList;
 
 /**
  * Object for storing multiple choice questions.
- * The incorrect choices are stored in a String
+ * The incorrect choices are stored in a String array list
  * to be fetched when needed.
  *
- * @author Zane Swaims (bzswaims@uw.edu)
- *         Abby Yrojo
- *         Mahammod
- * @version 0.1
+ * @author Zane Swaims
+ * @author Abbygaile Yrojo
+ * @author Mahammod
+ * @version 1.0
  */
 public class MultiQuestion extends AbstractQuestion {
 
@@ -23,8 +23,6 @@ public class MultiQuestion extends AbstractQuestion {
      * Array of incorrect answers.
      */
     private final ArrayList<String> myIncorrectAnswers;
-
-    //array list in case longer than 3 ^^
 
     /**
      * Constructs MultiQuestion.

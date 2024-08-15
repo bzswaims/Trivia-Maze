@@ -9,7 +9,7 @@ import java.io.Serial;
 import java.io.Serializable;
 
 /**
- * Room in maze.
+ * Room object that will act as the main rooms for our maze.
  *
  * @author Abbygaile Yrojo
  * @version July 30, 2024
@@ -18,6 +18,7 @@ public class Room implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 7776666666L;
+
     /**
      * Array of Doors, ordered N-E-S-W.
      */
@@ -48,7 +49,6 @@ public class Room implements Serializable {
      */
     private boolean myIsEnd;
 
-    //TODO: field for if you have visited the room
     /**
      * If Room has been visited.
      */
@@ -131,7 +131,6 @@ public class Room implements Serializable {
         return myIsBlock;
     }
 
-    //TODO: accessor for if you've visited the room, feel free to change the name of it
     /**
      * Returns if the room has been visited.
      * @return if the room has been visited.
@@ -171,19 +170,12 @@ public class Room implements Serializable {
      * @return Door.
      */
     public Door getDoor(final Direction theDirection) {
-        switch (theDirection) {
-            case NORTH:
-                return myDoors[0];
-            case EAST:
-                return myDoors[1];
-            case SOUTH:
-                return myDoors[2];
-            case WEST:
-                return myDoors[3];
-            default:
-                break;
-        }
-        return null;
+        return switch (theDirection) {
+            case NORTH -> myDoors[0];
+            case EAST -> myDoors[1];
+            case SOUTH -> myDoors[2];
+            case WEST -> myDoors[3];
+        };
     }
 
     /**
@@ -193,7 +185,6 @@ public class Room implements Serializable {
     public void setStart(final boolean theBool) {
         myIsStart = theBool;
 
-        //TODO: added this in to set the start room as having been visited.
         if(theBool) {
             myHasBeenVisited = true;
         }
@@ -207,7 +198,6 @@ public class Room implements Serializable {
         myIsBlock = theBool;
     }
 
-    //TODO: mutator for if you've visited the room or not
     /**
      * Sets if Room has been visited.
      * @param theBool boolean flag if the room has been visited.
@@ -224,7 +214,7 @@ public class Room implements Serializable {
 
     /**
      * Sets if Maze has searched here.
-     * @param theBool
+     * @param theBool Flag to set if the maze has been searched here.
      */
     public void setMazeVisited(final boolean theBool) {
         myMazeVisited = theBool;
@@ -248,15 +238,3 @@ public class Room implements Serializable {
         }
     }
 }
-
-/*
-NOTES (possibly but can be changed):
-Door[] Index guide:
-    0 - North
-    1 - East
-    2 - South
-    3 - West
-I like to remember directions like "Never Eat Soggy Worms" or something lol
-
-
- */

@@ -5,13 +5,26 @@
 
 package view;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import javax.swing.AbstractAction;
+import javax.swing.ActionMap;
+import javax.swing.BoxLayout;
+import javax.swing.InputMap;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 
 /**
  * Panel to display question and answers.
@@ -87,14 +100,10 @@ public class QAPanel extends JPanel {
      * Sets up buttons.
      */
     private void setUpButtons() {
-        final ActionListener buttonListener = new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theE) {
-                if (theE.getSource() instanceof JButton) {
-                    JButton button = (JButton) theE.getSource();
-                    System.out.println("Answered: " + button.getText());
-                    setValue(button.getText());
-                }
+        final ActionListener buttonListener = theE -> {
+            if (theE.getSource() instanceof JButton button) {
+                System.out.println("Answered: " + button.getText());
+                setValue(button.getText());
             }
         };
         for (JButton button : TF_BUTTONS) {

@@ -1,14 +1,22 @@
+/*
+ * TCSS 360 Software Development and Quality Assurance Techniques
+ * Summer 2024
+ */
+
 package model;
 
 /**
  * Object for storing the short answer questions.
  *
- * @author Zane Swaims (bzswaims@uw.edu)
- *         Abby Yrojo
- *         Mahammod
- * @version 0.1
+ * @author Zane Swaims
+ * @author Abbygaile Yrojo
+ * @author Mahammod
+ * @version 1.0
  */
 public class ShortQuestion extends AbstractQuestion{
+    /**
+     * Constructor for a ShortQuestion.
+     */
     public ShortQuestion() {
     }
 }

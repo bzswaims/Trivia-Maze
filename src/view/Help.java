@@ -1,11 +1,22 @@
+/*
+ * TCSS 360 Software Development and Quality Assurance Techniques
+ * Summer 2024
+ */
+
 package view;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JLabel;
 
 // TODO - Get the font working and colors not flashbanging
 //          aka get it to fit the theme
@@ -13,8 +24,9 @@ import java.io.IOException;
 /**
  * Displays the help screen.
  *
- * @author Zane Swaims (bzswaims@uw.edu), Abbygaile Yrojo
- * @version 0.4
+ * @author Zane Swaims
+ * @author Abbygaile Yrojo
+ * @version 1.0
  */
 public class Help extends JPanel {
     /**

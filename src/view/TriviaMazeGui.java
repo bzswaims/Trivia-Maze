@@ -1,26 +1,35 @@
-//TODO Make an actual icon for the game.
-
-//What I need to do is create panels, the panels will each house the different classes.
-//trivia mazeGUI will pass the frame down to the mainMenu class, and well pretty much pass the JFrame around the program
-//from there when main menu clicks a button I can pass the JFrame into a new class and adjust it there.
-
-//instead I can pass in the JFrame and return the JFrame, and set the JFrame into the returned JFrame
+/*
+ * TCSS 360 Software Development and Quality Assurance Techniques
+ * Summer 2024
+ */
 
 package view;
 
-import java.awt.*;
-
-import java.beans.PropertyChangeEvent;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.Graphics;
+import java.awt.GraphicsEnvironment;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Image;
+import java.awt.Insets;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.OverlayLayout;
 
 /**
  * Starts the GUI for the Trivia Maze.
  *
  * @author Zane Swaims (bzswaims@uw.edu)
+ * @author Abbygaile Yrojo
  * @version 0.1
  */
 public class TriviaMazeGui {
@@ -51,21 +60,6 @@ public class TriviaMazeGui {
     private static final ImageIcon BAG = new ImageIcon("files/bag.png");
 
     /**
-     * Fetches the screen size.
-     */
-    private static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
-
-    /**
-     * Finds 1/3 of the width of the screen.
-     */
-    private static final int WIDTH = (int) SCREEN_SIZE.getWidth() / 3;
-
-    /**
-     * Finds 1/3 of the height of the screen.
-     */
-    private static final int HEIGHT = (int) SCREEN_SIZE.getHeight() / 3;
-
-    /**
      * The window.
      */
     private static JFrame myFrame;
@@ -91,14 +85,9 @@ public class TriviaMazeGui {
     private final MiniMap myMinimap;
 
     /**
-     * The panel containing the save help and quit buttons ingame.
+     * The panel containing the save help and quit buttons in game.
      */
     private final OptionsPanel myOptionsPanel;
-
-    /**
-     * The Question info panel.
-     */
-    private final QuestionDisplay myQuestionDisplay;
 
     /**
      * Used to load game.
@@ -120,7 +109,7 @@ public class TriviaMazeGui {
      */
     private final JPanel myBackgroundPanel;
 
-    private JPanel myQAPanel;
+    private final JPanel myQAPanel;
 
     /**
      * Constructor.
@@ -169,7 +158,6 @@ public class TriviaMazeGui {
             }
         };
 
-        myQuestionDisplay = new QuestionDisplay();
         myOptionsPanel = new OptionsPanel();
         //I hope this is working, this shit is like magic to me.
         myMainMenu.addPropertyChangeListener(myPCListener);
@@ -183,82 +171,65 @@ public class TriviaMazeGui {
      * @return PropertyChangeListener
      */
     private PropertyChangeListener createPCListener() {
-        return new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent theEvt) {
-                String newValue = theEvt.getNewValue().toString();
-                if(newValue.equals("Save")) {
-                    myPCSupport.firePropertyChange("Save", 0, 1);
-                } else if(newValue.equals("Load")) {
-                    myPCSupport.firePropertyChange("Load", 0, 1);
+        return theEvt -> {
+            String newValue = theEvt.getNewValue().toString();
+            if(newValue.equals("Save")) {
+                myPCSupport.firePropertyChange("Save", 0, 1);
+            } else if(newValue.equals("Load")) {
+                myPCSupport.firePropertyChange("Load", 0, 1);
+            }
+            if (newValue.equals("New game")) {
+                myFrame.remove(myMainPanel);
+                myFrame.setBackground(DARK);
+
+                JPanel gamePanel = new JPanel();
+                gamePanel.setLayout(new GridBagLayout());
+                // this acts as the pointer for setting stuff
+                GridBagConstraints c = new GridBagConstraints();
+                c.weightx = 0.5;
+                c.insets = new Insets(5,5,5,5);  // padding
+
+                // board
+                c.gridx = 0;
+                c.gridy = 0;
+                gamePanel.add(myBoard, c);
+
+                // movement
+                c.gridx = 0;
+                c.gridy = 1;
+                gamePanel.add(myNavBar.getNavBar(), c);
+
+                // status / interactable
+                c.gridx = 1;
+                c.gridy = 0;
+                gamePanel.add(myOptionsPanel, c);
+
+                // question / answer boxes
+                c.gridx = 2;
+                c.gridy = 0;
+                gamePanel.add(myQAPanel, c);
+
+                // map
+                c.gridx = 2;
+                c.gridy = 1;
+                gamePanel.add(myMinimap, c);
+
+                myFrame.add(gamePanel);
+
+                myFrame.pack();
+                myFrame.setLocationRelativeTo(null);
+                myFrame.repaint();
+            } else if (newValue.equals("forward") ||
+                       newValue.equals("left") || newValue.equals("right")) {
+                if (newValue.equals("left")) {
+                    myBoard.left();
+                } else if (newValue.equals("right")) {
+                    myBoard.right();
                 }
-                if (newValue.equals("New game")) {
-                    myFrame.remove(myMainPanel);
-                    myFrame.setBackground(DARK);
-
-                    JPanel gamePanel = new JPanel();
-                    gamePanel.setLayout(new GridBagLayout());
-                    // this acts as the pointer for setting stuff
-                    GridBagConstraints c = new GridBagConstraints();
-                    c.weightx = 0.5;
-                    c.insets = new Insets(5,5,5,5);  // padding
-
-                    // board
-                    c.gridx = 0;
-                    c.gridy = 0;
-                    gamePanel.add(myBoard, c);
-
-                    // movement
-                    c.gridx = 0;
-                    c.gridy = 1;
-                    gamePanel.add(myNavBar.getNavBar(), c);
-
-                    // status / interact-ables
-                    c.gridx = 1;
-                    c.gridy = 0;
-                    gamePanel.add(myOptionsPanel, c);
-
-                    // question / answer boxes
-                    c.gridx = 2;
-                    c.gridy = 0;
-                    gamePanel.add(myQAPanel, c);
-
-                    // map
-                    c.gridx = 2;
-                    c.gridy = 1;
-                    gamePanel.add(myMinimap, c);
-
-                    myFrame.add(gamePanel);
-
-//                    JPanel viewPanel = new JPanel();
-//                    viewPanel.add(myBoard, BorderLayout.CENTER);
-//                    viewPanel.add(myOptionsPanel, BorderLayout.EAST);
-//                    gamePanel.add(myNavBar.getNavBar(), BorderLayout.SOUTH);
-//                    myFrame.add(viewPanel, BorderLayout.CENTER);
-//                    myFrame.add(gamePanel, BorderLayout.SOUTH);
-//
-//                    JPanel informationPanel = new JPanel();
-//                    informationPanel.setLayout(new GridLayout(2, 1, 2, 2));
-//                    informationPanel.add(myQuestionDisplay);
-//                    informationPanel.add(myMinimap);
-//                    myFrame.add(informationPanel, BorderLayout.EAST);
-
-                    //myFrame.add(new JLabel(new ImageIcon("boards/treasure.png")), BorderLayout.EAST);
-                    myFrame.pack();
-                    myFrame.setLocationRelativeTo(null);
-                    myFrame.repaint();
-                } else if (newValue.equals("forward") ||
-                           newValue.equals("left") || newValue.equals("right")) {
-                    if (newValue.equals("left")) {
-                        myBoard.left();
-                    } else if (newValue.equals("right")) {
-                        myBoard.right();
-                    }
-                    setValue("Movement", newValue);
-                } else if (theEvt.getPropertyName().equals("Answer")) {
-                    System.out.println("TriviaMazeGui sending answer to Controller");
-                    setValue("Answer", newValue);
-                }
+                setValue("Movement", newValue);
+            } else if (theEvt.getPropertyName().equals("Answer")) {
+                System.out.println("TriviaMazeGui sending answer to Controller");
+                setValue("Answer", newValue);
             }
         };
     }
@@ -280,7 +251,7 @@ public class TriviaMazeGui {
         myFrame.add(myMainPanel);
         myMainMenu.setColors(PURPLE, DARK);
         ((QAPanel) myQAPanel).setColors(PURPLE, DARK);
-        ((QAPanel) myQAPanel).addPropertyChangeListener(myPCListener);
+        myQAPanel.addPropertyChangeListener(myPCListener);
 
         myFrame.setSize(new Dimension(BACKGROUND.getIconWidth(),
                 BACKGROUND.getIconHeight()));
@@ -332,28 +303,52 @@ public class TriviaMazeGui {
         }
     }
 
+    /**
+     * Sets the size of the minimap.
+     * @param theRows the number of rows in the map.
+     * @param theCols the number of columns in the map.
+     */
     public void setMapValues(final int theRows, final int theCols) {
         myMinimap.setUpMap(theRows, theCols);
     }
 
+    /**
+     * adds a room to the minimap.
+     * @param theRow the number of rows in the map
+     * @param theCol the number of columns in the map
+     */
     public void showRoom(final int theRow, final int theCol) {
         myMinimap.addRoomTile(theRow, theCol);
     }
 
+    //TODO I do not know what this is doing, flagging for removal since its printing to console.
     public void getMapToString() {
         System.out.println(myMinimap.toString());
     }
 
+    /**
+     * Moves the player icon on the minimap.
+     * @param theDirection the direction to move the player icon in.
+     */
     public void movePlayer(final int theDirection) {
         myMinimap.movePlayerSpot(theDirection);
     }
 
+    /**
+     * Sets up the question for the QA panel.
+     * @param theType the type of question being set up.
+     * @param theQuestion the question text to be displayed.
+     * @param theAnswers the array of answers for the question.
+     */
     public void setUpQuestion(final int theType, final String theQuestion,
                               final String[] theAnswers) {
         myNavBar.getNavBar().setEnabled(false);
         ((QAPanel) myQAPanel).setQuestion(theType, theQuestion, theAnswers);
     }
 
+    /**
+     * Removes the question from the panel.
+     */
     public void stopQuestion() {
         myNavBar.getNavBar().setEnabled(true);
         ((QAPanel) myQAPanel).clearQuestion();

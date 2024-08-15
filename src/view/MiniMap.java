@@ -3,24 +3,34 @@
  * Summer 2024
  */
 
-//TODO all of it
-
 package view;
 
-import javax.swing.*;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+import javax.swing.JPanel;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Creates the minimap panel to be used on the main GUI for the game.
+ *
+ * @author Mohammed
+ * @author Abbygaile Yrojo
+ * @version 1.0
+ */
 public class MiniMap extends JPanel {
     /** Length of map. */
     private static final int MAP_LENGTH = 200;
     /** Scaled size of tile. */
     private double myTileSize;
     /** List of room tiles with shapes and coordinates. */
-    private List<MyRoomTile> myRoomTiles;
+    private final List<MyRoomTile> myRoomTiles;
     /** List of doors with shapes, coordinates, and directions. */
     private List<Shape> myDoorTiles;
     /** Representation of player. */
@@ -30,7 +40,7 @@ public class MiniMap extends JPanel {
      * Constructs MiniMap.
      */
     public MiniMap() {
-        myRoomTiles = new ArrayList<MyRoomTile>();
+        myRoomTiles = new ArrayList<>();
         myTileSize = 0;
         setPreferredSize(new Dimension(MAP_LENGTH, MAP_LENGTH));
         setMinimumSize(new Dimension(MAP_LENGTH, MAP_LENGTH));
@@ -71,8 +81,7 @@ public class MiniMap extends JPanel {
      * @return boolean.
      */
     private boolean hasRoomTile(final int theRow, final int theCol) {
-        for (int i = 0; i < myRoomTiles.size(); i++) {
-            MyRoomTile tile = myRoomTiles.get(i);
+        for (MyRoomTile tile : myRoomTiles) {
             if (tile.myCol == theCol && tile.myRow == theRow) {
                 return true;
             }
@@ -90,8 +99,7 @@ public class MiniMap extends JPanel {
         final Graphics2D g2d = (Graphics2D) theG;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        for (int i = 0; i < myRoomTiles.size(); i++) {
-            MyRoomTile tile = myRoomTiles.get(i);
+        for (MyRoomTile tile : myRoomTiles) {
             g2d.setColor(Color.WHITE);
             g2d.fill(tile.myRectangle);
             g2d.setColor(Color.GREEN);
@@ -149,9 +157,8 @@ public class MiniMap extends JPanel {
     public String toString() {
         StringBuilder sb = new StringBuilder();
         sb.append("TILES [\n");
-        for (int i = 0; i < myRoomTiles.size(); i++) {
-            MyRoomTile tile = myRoomTiles.get(i);
-            sb.append("ROOM: " + tile.myRow + " " + tile.myCol);
+        for (MyRoomTile tile : myRoomTiles) {
+            sb.append("ROOM: ").append(tile.myRow).append(" ").append(tile.myCol);
         }
         sb.append("\n]");
         return sb.toString();
@@ -165,9 +172,9 @@ public class MiniMap extends JPanel {
         int myRow;
         /** Room's column. */
         int myCol;
-        /** Tile's x coord. */
+        /** Tile's x coordinate. */
         double myX;
-        /** Tile's y coord. */
+        /** Tile's y coordinate. */
         double myY;
         /** Shape of room tile. */
         Rectangle2D myRectangle;
@@ -185,6 +192,4 @@ public class MiniMap extends JPanel {
             myRectangle = new Rectangle2D.Double(myX, myY, myTileSize, myTileSize);
         }
     }
-
-    // may add DoorShape class here
 }

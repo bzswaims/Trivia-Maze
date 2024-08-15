@@ -3,9 +3,6 @@
  * Summer 2024
  */
 
-
-//potentially drop question interface
-
 package model;
 
 import java.io.Serial;
@@ -16,22 +13,22 @@ import java.io.Serializable;
  * The question proper is stored in a String, as is
  * the correct answer.
  *
- * @author Zane Swaims (bzswaims@uw.edu)
- *         Abby Yrojo
- *         Mahammod
- * @version 0.1
+ * @author Zane Swaims
+ * @author Abbygaile Yrojo
+ * @author Mahammod
+ * @version 1.0
  */
 public class AbstractQuestion implements Serializable, Question {
     @Serial
     private static final long serialVersionUID = 7788337777844466666L;
 
     /**
-     * Question.
+     * The question text.
      */
     private String myQuestion;
 
     /**
-     * Correct answer.
+     * The correct answer.
      */
     private String myCorrectAnswer;
 
@@ -46,7 +43,7 @@ public class AbstractQuestion implements Serializable, Question {
     private int myType;
 
     /**
-     * Constructs AbstractQuestion.
+     * Constructs an AbstractQuestion.
      */
     public AbstractQuestion() {
         myQuestion = "";
@@ -64,6 +61,7 @@ public class AbstractQuestion implements Serializable, Question {
 
     /**
      * Sets the correct answer.
+     *
      * @param theString the Correct answer.
      */
     public void setCorrectAnswer(final String theString)
@@ -72,7 +70,8 @@ public class AbstractQuestion implements Serializable, Question {
     }
 
     /**
-     * Sets the Question ID. Might be superfluous data.
+     * Sets the Question ID.
+     *
      * @param theID the number to associate with the Question.
      */
     public void setID (final int theID) {

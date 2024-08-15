@@ -1,24 +1,30 @@
-//TODO check if closing java virtual machine is ok.
-//TODO actually map the new game button to launch the game.
-//TODO find a way to clear the screen and refill it with the help screen.
-//TODO remove the myMenu list and the createButton method, both used for testing.
+/*
+ * TCSS 360 Software Development and Quality Assurance Techniques
+ * Summer 2024
+ */
 
 package view;
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
+import java.awt.Font;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
 import java.awt.event.ActionListener;
-import javax.swing.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import javax.swing.Box;
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Builds the main menu for the game.
  *
- * @author Zane Swaims (bzswaims@uw.edu), Abbygaile Yrojo
- * @version 0.2
+ * @author Zane Swaims
+ * @author Abbygaile Yrojo
+ * @version 1.0
  */
 public class MainMenu {
     /** To add to buttons. */
@@ -60,53 +66,36 @@ public class MainMenu {
      * @return ActionListener array.
      */
     private ActionListener[] createListeners() {
-        return new ActionListener[]{new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                myMenuBar.setVisible(false);
-                setValue("New game");
-            }
-        }, new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                // load
-                //TODO
-                //here I need to setup the game screen as per usual, but also trigger deserialization,
-                // deserialization should be happening where seralization happens, i believe in the controller?
-                //Either way I will just shoot off a boolean value.
-                myMenuBar.setVisible(false);
-                setValue("Load");
-                setValue("New game");
-            }
-        }, new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                //help
-                // this and action on the back button could go in a method hmmm
-                myMenuBar.removeAll();
-                myMenuBar.add(new Help());
-                JButton button = myMenuButtons.get(4);
-                myMenuBar.add(button);
-                button.setAlignmentX(Component.CENTER_ALIGNMENT);
-                button.setMaximumSize(new Dimension(200, 40));
-                myMenuBar.revalidate();
-                myMenuBar.repaint();
-            }
-        }, new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                //exit
-                System.exit(0);
-            }
-        }, new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent theEvent) {
-                // back
-                myMenuBar.removeAll();
-                setUpMainMenu();
-                myMenuBar.revalidate();
-                myMenuBar.repaint();
-            }
+        return new ActionListener[]{theEvent -> {
+            myMenuBar.setVisible(false);
+            setValue("New game");
+        }, theEvent -> {
+            // load
+            //TODO
+            //Messes up the minimap using new game.
+            myMenuBar.setVisible(false);
+            setValue("Load");
+            setValue("New game");
+        }, theEvent -> {
+            //help
+            // this and action on the back button could go in a method hmmm
+            myMenuBar.removeAll();
+            myMenuBar.add(new Help());
+            JButton button = myMenuButtons.get(4);
+            myMenuBar.add(button);
+            button.setAlignmentX(Component.CENTER_ALIGNMENT);
+            button.setMaximumSize(new Dimension(200, 40));
+            myMenuBar.revalidate();
+            myMenuBar.repaint();
+        }, theEvent -> {
+            //exit
+            System.exit(0);
+        }, theEvent -> {
+            // back
+            myMenuBar.removeAll();
+            setUpMainMenu();
+            myMenuBar.revalidate();
+            myMenuBar.repaint();
         }};
     }
 
@@ -119,8 +108,6 @@ public class MainMenu {
             JButton button = new JButton(names[i]);
             button.setEnabled(true);
             button.setFont(new Font("Tomorrow SemiBold", Font.PLAIN, 24));
-//            JButton button = buttonMaker(new ImageIcon(
-//                    String.format("files/%s.png", imageNames[i])));
             button.setFocusPainted(false);
             button.addActionListener(myListeners[i]);
             myMenuButtons.add(button);
@@ -148,20 +135,6 @@ public class MainMenu {
     }
 
     /**
-     * This is for mass creation of buttons with no functions
-     * this is primarily for testing and should be removed for the final product.
-     *
-     * @param theIcon The image attached to the button.
-     * @return The completed button.
-     */
-    public JButton buttonMaker(ImageIcon theIcon) {
-        final JButton button = new JButton(theIcon);
-        button.setEnabled(true);
-
-        return button;
-    }
-
-    /**
      * Add property change listener.
      * @param theListener the action listener.
      */
@@ -180,9 +153,13 @@ public class MainMenu {
                 oldValue, theNewValue);
     }
 
+    /**
+     * Sets the colors for the main menu.
+     * @param thePurple the purple used for the menu.
+     * @param theDark the darker color used for the menu.
+     */
     public void setColors(final Color thePurple, final Color theDark) {
-        for (int i = 0; i < myMenuButtons.size(); i++) {
-            JButton button = myMenuButtons.get(i);
+        for (JButton button : myMenuButtons) {
             button.setForeground(thePurple);
             button.setBackground(theDark);
         }

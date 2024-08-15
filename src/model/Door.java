@@ -1,22 +1,30 @@
+/*
+ * TCSS 360 Software Development and Quality Assurance Techniques
+ * Summer 2024
+ */
+
 package model;
 
 import java.io.Serial;
 import java.io.Serializable;
 
+/**
+ * Class for the doors that connect the Room objects.
+ *
+ * @author Abbygaile Yrojo
+ * @author Zane Swaims
+ *
+ * @version 1.0
+ */
 public class Door implements Serializable {
 
     @Serial
     private static final long serialVersionUID = 3666666777L;
 
     /**
-     * Question.
+     * Question to be stored on the door.
      */
     private AbstractQuestion myQuestion;
-
-    /**
-     * Correct answer to question.
-     */
-    private String myAnswer;
 
     /**
      * Current door state, 0 = locked
@@ -36,8 +44,6 @@ public class Door implements Serializable {
     public Door() {
         setLockState(1);
         setExit(false);
-
-        //call question factory to grab a question to slap onto this door!
     }
 
     /**
@@ -52,6 +58,7 @@ public class Door implements Serializable {
 
     /**
      * Sets the question.
+     *
      * @param theQuestion String.
      */
     public void setQuestion(final AbstractQuestion theQuestion) {
@@ -72,6 +79,7 @@ public class Door implements Serializable {
 
     /**
      * Returns if Door can be passed.
+     *
      * @return boolean.
      */
     public int getLockState() {
@@ -80,6 +88,7 @@ public class Door implements Serializable {
 
     /**
      * Sets if Door is the exit.
+     *
      * @param theBool boolean.
      */
     public void setExit(final boolean theBool) {
@@ -92,6 +101,7 @@ public class Door implements Serializable {
 
     /**
      * Returns Door string.
+     *
      * @return String.
      */
     @Override

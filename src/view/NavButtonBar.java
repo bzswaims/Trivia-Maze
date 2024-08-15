@@ -3,13 +3,6 @@
  * Summer 2024
  */
 
-//TODO make images a decent size, or variable (small medium large depending on screen size)
-//I find 150px or 200x square work well probably
-//TODO potentially make the buttons their own object like filters from project 4 in 305
-//TODO remove the test object myNavigation.
-//TODO remove the test method buttonMaker.
-//TODO add a minimap/map button.
-
 package view;
 
 import javax.swing.ImageIcon;
@@ -25,8 +18,8 @@ import java.util.List;
  * Builds the navigation bar for the game. This is used by the user
  * to navigate the maze.
  *
- * @author Zane Swaims (bzswaims@uw.edu)
- * @version 0.1
+ * @author Zane Swaims
+ * @version 1.0
  */
 public class NavButtonBar {
 
@@ -105,22 +98,8 @@ public class NavButtonBar {
             setValue("right");
         }, theEvent -> {
             // interact
-            //
-            //can delete this since no items
-            //
-            //TODO: replace with a save button
-        }//, theEvent -> {
-            //Inventory
-            //
-            //can delete this since no items
-            //
-            //this should open inventory if it is not open, and close it if it is open I think,
-            //or it could be implemented like help on the menus
-        //    myNavBar.removeAll();
-            //setUpMainMenu();
-        //    myNavBar.revalidate();
-        //    myNavBar.repaint();
-        //}
+            //TODO: delete
+        }
         };
     }
 
@@ -141,8 +120,8 @@ public class NavButtonBar {
      * Populates the menu bar.
      */
     private void setUpNavBar() {
-        for (int i = 0; i < myNavButtons.size(); i++) {
-            myNavBar.add(myNavButtons.get(i));
+        for (JButton myNavButton : myNavButtons) {
+            myNavBar.add(myNavButton);
         }
     }
 

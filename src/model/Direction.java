@@ -14,7 +14,9 @@ import java.util.Random;
  * @author Marty Stepp
  * @author Daniel M. Zimmerman
  * @author Alan Fowler
- * @version 1.2
+ * @author Abbygaile Yrojo
+ * @author Zane Swaims
+ * @version 1.3
  */
 public enum Direction {
 
@@ -124,16 +126,11 @@ public enum Direction {
     }
 
     public Direction flip(final Direction theDirection) {
-        switch (theDirection) {
-            case NORTH:
-                return SOUTH;
-            case EAST:
-                return WEST;
-            case SOUTH:
-                return NORTH;
-            case WEST:
-                return EAST;
-        }
-        return null;
+        return switch (theDirection) {
+            case NORTH -> SOUTH;
+            case EAST -> WEST;
+            case SOUTH -> NORTH;
+            case WEST -> EAST;
+        };
     }
 }

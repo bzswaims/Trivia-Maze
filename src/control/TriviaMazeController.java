@@ -5,10 +5,12 @@
 
 package control;
 
-import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.io.*;
-
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import model.Maze;
 import view.TriviaMazeGui;
 
@@ -16,6 +18,7 @@ import view.TriviaMazeGui;
  * Controls data flow between model and view.
  *
  * @author Abbygaile Yrojo
+ * @author Zane Swaims
  * @version July 30, 2024
  */
 public class TriviaMazeController {
@@ -27,7 +30,7 @@ public class TriviaMazeController {
     /**
      * File name for the save file.
      */
-    private String myFileName;
+    private final String myFileName;
 
     /**
      * To use data in Maze.
@@ -62,10 +65,13 @@ public class TriviaMazeController {
         myView.showRoom(myMaze.getCurrentRoom().getRow(), myMaze.getCurrentRoom().getCol());
         myView.getMapToString();
 
+        //TODO remove
         System.out.println(myMaze);
-        // myView.getMapToString();
     }
 
+    /**
+     * Creates the save file from serialization.
+     */
     private void createSave() {
         try {
             FileOutputStream file = new FileOutputStream(myFileName);
@@ -78,9 +84,6 @@ public class TriviaMazeController {
             file.close();
         } catch (IOException ex) {
             System.out.println("IOException is caught");
-            //Log.d("Save","IO exception");
-            // TODO Auto-generated catch block
-            ex.printStackTrace();
         }
     }
 
@@ -106,58 +109,56 @@ public class TriviaMazeController {
 
     /**
      * Creates listener for GUI.
+     *
      * @return PropertyChangeListener.
      */
     private PropertyChangeListener createListener() {
-        return new PropertyChangeListener() {
-            @Override
-            public void propertyChange(PropertyChangeEvent theEvt) {
-                // for when direction changes
-                String name = theEvt.getPropertyName();
-                if (name.equals("Save")) {
-                    //creates a save file
-                    createSave();
-                } else if (name.equals("Load")) {
-                    //loads a save file
-                    loadSave();
-                } else if (name.equals("Movement")) {
-                    String value = theEvt.getNewValue().toString();
-                    if (value.equals("left") || value.equals("right")) {
-                        myMaze.setCurrentDirection(value);
-                    } else if (value.equals("forward")) {
-                        final int state = myMaze.getDoorLockState();
-                        System.out.println("Door state: " + state);
-                        if (state == 2) {
-                            myMaze.moveForward();
-                            myView.showRoom(myMaze.getCurrentRoom().getRow(),
-                                            myMaze.getCurrentRoom().getCol());
-                            myView.movePlayer(myMaze.getCurrentDirection());
-                            myView.getMapToString();
+        return theEvt -> {
+            // for when direction changes
+            String name = theEvt.getPropertyName();
+            if (name.equals("Save")) {
+                //creates a save file
+                createSave();
+            } else if (name.equals("Load")) {
+                //loads a save file
+                loadSave();
+            } else if (name.equals("Movement")) {
+                String value = theEvt.getNewValue().toString();
+                if (value.equals("left") || value.equals("right")) {
+                    myMaze.setCurrentDirection(value);
+                } else if (value.equals("forward")) {
+                    final int state = myMaze.getDoorLockState();
+                    System.out.println("Door state: " + state);
+                    if (state == 2) {
+                        myMaze.moveForward();
+                        myView.showRoom(myMaze.getCurrentRoom().getRow(),
+                                        myMaze.getCurrentRoom().getCol());
+                        myView.movePlayer(myMaze.getCurrentDirection());
+                        myView.getMapToString();
 
-                            myView.updateView("up");
-                        } else if (state == 1) {
-                            // disable nav bar
-                            System.out.println("Show question");
-                            myView.setUpQuestion(
-                                    myMaze.getCurrentQuestion().getType(),
-                                    myMaze.getCurrentQuestion().getQuestion(),
-                                    myMaze.getAnswers());
-                        }
+                        myView.updateView("up");
+                    } else if (state == 1) {
+                        // disable nav bar
+                        System.out.println("Show question");
+                        myView.setUpQuestion(
+                                myMaze.getCurrentQuestion().getType(),
+                                myMaze.getCurrentQuestion().getQuestion(),
+                                myMaze.getAnswers());
                     }
+                }
 
-                } else if (name.equals("Answer")) {
-                    System.out.println("Correct? : " + myMaze.isCorrect(theEvt.getNewValue().toString()));
-                    if (myMaze.isCorrect(theEvt.getNewValue().toString())) {
-                        myMaze.setDoorState(2);
-                        myView.stopQuestion();
-                        // myView.stopQuestion()
-                          // clear qapanel
-                          // re-enable navbar
-                          // update view
-                    } else {
-                        myMaze.setDoorState(0);
-                        myView.stopQuestion();
-                    }
+            } else if (name.equals("Answer")) {
+                System.out.println("Correct? : " + myMaze.isCorrect(theEvt.getNewValue().toString()));
+                if (myMaze.isCorrect(theEvt.getNewValue().toString())) {
+                    myMaze.setDoorState(2);
+                    myView.stopQuestion();
+                    // myView.stopQuestion()
+                      // clear QAPanel
+                      // re-enable navbar
+                      // update view
+                } else {
+                    myMaze.setDoorState(0);
+                    myView.stopQuestion();
                 }
             }
         };

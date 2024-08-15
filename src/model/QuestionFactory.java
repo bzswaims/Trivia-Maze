@@ -13,13 +13,17 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Random;
 
 /**
- * Gathers questions from database. All question types should be kept together.
+ * Takes in an int value representing a question type, and gives a random question of that type back.
+ * If all questions of that type have been fetched from the database, it will restart selecting that question
+ * type as though non have been fetched.
+ * Types: 1 - Multiple choice question
+ *        2 - True or false question
+ *        3 - Short answer question
  *
- * @author Zane Swaims (bzswaims@uw.edu)
- * @version 0.1
+ * @author Zane Swaims
+ * @version 1.0
  */
 public class QuestionFactory implements Serializable {
 
@@ -52,14 +56,9 @@ public class QuestionFactory implements Serializable {
     private static SQLiteDataSource ds;
 
     /**
-     * random number generator.
-     */
-    private Random myRand;
-
-    /**
      * arraylist to store IDs we have used already.
      */
-    private int[] myUsedQuestions;
+    private final int[] myUsedQuestions;
 
     /**
      * Constructor.
@@ -74,12 +73,20 @@ public class QuestionFactory implements Serializable {
             System.exit(0);
         }
 
-        myRand = new Random();
-
         //This is +1 because our ID tags for questions start at 1 not 0.
         myUsedQuestions = new int[TOTAL_QUESTIONS + 1];
     }
 
+    /**
+     * Makes a question at random based on the type value fed in. It will cycle through all questions of the
+     * specified type until all are selected and then will recycle through them as though none of that type
+     * have been selected.
+     * 1 - Multiple choice question
+     * 2 - True false question
+     * 3 - Short answer question
+     * @param theType int value of the type of question to be returned.
+     * @return AbstractQuestion made at random.
+     */
     public AbstractQuestion makeQuestion(final int theType) {
 
         AbstractQuestion tempQuestion = null;
@@ -99,13 +106,12 @@ public class QuestionFactory implements Serializable {
      * Builds a multiple choice question
      */
     private MultiQuestion buildMultiQuestion(final int theType) {
-        //TODO
         MultiQuestion tempQuestion = new MultiQuestion();
 
         String query = "SELECT * FROM Questions ORDER BY RANDOM()";
 
         try (Connection conn = ds.getConnection();
-             Statement stmt = conn.createStatement();) {
+             Statement stmt = conn.createStatement()) {
 
             ResultSet rs = stmt.executeQuery(query);
 
@@ -128,7 +134,6 @@ public class QuestionFactory implements Serializable {
 
             if(tempQuestion.getID() == -1)
             {
-                //reflag all multi questions as having not been used.
                 for(int i = 1; i <= TOTAL_MULTI_QUESTIONS; i++){
                     myUsedQuestions[i] = 0;
                 }
@@ -158,7 +163,7 @@ public class QuestionFactory implements Serializable {
             rs = stmt.executeQuery(query);
 
             while ( rs.next() ) {
-                int answerID = rs.getInt( "AnswerID" );
+                rs.getInt( "AnswerID" );
                 int answerQuestionID = rs.getInt( "QuestionID" );
                 String answerText = rs.getString( "AnswerText" );
                 boolean isCorrect = rs.getBoolean( "IsCorrect" );
@@ -180,44 +185,6 @@ public class QuestionFactory implements Serializable {
     }
 
     /**
-     * Pulls a random question of type desired from the database.
-     */
-    private AbstractQuestion randomQuestion(final int theType){
-        AbstractQuestion tempQuestion = new AbstractQuestion();
-
-        String query = "SELECT * FROM Questions ORDER BY RANDOM()";
-
-        try (Connection conn = ds.getConnection();
-             Statement stmt = conn.createStatement();) {
-
-            ResultSet rs = stmt.executeQuery(query);
-
-            while (rs.next()) {
-                int questionID = rs.getInt("QuestionID");
-                String questionText = rs.getString("QuestionText");
-                int questionType = rs.getInt("QuestionType");
-
-                if (questionType == theType && myUsedQuestions[questionID] == 0) {
-
-                    tempQuestion.setQuestion(questionText);
-                    tempQuestion.setID(questionID);
-                    tempQuestion.setType(questionType);
-
-                    myUsedQuestions[questionID] = 1;
-
-                    break;
-                }
-            }
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-            System.exit(0);
-        }
-
-        return tempQuestion;
-    }
-
-    /**
      * Builds a short answer question
      */
     private AbstractQuestion buildShortAnswer (final int theType) {
@@ -226,7 +193,7 @@ public class QuestionFactory implements Serializable {
         String query = "SELECT * FROM Questions ORDER BY RANDOM()";
 
         try (Connection conn = ds.getConnection();
-             Statement stmt = conn.createStatement();) {
+             Statement stmt = conn.createStatement()) {
 
             ResultSet rs = stmt.executeQuery(query);
 
@@ -249,7 +216,6 @@ public class QuestionFactory implements Serializable {
 
         if(tempQuestion.getID() == -1)
         {
-            //reflag all short answer questions as having not been used.
             for(int i = TOTAL_MULTI_QUESTIONS + TOTAL_TRUE_FALSE_QUESTIONS + 1; i <= TOTAL_MULTI_QUESTIONS + TOTAL_TRUE_FALSE_QUESTIONS + TOTAL_SHORT_QUESTIONS; i++){
                 myUsedQuestions[i] = 0;
             }
@@ -279,7 +245,7 @@ public class QuestionFactory implements Serializable {
             rs = stmt.executeQuery(query);
 
             while ( rs.next() ) {
-                int answerID = rs.getInt( "AnswerID" );
+                rs.getInt( "AnswerID" );
                 int answerQuestionID = rs.getInt( "QuestionID" );
                 String answerText = rs.getString( "AnswerText" );
                 boolean isCorrect = rs.getBoolean( "IsCorrect" );
@@ -303,13 +269,12 @@ public class QuestionFactory implements Serializable {
      * Builds a true false answer question
      */
     private AbstractQuestion buildTrueFalseAnswer (final int theType) {
-        //TODO
         TrueFalseQuestion tempQuestion = new TrueFalseQuestion();
 
         String query = "SELECT * FROM Questions ORDER BY RANDOM()";
 
         try (Connection conn = ds.getConnection();
-             Statement stmt = conn.createStatement();) {
+             Statement stmt = conn.createStatement()) {
 
             ResultSet rs = stmt.executeQuery(query);
 
@@ -332,7 +297,6 @@ public class QuestionFactory implements Serializable {
 
         if(tempQuestion.getID() == -1)
         {
-            //reflag all true false questions as having not been used.
             for(int i =TOTAL_MULTI_QUESTIONS + 1; i <= TOTAL_MULTI_QUESTIONS + TOTAL_TRUE_FALSE_QUESTIONS; i++){
                 myUsedQuestions[i] = 0;
             }
@@ -362,7 +326,7 @@ public class QuestionFactory implements Serializable {
         rs = stmt.executeQuery(query);
 
             while ( rs.next() ) {
-                int answerID = rs.getInt( "AnswerID" );
+                rs.getInt( "AnswerID" );
                 int answerQuestionID = rs.getInt( "QuestionID" );
                 String answerText = rs.getString( "AnswerText" );
                 boolean isCorrect = rs.getBoolean( "IsCorrect" );

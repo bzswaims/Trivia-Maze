@@ -1,18 +1,18 @@
 /*
- * TCSS 360 Software Development and Assurance Techniques
+ * TCSS 360 Software Development and Quality Assurance Techniques
  * Summer 2024
  */
 
-package model;
+//TODO clean up warnings better.
 
-// TO DO - write method getGameProgress()
-//      0 = game over = no path to the end cuz of locked doors
-//      1 = in progress
-//      2 = won = player unlocked the exit door
+package model;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Collections;
 
 /**
  * This represents a 2D Maze that is travelled
@@ -23,10 +23,8 @@ import java.util.*;
  */
 public class Maze implements Serializable {
 
-
     @Serial
     private static final long serialVersionUID = 62999933L;
-
 
     /** To control how filled the maze is with Rooms. */
     private final static double MAX_RATIO = 0.6;
@@ -54,7 +52,7 @@ public class Maze implements Serializable {
     /** Int representation of player's game progress.
      *  0 is game lost. 1 is in progress. 2 is game win.
      */
-    private int myGameProgress;
+    private final int myGameProgress;
 
     /**
      * Constructs the Maze.
@@ -141,8 +139,8 @@ public class Maze implements Serializable {
     private void createPaths(final Random theRandom) {
         final int size = myRooms.length * myRooms[0].length;
         double currentRatio = (double) myPathRooms.size() / size;
-        Room currentRoom = myRooms[myPathRooms.get(0).getRow()]
-                [myPathRooms.get(0).getCol()];
+        Room currentRoom = myRooms[myPathRooms.getFirst().getRow()]
+                [myPathRooms.getFirst().getCol()];
         List<Room> edgeRooms = new ArrayList<>();
         Direction dir = null;
         int i = 0;
@@ -209,14 +207,14 @@ public class Maze implements Serializable {
         //one door to share between rooms, the door can store some kind of location between the two or something
         //another look for north-south after east-west doors.
 
-        for (int i = 0; i < myPathRooms.size(); i++) {
-            room = myPathRooms.get(i);
+        for (Room myPathRoom : myPathRooms) {
+            room = myPathRoom;
             for (Direction d : Direction.values()) {
                 // if the room is open in a certain d
                 // canEnter also handles if there is a room in a certain d
                 if (canEnter(room, d)) {
                     Room neighbor = myRooms[room.getRow() + d.dy()]
-                                            [room.getCol() + d.dx()];
+                            [room.getCol() + d.dx()];
                     // neighbor room's direction would be opposite
                     Door neighborDoor = neighbor.getDoor(d.flip(d));
                     if (neighborDoor != null) {
@@ -303,16 +301,16 @@ public class Maze implements Serializable {
         List<String> list = new ArrayList<>();
         Direction[] directions = Direction.values();
         int change, bound;
-        for (int i = 0; i < directions.length; i++) {
-            if (directions[i].dx() != 0) {
-                change = theRoom.getCol() + directions[i].dx();
+        for (Direction direction : directions) {
+            if (direction.dx() != 0) {
+                change = theRoom.getCol() + direction.dx();
                 bound = myRooms[0].length;
             } else {
-                change = theRoom.getRow() + directions[i].dy();
+                change = theRoom.getRow() + direction.dy();
                 bound = myRooms.length;
             }
             if (isInBounds(change, bound)) {
-                list.add("" + directions[i]);
+                list.add("" + direction);
             }
         }
         return list;
@@ -343,6 +341,8 @@ public class Maze implements Serializable {
 
     /**
      * Attempts to move to the room player is facing.
+     *
+     * @return boolean.
      */
     public boolean moveForward() {
         Room room = getNextRoom(myCurrentRoom, DIRECTIONS[myDirIndex]);
@@ -397,7 +397,7 @@ public class Maze implements Serializable {
         for (int i = 0; i < myRooms.length; i++) {
             // add the horizontal doors
             for (int j = 0; j < myRooms[0].length; j++) {
-                s.append(space + space + space);
+                s.append(space).append(space).append(space);
                 if (myRooms[i][j].getDoor(Direction.NORTH) == null) {
                     s.append("=");
                 } else {
@@ -410,7 +410,7 @@ public class Maze implements Serializable {
                 if (myRooms[i][j].getDoor(Direction.WEST) == null) {
                     s.append(" | ");
                 } else {
-                    s.append(space + myRooms[i][j].getDoor(Direction.WEST) + space);
+                    s.append(space).append(myRooms[i][j].getDoor(Direction.WEST)).append(space);
                 }
                 s.append(myRooms[i][j]);
             }
@@ -419,20 +419,20 @@ public class Maze implements Serializable {
                     getDoor(Direction.EAST) == null) {
                 s.append(" | ");
             } else {
-                s.append(space + myRooms[i][myRooms[0].length - 1].
+                s.append(space).append(myRooms[i][myRooms[0].length - 1].
                         getDoor(Direction.EAST));
             }
             s.append("\n");
         }
         // bottom row
         for (int k = 0; k < myRooms[0].length; k++) {
-            s.append(space + space + space);
+            s.append(space).append(space).append(space);
             if (myRooms[myRooms.length - 1][k].
                     getDoor(Direction.SOUTH) == null) {
                 s.append("=");
             } else {
                 s.append(myRooms[myRooms.length - 1][k].
-                        getDoor(Direction.SOUTH) + space);
+                        getDoor(Direction.SOUTH)).append(space);
             }
         }
 
@@ -444,8 +444,8 @@ public class Maze implements Serializable {
      * @return boolean.
      */
     public boolean hasLost() {
-        for (int i = 0; i < myPathRooms.size(); i++) {
-            myPathRooms.get(i).setMazeVisited(false);
+        for (Room myPathRoom : myPathRooms) {
+            myPathRoom.setMazeVisited(false);
         }
         return hasLost(myCurrentRoom);
     }
@@ -457,7 +457,7 @@ public class Maze implements Serializable {
      */
     private boolean hasLost(final Room theCurrent) {
         theCurrent.setMazeVisited(true);
-        final boolean lostDirections[] = new boolean[4];
+        final boolean[] lostDirections = new boolean[4];
         // check if each door exists and not locked
         for (int i = 0; i < DIRECTIONS.length; i++) {
             final Door door = theCurrent.getDoor(DIRECTIONS[i]);
@@ -472,8 +472,8 @@ public class Maze implements Serializable {
             }
         }
         // if there is an open path in a certain direction, then not lost
-        for (int i = 0; i < lostDirections.length; i++) {
-            if (!lostDirections[i]) {
+        for (boolean lostDirection : lostDirections) {
+            if (!lostDirection) {
                 return false;
             }
         }
@@ -519,10 +519,9 @@ public class Maze implements Serializable {
      */
     private void setQuestions(Random theRandom) {
         int questionCount = 0; // or door count
-        for (int i = 0; i < myPathRooms.size(); i++) {
-            Room room = myPathRooms.get(i);
-            for (int j = 0; j < DIRECTIONS.length; j++) {
-                Door door = room.getDoor(DIRECTIONS[j]);
+        for (Room room : myPathRooms) {
+            for (Direction direction : DIRECTIONS) {
+                Door door = room.getDoor(direction);
                 if (door != null && door.getQuestion() == null) {
                     System.out.println("Door state: " + door.getLockState());
                     door.setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
@@ -540,6 +539,10 @@ public class Maze implements Serializable {
         System.out.println("Question count: " + questionCount);
     }
 
+    /**
+     * Accessor to retrieve the current question.
+     * @return AbstractQuestion.
+     */
     public AbstractQuestion getCurrentQuestion() {
         return myCurrentRoom.getDoor(DIRECTIONS[myDirIndex]).getQuestion();
     }

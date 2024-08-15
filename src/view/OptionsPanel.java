@@ -1,17 +1,27 @@
+/*
+ * TCSS 360 Software Development and Quality Assurance Techniques
+ * Summer 2024
+ */
+
 package view;
 
-import javax.swing.*;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import javax.swing.JPanel;
+import javax.swing.JButton;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Creates a panel that contains a save button and an exit button.
+ *
+ * @author Zane Swaims
+ * @version 1.0
+ */
 public class OptionsPanel extends JPanel {
-
-    //need to make a panel that contains a save button, a quit button, and a help button.
-    //They should be stacked vertically.
-    //the order will be help, save, quit
 
     /**
      * List for storing the buttons.
@@ -43,8 +53,8 @@ public class OptionsPanel extends JPanel {
     }
 
     private void setUpOptionsPanel() {
-        for (int i = 0; i < myOptionButtons.size(); i++) {
-            add(myOptionButtons.get(i));
+        for (JButton myOptionButton : myOptionButtons) {
+            add(myOptionButton);
         }
     }
 
@@ -56,7 +66,6 @@ public class OptionsPanel extends JPanel {
     private ActionListener[] createListeners() {
         return new ActionListener[] {theEvent -> {
             //Save button
-            //TODO
             myPCSupport.firePropertyChange("Save", 0, "Save");
         }, theEvent -> {
             //Quit button

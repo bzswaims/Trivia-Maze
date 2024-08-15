@@ -3,21 +3,23 @@
  * Summer 2024
  */
 
-//TODO remove the array of 4 boards, and actually use a different class to compile the maze proper.
-//TODO make pov a better field, for now it is for testing
-
 package view;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 import java.lang.reflect.InvocationTargetException;
-import javax.swing.*;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 
 /**
  * Displays the "board", that is what the user will see.
  * This handles updating the graphics so the user knows where they are.
  *
- * @author Zane Swaims (bzswaims@uw.edu), Abbygaile Yrojo
- * @version 0.2
+ * @author Zane Swaims
+ * @author Abbygaile Yrojo
+ * @version 1.0
  */
 public class Board extends JPanel{
     /**
@@ -60,8 +62,6 @@ public class Board extends JPanel{
     @Override
     public void paintComponent(final Graphics theGraphics) {
         super.paintComponent(theGraphics);
-        final Graphics2D g2d = (Graphics2D) theGraphics;
-
     }
 
     /**
@@ -117,18 +117,12 @@ public class Board extends JPanel{
      * Moves through/towards the door in front of the user.
      */
     public void up() {
-        //this method will go up to the door
-        //if unlocked go through the door
-        //if locked, prompt player
-        //if have not been answered, prompt with question
-        //if there is nothing there do nothing
-
         myCurrentImage.setIcon(myRoom[5]);
         delay();
     }
 
     private void delay() {
-        (new Thread(() -> {
+        new Thread(() -> {
             try {
                 Thread.sleep(500);
             } catch (InterruptedException ex) {
@@ -136,32 +130,10 @@ public class Board extends JPanel{
             }
 
             try {
-                SwingUtilities.invokeAndWait(() -> {
-                    myCurrentImage.setIcon(myRoom[myPov]);
-                });
+                SwingUtilities.invokeAndWait(() -> myCurrentImage.setIcon(myRoom[myPov]));
             } catch (InterruptedException | InvocationTargetException ex) {
                 throw new RuntimeException(ex);
             }
-        })).start();
-    }
-
-    /**
-     * Interacts with what is in front of the user.
-     * In the case of an item in the room, picks it up
-     * In the case of a door, opens the question
-     *
-     * can be deleted since we have no items and just have up button do the same thing
-     */
-    public void interact() {
-        //
-    }
-
-    /**
-     * Opens the inventory for the user to see what they have.
-     *
-     * can be deleted since no items
-     */
-    public void inventory() {
-        //
+        }).start();
     }
 }

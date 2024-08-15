@@ -1,20 +1,22 @@
-//TODO there is probably a way to utilize boolean to store stuff in here
+/*
+ * TCSS 360 Software Development and Quality Assurance Techniques
+ * Summer 2024
+ */
 
 package model;
-
-import java.io.Serial;
-import java.io.Serializable;
 
 /**
  * Object for storing the true and false questions.
  *
- * @author Zane Swaims (bzswaims@uw.edu)
- *         Abby Yrojo
- *         Mahammod
- * @version 0.1
+ * @author Zane Swaims
+ * @author Abbygaile Yrojo
+ * @author Mahammod
+ * @version 1.0
  */
 public class TrueFalseQuestion extends AbstractQuestion{
-
+    /**
+     * Constructor for true or false questions.
+     */
     public TrueFalseQuestion() {
     }
 }
