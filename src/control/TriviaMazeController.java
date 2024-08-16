@@ -177,19 +177,17 @@ public class TriviaMazeController {
 
             } else if (name.equals("Answer")) {
                 System.out.println("Correct? : " + myMaze.isCorrect(theEvt.getNewValue().toString()));
-                myMaze.setDoorState(2);
-                myView.stopQuestion();
-//                if (myMaze.isCorrect(theEvt.getNewValue().toString())) {
-//                    myMaze.setDoorState(2);
-//                    myView.stopQuestion();
-//                    // myView.stopQuestion()
-//                      // clear QAPanel
-//                      // re-enable navbar
-//                      // update view
-//                } else {
-//                    myMaze.setDoorState(0);
-//                    myView.stopQuestion();
-//                }
+                if (myMaze.isCorrect(theEvt.getNewValue().toString())) {
+                    myMaze.setDoorState(2);
+                    myView.stopQuestion();
+                    // myView.stopQuestion()
+                      // clear QAPanel
+                      // re-enable navbar
+                      // update view
+                } else {
+                    myMaze.setDoorState(0);
+                    myView.stopQuestion();
+                }
 
                 for ( Direction dir : Direction.values()){
                     if(myMaze.getCurrentRoom().getDoor(dir)!=null){
