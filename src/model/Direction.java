@@ -16,6 +16,7 @@ import java.util.Random;
  * @author Alan Fowler
  * @author Abbygaile Yrojo
  * @author Zane Swaims
+ * @author Mohammed Alhamed
  * @version 1.3
  */
 public enum Direction {

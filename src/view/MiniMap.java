@@ -5,17 +5,17 @@
 
 package view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.Shape;
+import model.Direction;
+
+import java.awt.*;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import javax.swing.*;
+import java.awt.image.BufferedImage;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.SwingUtilities;
 
 /**
  * Creates the minimap panel to be used on the main GUI for the game.
@@ -50,20 +50,33 @@ public class MiniMap extends JPanel {
     /** List of room tiles with shapes and coordinates. */
     private final List<MyRoomTile> myRoomTiles;
     /** List of doors with shapes, coordinates, and directions. */
-    private List<Shape> myDoorTiles;
+    private final List<MyDoorTile> myDoorTiles;
     /** Representation of player. */
     private Ellipse2D.Double myPlayerSpot;
+
+    private int myPlayerX;
+
+    private int myPlayerY;
+
+    private int myPlayerDirection = 0;
+
+    private int myPlayerIdle = 0;
 
     /**
      * Constructs MiniMap.
      */
     public MiniMap() {
         myRoomTiles = new ArrayList<>();
+        myDoorTiles = new ArrayList<>();
         myTileSize = 0;
         this.setVisible(true);
         setPreferredSize(new Dimension(MAP_LENGTH, MAP_LENGTH));
         setMinimumSize(new Dimension(MAP_LENGTH, MAP_LENGTH));
+        startPlayerAnimation();
+
     }
+
+
 
     /**
      * Set up the map for adding shapes.
@@ -94,6 +107,22 @@ public class MiniMap extends JPanel {
     }
 
     /**
+     * Attempt to add new door tile.
+     * @param theRow int row.
+     * @param theCol int col.
+     * @param theDirection int direction.
+     */
+    public void addDoorTile(final int theRow, final int theCol, final Direction theDirection, final int theState) {
+        if (hasDoorTile(theRow, theCol, theDirection)) {
+            removeDoorTile(theRow, theCol, theDirection);
+        }
+
+        MyDoorTile tile = new MyDoorTile(theRow, theCol, theDirection, theState);
+        myDoorTiles.add(tile);
+        repaint();
+    }
+
+    /**
      * Used to check if room tiles already has shape of room.
      * @param theRow int row.
      * @param theCol int col.
@@ -102,6 +131,39 @@ public class MiniMap extends JPanel {
     private boolean hasRoomTile(final int theRow, final int theCol) {
         for (MyRoomTile tile : myRoomTiles) {
             if (tile.myCol == theCol && tile.myRow == theRow) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Used to check if door tiles already exists;
+     * @param theRow int row.
+     * @param theCol int col.
+     * @param theDirection int direction.
+     * @return boolean.
+     */
+    private boolean hasDoorTile(final int theRow, final int theCol, final Direction theDirection) {
+        for (MyRoomTile tile : myRoomTiles) {
+            if (tile.myCol == theCol && tile.myRow == theRow) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Used to remove door tile;
+     * @param theRow int row.
+     * @param theCol int col.
+     * @param theDirection int direction.
+     * @return boolean.
+     */
+    private boolean removeDoorTile(final int theRow, final int theCol, final Direction theDirection) {
+        for (MyDoorTile tile : myDoorTiles) {
+            if (tile.myCol == theCol && tile.myRow == theRow && tile.myDir == theDirection) {
+                myDoorTiles.remove(tile);
                 return true;
             }
         }
@@ -118,14 +180,22 @@ public class MiniMap extends JPanel {
         final Graphics2D g2d = (Graphics2D) theG;
         g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
+
         for (MyRoomTile tile : myRoomTiles) {
-            g2d.setColor(Color.WHITE);
-            g2d.fill(tile.myRectangle);
-            g2d.setColor(Color.GREEN);
-            g2d.draw(tile.myRectangle);
+            tile.myShape.paintIcon(this, theG, (int) tile.myX, (int) tile.myY);
         }
-        g2d.setColor(Color.CYAN);
-        g2d.fill(myPlayerSpot);
+        for (MyDoorTile tile : myDoorTiles) {
+            tile.myShape.paintIcon(this, theG, tile.myX, tile.myY);
+        }
+
+        ImageIcon playerIdle = getScaledImage(PLAYER[myPlayerIdle], (int) myTileSize, (int) myTileSize);
+
+        ImageIcon playerPointer = getScaledImage(POINTERS[myPlayerDirection], (int) myTileSize, (int) myTileSize);
+
+        playerIdle.paintIcon(this, theG, myPlayerX , myPlayerY);
+        playerPointer.paintIcon(this, theG, myPlayerX , myPlayerY);
+
+
     }
 
     /**
@@ -135,6 +205,10 @@ public class MiniMap extends JPanel {
      */
     private void setPlayerSpot(final double theX, final double theY) {
         myPlayerSpot.setFrameFromDiagonal(theX, theY, theX + myTileSize, theY + myTileSize);
+        myPlayerX = (int) theX;
+        myPlayerY = (int) theY;
+
+
         repaint();
     }
 
@@ -166,6 +240,21 @@ public class MiniMap extends JPanel {
         }
 
         setPlayerSpot(x, y);
+
+    }
+
+    /**
+     * Rotate the player.
+     * @param theDirection int direction.
+     */
+    public void rotatePlayer(final int theDirection) {
+        if (theDirection < 0 || theDirection > 3) {
+            throw new IllegalArgumentException("Out of bounds! [0, 3]");
+        }
+        myPlayerDirection = theDirection;
+
+        delayRepaint();
+
     }
 
     /**
@@ -196,7 +285,7 @@ public class MiniMap extends JPanel {
         /** Tile's y coordinate. */
         double myY;
         /** Shape of room tile. */
-        Rectangle2D myRectangle;
+        ImageIcon myShape;
 
         /**
          * Constructs room tile.
@@ -208,7 +297,106 @@ public class MiniMap extends JPanel {
             myCol = theCol;
             myX = theCol * myTileSize;
             myY = theRow * myTileSize;
-            myRectangle = new Rectangle2D.Double(myX, myY, myTileSize, myTileSize);
+            myShape = getScaledImage(TILE, (int) myTileSize, (int) myTileSize);
         }
+    }
+
+    /**
+     * Room tile with data necessary for drawing room correctly.
+     */
+    private class MyDoorTile {
+        /** Door's row. */
+        int myRow;
+        /** Door's column. */
+        int myCol;
+        /** Tile's x coordinate. */
+        int myX;
+        /** Tile's y coordinate. */
+        int myY;
+        /** Tile's direction. */
+        Direction myDir;
+        /** Tile's state. */
+        int myState;
+        /** Tile's shape. */
+        ImageIcon myShape;
+
+        /**
+         * Constructs room tile.
+         * @param theRow int row.
+         * @param theCol int col.
+         */
+        public MyDoorTile(final int theRow, final int theCol, final Direction theDirection, final int theState) {
+            myRow = theRow;
+            myCol = theCol;
+            myX = (int) ( theCol * myTileSize );
+            myY = (int) ( theRow * myTileSize) ;
+            myDir = theDirection;
+            myState = theState;
+
+            myShape = getScaledImage(DOORS[myState], (int) myTileSize, (int) myTileSize);
+
+            switch (myDir){
+                case Direction.NORTH:
+                    myY -= myShape.getIconHeight() / 2;
+                    break;
+                case Direction.EAST:
+                    myX += myShape.getIconWidth() / 2;
+                    break;
+                case Direction.SOUTH:
+                    myY += myShape.getIconHeight() / 2;
+                    break;
+                case Direction.WEST:
+                    myX -= myShape.getIconWidth() / 2;
+                    break;
+            }
+        }
+    }
+    private void startPlayerAnimation() {
+        new Thread(() -> {
+            while( true ){
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException ex) {
+                    throw new RuntimeException(ex);
+                }
+
+                try {
+                    SwingUtilities.invokeAndWait(() -> {
+                        myPlayerIdle = myPlayerIdle == 0 ? 1 : 0;
+                        repaint();
+                    });
+                } catch (InterruptedException | InvocationTargetException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        }).start();
+    }
+
+    // https://stackoverflow.com/a/39515940;
+    private ImageIcon getScaledImage(ImageIcon srcImg, int w, int h){
+
+        BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g2 = resizedImg.createGraphics();
+        g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g2.drawImage(srcImg.getImage(), 0, 0, w, h, null);
+        g2.dispose();
+
+        return new ImageIcon(resizedImg);
+    }
+
+    private void delayRepaint() {
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException ex) {
+                throw new RuntimeException(ex);
+            }
+
+            try {
+                SwingUtilities.invokeAndWait(() -> repaint());
+            } catch (InterruptedException | InvocationTargetException ex) {
+                throw new RuntimeException(ex);
+            }
+        }).start();
     }
 }

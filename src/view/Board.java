@@ -38,19 +38,28 @@ public class Board extends JPanel{
     private final JLabel myCurrentImage;
 
     /**
+     * Stop board from updating;
+     */
+
+    private boolean myUpdate;
+
+    /**
      * Constructor.
      */
     Board() {
         super();
-        myRoom = new ImageIcon[6];
+        myRoom = new ImageIcon[8];
         myRoom[0] = new ImageIcon("boards/north.png");
         myRoom[1] = new ImageIcon("boards/east.png");
         myRoom[2] = new ImageIcon("boards/south.png");
         myRoom[3] = new ImageIcon("boards/west.png");
         myRoom[4] = new ImageIcon("boards/turn.png");
         myRoom[5] = new ImageIcon("boards/enterdoor.png");
+        myRoom[6] = new ImageIcon("boards/lose.png");
+        myRoom[7] = new ImageIcon("boards/win.png");
         myPov = 0;
         myCurrentImage = new JLabel(myRoom[myPov]);
+        myUpdate = true;
         start();
     }
 
@@ -120,6 +129,21 @@ public class Board extends JPanel{
         myCurrentImage.setIcon(myRoom[5]);
         delay();
     }
+    /**
+     * Show lost scene;
+     */
+    public void lose() {
+        myCurrentImage.setIcon(myRoom[6]);
+
+        myUpdate = false;
+    }
+    /**
+     * Show win scene;
+     */
+    public void win() {
+        myCurrentImage.setIcon(myRoom[7]);
+        myUpdate = false;
+    }
 
     private void delay() {
         new Thread(() -> {
@@ -130,7 +154,10 @@ public class Board extends JPanel{
             }
 
             try {
-                SwingUtilities.invokeAndWait(() -> myCurrentImage.setIcon(myRoom[myPov]));
+                SwingUtilities.invokeAndWait(() -> {
+                    if(myUpdate)
+                        myCurrentImage.setIcon(myRoom[myPov]);
+                });
             } catch (InterruptedException | InvocationTargetException ex) {
                 throw new RuntimeException(ex);
             }

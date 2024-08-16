@@ -5,6 +5,8 @@
 
 package view;
 
+import model.Direction;
+
 import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
@@ -291,6 +293,26 @@ public class TriviaMazeGui {
     }
 
     /**
+     * Lost board.
+     */
+    public void lost() {
+        myBoard.lose();
+        myNavBar.getNavBar().removeAll();
+        myNavBar.getNavBar().repaint();
+        myBoard.repaint();
+    }
+
+    /**
+     * Won board.
+     */
+    public void win() {
+        myBoard.win();
+        myNavBar.getNavBar().removeAll();
+        myNavBar.getNavBar().repaint();
+        myBoard.repaint();
+    }
+
+    /**
      * Sets the size of the minimap.
      * @param theRows the number of rows in the map.
      * @param theCols the number of columns in the map.
@@ -309,11 +331,30 @@ public class TriviaMazeGui {
     }
 
     /**
+     * adds a door to the minimap.
+     * @param theRow the number of rows in the map
+     * @param theCol the number of columns in the map
+     * @param theDirection the number representing door's direction
+     * @param theState the number representing door's state
+     */
+    public void showDoor(final int theRow, final int theCol, final Direction theDirection, final int theState) {
+        myMinimap.addDoorTile(theRow, theCol, theDirection, theState);
+    }
+
+    /**
      * Moves the player icon on the minimap.
      * @param theDirection the direction to move the player icon in.
      */
     public void movePlayer(final int theDirection) {
         myMinimap.movePlayerSpot(theDirection);
+    }
+
+    /**
+     * Rotate the player icon on the minimap.
+     * @param theDirection the direction to rotate the player icon in.
+     */
+    public void rotatePlayer(final int theDirection) {
+        myMinimap.rotatePlayer(theDirection);
     }
 
     /**
