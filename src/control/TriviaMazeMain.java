@@ -16,7 +16,7 @@ import view.TriviaMazeGui;
  *
  * @author Zane Swaims (bzswaims@uw.edu)
  * @author Abbygaile Yrojo
- * @author Mahammod
+ * @author Mohammod
  * @version 1.0
  */
 public final class TriviaMazeMain {
@@ -59,17 +59,6 @@ public final class TriviaMazeMain {
         Maze maze = new Maze();
         TriviaMazeGui view = new TriviaMazeGui();
         TriviaMazeController controller = new TriviaMazeController(maze, view);
-
-        //TODO remove
-//        TESTING PURPOSES
-//        System.out.println("Has player lost? : " + maze.hasLost());
-//        Direction direction[] = Direction.values();
-//        for (int i = 0; i < 4; i++) {
-//            if (maze.getCurrentRoom().getDoor(direction[i]) != null) {
-//                maze.getCurrentRoom().getDoor(direction[i]).setLockState(0);
-//            }
-//        }
-//        System.out.println("Has player lost? : " + maze.hasLost());
 
         EventQueue.invokeLater(() -> {
             setLookAndFeel();

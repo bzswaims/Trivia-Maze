@@ -5,25 +5,12 @@
 
 package view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.Graphics;
-import java.awt.GraphicsEnvironment;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
-import java.awt.Insets;
+import java.awt.*;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.File;
 import java.io.IOException;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.OverlayLayout;
+import javax.swing.*;
 
 /**
  * Starts the GUI for the Trivia Maze.
@@ -319,11 +306,6 @@ public class TriviaMazeGui {
      */
     public void showRoom(final int theRow, final int theCol) {
         myMinimap.addRoomTile(theRow, theCol);
-    }
-
-    //TODO I do not know what this is doing, flagging for removal since its printing to console.
-    public void getMapToString() {
-        System.out.println(myMinimap.toString());
     }
 
     /**

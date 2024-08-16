@@ -13,7 +13,7 @@ import java.awt.RenderingHints;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
-import javax.swing.JPanel;
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +26,25 @@ import java.util.List;
  */
 public class MiniMap extends JPanel {
     /** Length of map. */
-    private static final int MAP_LENGTH = 200;
+    private static final int MAP_LENGTH = 250;
+    /** Pointers for direction. */
+    private static final ImageIcon[] POINTERS =
+            {new ImageIcon("map/map_up.png"),
+                    new ImageIcon("map/map_right.png"),
+                    new ImageIcon("map/map_down.png"),
+                    new ImageIcon("map/map_left.png")};
+    /** Door state icons. */
+    private static final ImageIcon[] DOORS =
+            {new ImageIcon("map/door_state_0.png"),
+             new ImageIcon("map/door_state_1.png"),
+             new ImageIcon("map/door_state_2.png")};
+    /** Room tile icon. */
+    private static final ImageIcon TILE = new ImageIcon("map/roomtile.png");
+    /** Player icons. */
+    private static final ImageIcon[] PLAYER =
+            {new ImageIcon("map/player_idle1.png"),
+             new ImageIcon("map/player_idle2.png"),
+             new ImageIcon("map/player_distress.png")};
     /** Scaled size of tile. */
     private double myTileSize;
     /** List of room tiles with shapes and coordinates. */
@@ -42,6 +60,7 @@ public class MiniMap extends JPanel {
     public MiniMap() {
         myRoomTiles = new ArrayList<>();
         myTileSize = 0;
+        this.setVisible(true);
         setPreferredSize(new Dimension(MAP_LENGTH, MAP_LENGTH));
         setMinimumSize(new Dimension(MAP_LENGTH, MAP_LENGTH));
     }

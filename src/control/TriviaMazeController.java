@@ -63,7 +63,6 @@ public class TriviaMazeController {
         myView.start();
         myView.setMapValues(myMaze.getRows(), myMaze.getCols());
         myView.showRoom(myMaze.getCurrentRoom().getRow(), myMaze.getCurrentRoom().getCol());
-        myView.getMapToString();
 
         //TODO remove
         System.out.println(myMaze);
@@ -134,7 +133,6 @@ public class TriviaMazeController {
                         myView.showRoom(myMaze.getCurrentRoom().getRow(),
                                         myMaze.getCurrentRoom().getCol());
                         myView.movePlayer(myMaze.getCurrentDirection());
-                        myView.getMapToString();
 
                         myView.updateView("up");
                     } else if (state == 1) {
