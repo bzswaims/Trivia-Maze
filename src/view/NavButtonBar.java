@@ -98,7 +98,6 @@ public class NavButtonBar {
             setValue("right");
         }, theEvent -> {
             // interact
-            //TODO: delete
         }
         };
     }

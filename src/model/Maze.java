@@ -3,8 +3,6 @@
  * Summer 2024
  */
 
-//TODO clean up warnings better.
-
 package model;
 
 import java.io.Serial;
@@ -47,12 +45,7 @@ public class Maze implements Serializable {
     /**
      * Question factory to build questions with.
      */
-    private QuestionFactory myQuestionFactory;
-
-    /** Int representation of player's game progress.
-     *  0 is game lost. 1 is in progress. 2 is game win.
-     */
-    private final int myGameProgress;
+    private final QuestionFactory myQuestionFactory;
 
     /**
      * Constructs the Maze.
@@ -60,7 +53,6 @@ public class Maze implements Serializable {
     public Maze() {
         myPathRooms = new ArrayList<>();
         myDirIndex = 0;
-        myGameProgress = 1;
         myQuestionFactory = new QuestionFactory();
 
         assembleMaze(4, 4);
@@ -217,11 +209,7 @@ public class Maze implements Serializable {
                             [room.getCol() + d.dx()];
                     // neighbor room's direction would be opposite
                     Door neighborDoor = neighbor.getDoor(d.flip(d));
-                    if (neighborDoor != null) {
-                        room.addDoor(d, neighborDoor);
-                    } else {
-                        room.addDoor(d, null);
-                    }
+                    room.addDoor(d, neighborDoor);
                 }
             }
         }
@@ -341,16 +329,12 @@ public class Maze implements Serializable {
 
     /**
      * Attempts to move to the room player is facing.
-     *
-     * @return boolean.
      */
-    public boolean moveForward() {
+    public void moveForward() {
         Room room = getNextRoom(myCurrentRoom, DIRECTIONS[myDirIndex]);
         if (room != null) {
             myCurrentRoom = room;
-            return true;
         }
-        return false;
     }
 
     /**
@@ -518,7 +502,6 @@ public class Maze implements Serializable {
      * @param theRandom Random object to randomly select the questions.
      */
     private void setQuestions(final Random theRandom) {
-        int questionCount = 0; // or door count
         for (Room room : myPathRooms) {
             for (Direction direction : DIRECTIONS) {
                 Door door = room.getDoor(direction);

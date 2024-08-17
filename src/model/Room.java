@@ -132,12 +132,6 @@ public class Room implements Serializable {
     }
 
     /**
-     * Returns if the room has been visited.
-     * @return if the room has been visited.
-     */
-    public boolean haveIBeen() { return myHasBeenVisited;}
-
-    /**
      * Adds Door to Room based on direction.
      * @param theDirection Direction.
      */
@@ -197,12 +191,6 @@ public class Room implements Serializable {
     public void setBlock(final boolean theBool) {
         myIsBlock = theBool;
     }
-
-    /**
-     * Sets if Room has been visited.
-     * @param theBool boolean flag if the room has been visited.
-     */
-    public void setHasBeenVisited (final boolean theBool) { myHasBeenVisited = theBool;}
 
     /**
      * Return if Maze has searched here.

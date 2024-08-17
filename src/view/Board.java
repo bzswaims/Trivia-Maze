@@ -118,10 +118,6 @@ public class Board extends JPanel{
         delay();
     }
 
-    public int getPov() {
-        return myPov;
-    }
-
     /**
      * Moves through/towards the door in front of the user.
      */
