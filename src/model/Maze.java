@@ -3,16 +3,14 @@
  * Summer 2024
  */
 
-//TODO clean up warnings better.
-
 package model;
 
 import java.io.Serial;
 import java.io.Serializable;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 /**
  * This represents a 2D Maze that is travelled
@@ -22,37 +20,39 @@ import java.util.Collections;
  * @version August 14, 2024
  */
 public class Maze implements Serializable {
-
+    /** For saving. */
     @Serial
     private static final long serialVersionUID = 62999933L;
 
+    /** Length of maze. */
+    private static final int LENGTH = 4;
+
     /** To control how filled the maze is with Rooms. */
     private final static double MAX_RATIO = 0.6;
+
     /** For turning directions. */
     private final static Direction[] DIRECTIONS = {Direction.NORTH,
                     Direction.EAST, Direction.SOUTH, Direction.WEST};
+
     /** The maze itself. */
     private Room[][] myRooms;
+
     /** Rooms that may be travelled through. */
     private final List<Room> myPathRooms;
+
     /** The beginning of the maze. */
     private Room myStartRoom;
-    /** The room with the exit. */
-    private Room myEndRoom;
+
     /** Player's current room. */
     private Room myCurrentRoom;
+
     /** Int representation of player's current direction. */
     private int myDirIndex;
 
     /**
      * Question factory to build questions with.
      */
-    private QuestionFactory myQuestionFactory;
-
-    /** Int representation of player's game progress.
-     *  0 is game lost. 1 is in progress. 2 is game win.
-     */
-    private final int myGameProgress;
+    private final QuestionFactory myQuestionFactory;
 
     /**
      * Constructs the Maze.
@@ -60,24 +60,16 @@ public class Maze implements Serializable {
     public Maze() {
         myPathRooms = new ArrayList<>();
         myDirIndex = 0;
-        myGameProgress = 1;
         myQuestionFactory = new QuestionFactory();
 
-        assembleMaze(4, 4);
+        assembleMaze();
     }
 
     /**
      * Generates paths in the maze.
-     * @param theWidth int.
-     * @param theHeight int.
      */
-    private void assembleMaze(final int theWidth, final int theHeight) {
-        if (theWidth < 4 || theHeight < 4) {
-            throw new IllegalArgumentException("One of the passed lengths " +
-                                                "are less than 4.");
-        }
-
-        myRooms = new Room[theWidth][theHeight];
+    private void assembleMaze() {
+        myRooms = new Room[LENGTH][LENGTH];
         Random random = new Random();
         // rooms default to "block" state
         fillDefaultRooms();
@@ -192,7 +184,6 @@ public class Maze implements Serializable {
                 break;
             }
         }
-        myEndRoom = room;
     }
 
     /**
@@ -200,13 +191,6 @@ public class Maze implements Serializable {
      */
     private void createDoors() {
         Room room;
-
-        //location 0,0 and 0,1 for example, door between the two.
-        //share a door, room 0,0 east door should be the same as room 0,1 west door (the opposite direction)
-        //room 0 <=> room 1
-        //one door to share between rooms, the door can store some kind of location between the two or something
-        //another look for north-south after east-west doors.
-
         for (Room myPathRoom : myPathRooms) {
             room = myPathRoom;
             for (Direction d : Direction.values()) {
@@ -217,11 +201,8 @@ public class Maze implements Serializable {
                             [room.getCol() + d.dx()];
                     // neighbor room's direction would be opposite
                     Door neighborDoor = neighbor.getDoor(d.flip(d));
-                    if (neighborDoor != null) {
-                        room.addDoor(d, neighborDoor);
-                    } else {
-                        room.addDoor(d, null);
-                    }
+                    if (neighborDoor != null) room.addDoor(d, neighborDoor);
+                    else room.addDoor(d, null);
                 }
             }
         }
@@ -257,7 +238,8 @@ public class Maze implements Serializable {
      * @param theDirection Direction.
      * @return boolean.
      */
-    private boolean doesRoomExist(final Room theRoom, final Direction theDirection) {
+    private boolean doesRoomExist(final Room theRoom,
+                                  final Direction theDirection) {
         return theDirection != null &&
                 isInBounds(theRoom.getCol() +
                         theDirection.dx(), myRooms[0].length) &&
@@ -266,16 +248,18 @@ public class Maze implements Serializable {
     }
 
     /**
-     * Returns if the Room can be entered.
+     * Returns if the Room can be opened.
      * @param theRoom Current room.
      * @param theDirection Direction.
      * @return boolean.
      */
-    private boolean canEnter(final Room theRoom, final Direction theDirection) {
+    private boolean canEnter(final Room theRoom,
+                             final Direction theDirection) {
         return doesRoomExist(theRoom, theDirection) &&
                 (!myRooms[theRoom.getRow()]
                         [theRoom.getCol() + theDirection.dx()].isBlock() &&
-                        !myRooms[theRoom.getRow() + theDirection.dy()][theRoom.getCol()]
+                        !myRooms[theRoom.getRow() + theDirection.dy()]
+                                [theRoom.getCol()]
                                 .isBlock());
     }
 
@@ -341,16 +325,12 @@ public class Maze implements Serializable {
 
     /**
      * Attempts to move to the room player is facing.
-     *
-     * @return boolean.
      */
-    public boolean moveForward() {
+    public void moveForward() {
         Room room = getNextRoom(myCurrentRoom, DIRECTIONS[myDirIndex]);
         if (room != null) {
             myCurrentRoom = room;
-            return true;
         }
-        return false;
     }
 
     /**
@@ -410,7 +390,8 @@ public class Maze implements Serializable {
                 if (myRooms[i][j].getDoor(Direction.WEST) == null) {
                     s.append(" | ");
                 } else {
-                    s.append(space).append(myRooms[i][j].getDoor(Direction.WEST)).append(space);
+                    s.append(space).append(myRooms[i][j].
+                            getDoor(Direction.WEST)).append(space);
                 }
                 s.append(myRooms[i][j]);
             }
@@ -419,8 +400,8 @@ public class Maze implements Serializable {
                     getDoor(Direction.EAST) == null) {
                 s.append(" | ");
             } else {
-                s.append(space).append(myRooms[i][myRooms[0].length - 1].
-                        getDoor(Direction.EAST));
+                s.append(space).append(myRooms[i][myRooms[0].length - 1]
+                        .getDoor(Direction.EAST));
             }
             s.append("\n");
         }
@@ -497,14 +478,6 @@ public class Maze implements Serializable {
     }
 
     /**
-     * Gets number of columns.
-     * @return int.
-     */
-    public int getCols() {
-        return myRooms[0].length;
-    }
-
-    /**
      * Returns current direction index.
      * @return int.
      */
@@ -518,12 +491,12 @@ public class Maze implements Serializable {
      * @param theRandom Random object to randomly select the questions.
      */
     private void setQuestions(final Random theRandom) {
-        int questionCount = 0; // or door count
         for (Room room : myPathRooms) {
             for (Direction direction : DIRECTIONS) {
                 Door door = room.getDoor(direction);
                 if (door != null && door.getQuestion() == null) {
-                    door.setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
+                    door.setQuestion(myQuestionFactory
+                            .makeQuestion(theRandom.nextInt(3) + 1));
                 }
             }
         }
@@ -544,7 +517,8 @@ public class Maze implements Serializable {
     public String[] getAnswers() {
         AbstractQuestion question = getCurrentQuestion();
         if (question.getType() == 1) {
-            List<String> list = ((MultiQuestion) question).getIncorrectAnswers();
+            List<String> list = ((MultiQuestion) question)
+                    .getIncorrectAnswers();
             list.add(question.getCorrectAnswer());
             Collections.shuffle(list);
             String[] answers = new String[4];

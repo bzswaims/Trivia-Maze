@@ -20,7 +20,6 @@ import java.util.Random;
  * @version 1.3
  */
 public enum Direction {
-
     /**
      * North (which is up on the screen).
      */
@@ -126,6 +125,11 @@ public enum Direction {
         return result;
     }
 
+    /**
+     * Flips the direction horizontally or vertically.
+     * @param theDirection Direction.
+     * @return Direction.
+     */
     public Direction flip(final Direction theDirection) {
         return switch (theDirection) {
             case NORTH -> SOUTH;

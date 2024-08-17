@@ -10,10 +10,10 @@ package model;
  *
  * @author Zane Swaims
  * @author Abbygaile Yrojo
- * @author Mahammod
+ * @author Mohammed
  * @version 1.0
  */
-public class ShortQuestion extends AbstractQuestion{
+public class ShortQuestion extends AbstractQuestion {
     /**
      * Constructor for a ShortQuestion.
      */

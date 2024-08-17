@@ -5,14 +5,14 @@
 
 package view;
 
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JPanel;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 /**
  * Builds the navigation bar for the game. This is used by the user
@@ -50,9 +50,7 @@ public class NavButtonBar {
     {
         myNavButtons = new ArrayList<>();
         myNavBar = new JPanel();
-
         myPCSupport = new PropertyChangeSupport(this);
-
         myListeners = createListeners();
         createButtons();
         setUpNavBar();
@@ -96,18 +94,14 @@ public class NavButtonBar {
         }, theEvent -> {
             // right button
             setValue("right");
-        }, theEvent -> {
-            // interact
-            //TODO: delete
-        }
-        };
+        }};
     }
 
     /**
      * Methods that compiles the buttons into the panel.
      */
     private void createButtons() {
-        final String[] imageNames = {"left", "up", "right", "hand"}; //, "bag"
+        final String[] imageNames = {"left", "up", "right"};
         for (int i = 0; i < imageNames.length; i++) {
             JButton button = buttonMaker(new ImageIcon(
                     String.format("files/%s.png", imageNames[i])));

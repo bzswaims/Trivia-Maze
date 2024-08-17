@@ -10,10 +10,10 @@ package model;
  *
  * @author Zane Swaims
  * @author Abbygaile Yrojo
- * @author Mahammod
+ * @author Mohammed
  * @version 1.0
  */
-public class TrueFalseQuestion extends AbstractQuestion{
+public class TrueFalseQuestion extends AbstractQuestion {
     /**
      * Constructor for true or false questions.
      */

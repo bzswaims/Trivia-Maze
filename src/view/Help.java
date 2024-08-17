@@ -9,14 +9,14 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
-import javax.swing.JLabel;
 
 // TODO - Get the font working and colors not flashbanging
 //          aka get it to fit the theme
@@ -70,18 +70,5 @@ public class Help extends JPanel {
 
         setVisible(true);
     }
-
-//    /**
-//     * Draws text and images.
-//     * @param theGraphics Graphics.
-//     */
-//    @Override
-//    protected void paintComponent(final Graphics theGraphics) {
-//        super.paintComponent(theGraphics);
-//        final Graphics2D g2d = (Graphics2D) theGraphics;
-//        g2d.setFont(Font.getFont("Tomorrow Regular"));
-//        g2d.drawString(TEXT, 0, 0);
-//        g2d.drawImage(myImage, 30, 100, null);
-//    }
 }
 

@@ -5,16 +5,15 @@
 
 package view;
 
-import model.Direction;
-
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
-import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.*;
 import javax.swing.SwingUtilities;
+import model.Direction;
 
 /**
  * Creates the minimap panel to be used on the main GUI for the game.
@@ -52,14 +51,14 @@ public class MiniMap extends JPanel {
     private final List<MyDoorTile> myDoorTiles;
     /** Representation of player. */
     private Ellipse2D.Double myPlayerSpot;
-
+    /** Player's current x. */
     private int myPlayerX;
-
+    /** Player's current x. */
     private int myPlayerY;
-
-    private int myPlayerDirection = 0;
-
-    private int myPlayerIdle = 0;
+    /** Player's current Direction. */
+    private int myPlayerDirection;
+    /** Player idle frame number. */
+    private int myPlayerIdle;
 
     /**
      * Constructs MiniMap.
@@ -68,6 +67,8 @@ public class MiniMap extends JPanel {
         myRoomTiles = new ArrayList<>();
         myDoorTiles = new ArrayList<>();
         myTileSize = 0;
+        myPlayerDirection = 0;
+        myPlayerIdle = 0;
         this.setVisible(true);
         setPreferredSize(new Dimension(MAP_LENGTH, MAP_LENGTH));
         setMinimumSize(new Dimension(MAP_LENGTH, MAP_LENGTH));
@@ -75,14 +76,12 @@ public class MiniMap extends JPanel {
 
     }
 
-
-
     /**
      * Set up the map for adding shapes.
+     * Only one length is needed since the maze is a square.
      * @param theRows int rows of maze.
-     * @param theCols int columns of maze.
      */
-    public void setUpMap(final int theRows, final int theCols) {
+    public void setUpMap(final int theRows) {
         myTileSize = (double) MAP_LENGTH / theRows;
         myPlayerSpot = new Ellipse2D.Double();
         setBackground(Color.BLACK);
@@ -111,12 +110,14 @@ public class MiniMap extends JPanel {
      * @param theCol int col.
      * @param theDirection int direction.
      */
-    public void addDoorTile(final int theRow, final int theCol, final Direction theDirection, final int theState) {
-        if (hasDoorTile(theRow, theCol, theDirection)) {
+    public void addDoorTile(final int theRow, final int theCol,
+                            final Direction theDirection,
+                            final int theState) {
+        if (hasDoorTile(theRow, theCol)) {
             removeDoorTile(theRow, theCol, theDirection);
         }
-
-        MyDoorTile tile = new MyDoorTile(theRow, theCol, theDirection, theState);
+        MyDoorTile tile = new MyDoorTile(theRow, theCol,
+                                        theDirection, theState);
         myDoorTiles.add(tile);
         repaint();
     }
@@ -137,13 +138,12 @@ public class MiniMap extends JPanel {
     }
 
     /**
-     * Used to check if door tiles already exists;
+     * Used to check if door tiles already exists.
      * @param theRow int row.
      * @param theCol int col.
-     * @param theDirection int direction.
      * @return boolean.
      */
-    private boolean hasDoorTile(final int theRow, final int theCol, final Direction theDirection) {
+    private boolean hasDoorTile(final int theRow, final int theCol) {
         for (MyRoomTile tile : myRoomTiles) {
             if (tile.myCol == theCol && tile.myRow == theRow) {
                 return true;
@@ -159,9 +159,11 @@ public class MiniMap extends JPanel {
      * @param theDirection int direction.
      * @return boolean.
      */
-    private boolean removeDoorTile(final int theRow, final int theCol, final Direction theDirection) {
+    private boolean removeDoorTile(final int theRow, final int theCol,
+                                   final Direction theDirection) {
         for (MyDoorTile tile : myDoorTiles) {
-            if (tile.myCol == theCol && tile.myRow == theRow && tile.myDir == theDirection) {
+            if (tile.myCol == theCol && tile.myRow == theRow
+                    && tile.myDir == theDirection) {
                 myDoorTiles.remove(tile);
                 return true;
             }
@@ -187,9 +189,11 @@ public class MiniMap extends JPanel {
             tile.myShape.paintIcon(this, theG, tile.myX, tile.myY);
         }
 
-        ImageIcon playerIdle = getScaledImage(PLAYER[myPlayerIdle], (int) myTileSize, (int) myTileSize);
+        ImageIcon playerIdle = getScaledImage(PLAYER[myPlayerIdle],
+                (int) myTileSize, (int) myTileSize);
 
-        ImageIcon playerPointer = getScaledImage(POINTERS[myPlayerDirection], (int) myTileSize, (int) myTileSize);
+        ImageIcon playerPointer = getScaledImage(POINTERS[myPlayerDirection],
+                (int) myTileSize, (int) myTileSize);
 
         playerIdle.paintIcon(this, theG, myPlayerX , myPlayerY);
         playerPointer.paintIcon(this, theG, myPlayerX , myPlayerY);
@@ -203,7 +207,8 @@ public class MiniMap extends JPanel {
      * @param theY double y.
      */
     private void setPlayerSpot(final double theX, final double theY) {
-        myPlayerSpot.setFrameFromDiagonal(theX, theY, theX + myTileSize, theY + myTileSize);
+        myPlayerSpot.setFrameFromDiagonal(theX, theY,
+                theX + myTileSize, theY + myTileSize);
         myPlayerX = (int) theX;
         myPlayerY = (int) theY;
 
@@ -219,7 +224,6 @@ public class MiniMap extends JPanel {
         if (theDirection < 0 || theDirection > 3) {
             throw new IllegalArgumentException("Out of bounds! [0, 3]");
         }
-
         double x = myPlayerSpot.getX();
         double y = myPlayerSpot.getY();
         switch (theDirection) {
@@ -254,21 +258,6 @@ public class MiniMap extends JPanel {
 
         delayRepaint();
 
-    }
-
-    /**
-     * JUST FOR TEST PURPOSES!!
-     * @return String.
-     */
-    @Override
-    public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("TILES [\n");
-        for (MyRoomTile tile : myRoomTiles) {
-            sb.append("ROOM: ").append(tile.myRow).append(" ").append(tile.myCol);
-        }
-        sb.append("\n]");
-        return sb.toString();
     }
 
     /**
@@ -324,7 +313,8 @@ public class MiniMap extends JPanel {
          * @param theRow int row.
          * @param theCol int col.
          */
-        public MyDoorTile(final int theRow, final int theCol, final Direction theDirection, final int theState) {
+        public MyDoorTile(final int theRow, final int theCol,
+                          final Direction theDirection, final int theState) {
             myRow = theRow;
             myCol = theCol;
             myX = (int) ( theCol * myTileSize );
@@ -332,7 +322,8 @@ public class MiniMap extends JPanel {
             myDir = theDirection;
             myState = theState;
 
-            myShape = getScaledImage(DOORS[myState], (int) myTileSize, (int) myTileSize);
+            myShape = getScaledImage(DOORS[myState],
+                    (int) myTileSize, (int) myTileSize);
 
             switch (myDir){
                 case Direction.NORTH:
@@ -371,7 +362,13 @@ public class MiniMap extends JPanel {
         }).start();
     }
 
-    // https://stackoverflow.com/a/39515940;
+    /**
+     * Returns scaled image icon.
+     * @param srcImg ImageIcon.
+     * @param w int width.
+     * @param h int height.
+     * @return ImageIcon.
+     */
     private ImageIcon getScaledImage(ImageIcon srcImg, int w, int h){
 
         BufferedImage resizedImg = new BufferedImage(w, h, BufferedImage.TYPE_INT_ARGB);
@@ -383,6 +380,9 @@ public class MiniMap extends JPanel {
         return new ImageIcon(resizedImg);
     }
 
+    /**
+     * For animation.
+     */
     private void delayRepaint() {
         new Thread(() -> {
             try {

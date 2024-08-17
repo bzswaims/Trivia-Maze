@@ -15,7 +15,8 @@ import javax.swing.SwingUtilities;
 
 /**
  * Displays the "board", that is what the user will see.
- * This handles updating the graphics so the user knows where they are.
+ * This handles updating the graphics so the user
+ * knows their current direction.
  *
  * @author Zane Swaims
  * @author Abbygaile Yrojo
@@ -118,10 +119,6 @@ public class Board extends JPanel{
         delay();
     }
 
-    public int getPov() {
-        return myPov;
-    }
-
     /**
      * Moves through/towards the door in front of the user.
      */
@@ -145,6 +142,9 @@ public class Board extends JPanel{
         myUpdate = false;
     }
 
+    /**
+     * For animation.
+     */
     private void delay() {
         new Thread(() -> {
             try {

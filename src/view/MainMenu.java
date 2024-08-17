@@ -5,19 +5,19 @@
 
 package view;
 
-import java.awt.Font;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Builds the main menu for the game.
@@ -71,14 +71,11 @@ public class MainMenu {
             setValue("New game");
         }, theEvent -> {
             // load
-            //TODO
-            //Messes up the minimap using new game.
             myMenuBar.setVisible(false);
             setValue("Load");
             setValue("New game");
         }, theEvent -> {
             //help
-            // this and action on the back button could go in a method hmmm
             myMenuBar.removeAll();
             myMenuBar.add(new Help());
             JButton button = myMenuButtons.get(4);
@@ -91,7 +88,7 @@ public class MainMenu {
             //exit
             System.exit(0);
         }, theEvent -> {
-            // back
+            // back (exit help screen)
             myMenuBar.removeAll();
             setUpMainMenu();
             myMenuBar.revalidate();
@@ -103,11 +100,13 @@ public class MainMenu {
      * Methods that compiles the buttons into the panel.
      */
     private void createButtons() {
-        final String[] names = {"New Game", "Continue", "Help", "Exit", "Back"};
+        final String[] names = {"New Game", "Continue",
+                "Help", "Exit", "Back"};
+        final Font font = new Font("Tomorrow SemiBold", Font.PLAIN, 24);
         for (int i = 0; i < names.length; i++) {
             JButton button = new JButton(names[i]);
             button.setEnabled(true);
-            button.setFont(new Font("Tomorrow SemiBold", Font.PLAIN, 24));
+            button.setFont(font);
             button.setFocusPainted(false);
             button.addActionListener(myListeners[i]);
             myMenuButtons.add(button);
@@ -147,7 +146,7 @@ public class MainMenu {
      * Changes the menu by notifying listener.
      * @param theNewValue String.
      */
-    public void setValue(String theNewValue) {
+    public void setValue(final String theNewValue) {
         String oldValue = "Main menu";
         this.myPCSupport.firePropertyChange("Change view",
                 oldValue, theNewValue);

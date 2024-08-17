@@ -15,10 +15,13 @@ import java.io.Serializable;
  *
  * @author Zane Swaims
  * @author Abbygaile Yrojo
- * @author Mahammod
+ * @author Mohammed
  * @version 1.0
  */
 public class AbstractQuestion implements Serializable, Question {
+    /**
+     * For saving/loading.
+     */
     @Serial
     private static final long serialVersionUID = 7788337777844466666L;
 

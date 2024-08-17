@@ -5,18 +5,19 @@
 
 package model;
 
-import org.sqlite.SQLiteDataSource;
-
 import java.io.Serial;
 import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import org.sqlite.SQLiteDataSource;
 
 /**
- * Takes in an int value representing a question type, and gives a random question of that type back.
- * If all questions of that type have been fetched from the database, it will restart selecting that question
+ * Takes in an int value representing a question type,
+ * and gives a random question of that type back.
+ * If all questions of that type have been fetched from the database,
+ * it will restart selecting that question
  * type as though non have been fetched.
  * Types: 1 - Multiple choice question
  *        2 - True or false question
@@ -26,27 +27,29 @@ import java.sql.Statement;
  * @version 1.0
  */
 public class QuestionFactory implements Serializable {
-
+    /**
+     * For saving/loading.
+     */
     @Serial
     private static final long serialVersionUID = 33322228666777999L;
 
     /**
-     * constant for total number of questions in database.
+     * Constant for total number of questions in database.
      */
     static final int TOTAL_QUESTIONS = 30;
 
     /**
-     * constant for total number of multiple choice questions in database.
+     * Constant for total number of multiple choice questions in database.
      */
     static final int TOTAL_MULTI_QUESTIONS = 10;
 
     /**
-     * constant for total number of true false questions in database.
+     * Constant for total number of true false questions in database.
      */
     static final int TOTAL_TRUE_FALSE_QUESTIONS = 10;
 
     /**
-     * constant for total number of short answer questions in database.
+     * Constant for total number of short answer questions in database.
      */
     static final int TOTAL_SHORT_QUESTIONS = 10;
 
@@ -56,7 +59,7 @@ public class QuestionFactory implements Serializable {
     private static SQLiteDataSource ds;
 
     /**
-     * arraylist to store IDs we have used already.
+     * Arraylist to store IDs we have used already.
      */
     private final int[] myUsedQuestions;
 
@@ -78,8 +81,10 @@ public class QuestionFactory implements Serializable {
     }
 
     /**
-     * Makes a question at random based on the type value fed in. It will cycle through all questions of the
-     * specified type until all are selected and then will recycle through them as though none of that type
+     * Makes a question at random based on the type value fed in.
+     * It will cycle through all questions of the
+     * specified type until all are selected and then will recycle
+     * through them as though none of that type
      * have been selected.
      * 1 - Multiple choice question
      * 2 - True false question
@@ -104,6 +109,7 @@ public class QuestionFactory implements Serializable {
 
     /**
      * Builds a multiple choice question
+     * @param theType int.
      */
     private MultiQuestion buildMultiQuestion(final int theType) {
         MultiQuestion tempQuestion = new MultiQuestion();
@@ -120,7 +126,8 @@ public class QuestionFactory implements Serializable {
                 String questionText = rs.getString("QuestionText");
                 int questionType = rs.getInt("QuestionType");
 
-                if (questionType == theType && myUsedQuestions[questionID] == 0) {
+                if (questionType == theType
+                        && myUsedQuestions[questionID] == 0) {
 
                     tempQuestion.setQuestion(questionText);
                     tempQuestion.setID(questionID);
@@ -132,7 +139,7 @@ public class QuestionFactory implements Serializable {
                 }
             }
 
-            if(tempQuestion.getID() == -1)
+            if (tempQuestion.getID() == -1)
             {
                 for(int i = 1; i <= TOTAL_MULTI_QUESTIONS; i++){
                     myUsedQuestions[i] = 0;
@@ -145,7 +152,8 @@ public class QuestionFactory implements Serializable {
                     String questionText = rs.getString("QuestionText");
                     int questionType = rs.getInt("QuestionType");
 
-                    if (questionType == theType && myUsedQuestions[questionID] == 0) {
+                    if (questionType == theType
+                            && myUsedQuestions[questionID] == 0) {
 
                         tempQuestion.setQuestion(questionText);
                         tempQuestion.setID(questionID);
@@ -175,7 +183,6 @@ public class QuestionFactory implements Serializable {
                     tempQuestion.addIncorrectAnswer(answerText);
                 }
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
             System.exit(0);
@@ -186,6 +193,7 @@ public class QuestionFactory implements Serializable {
 
     /**
      * Builds a short answer question
+     * @param theType int.
      */
     private ShortQuestion buildShortAnswer (final int theType) {
         ShortQuestion tempQuestion = new ShortQuestion();
@@ -267,6 +275,7 @@ public class QuestionFactory implements Serializable {
 
     /**
      * Builds a true false answer question
+     * @param theType int.
      */
     private TrueFalseQuestion buildTrueFalseAnswer (final int theType) {
         TrueFalseQuestion tempQuestion = new TrueFalseQuestion();
@@ -297,7 +306,9 @@ public class QuestionFactory implements Serializable {
 
         if(tempQuestion.getID() == -1)
         {
-            for(int i =TOTAL_MULTI_QUESTIONS + 1; i <= TOTAL_MULTI_QUESTIONS + TOTAL_TRUE_FALSE_QUESTIONS; i++){
+            for (int i =TOTAL_MULTI_QUESTIONS + 1;
+                 i <= TOTAL_MULTI_QUESTIONS + TOTAL_TRUE_FALSE_QUESTIONS;
+                 i++) {
                 myUsedQuestions[i] = 0;
             }
 

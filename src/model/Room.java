@@ -12,10 +12,12 @@ import java.io.Serializable;
  * Room object that will act as the main rooms for our maze.
  *
  * @author Abbygaile Yrojo
- * @version July 30, 2024
+ * @version August 16, 2024
  */
 public class Room implements Serializable {
-
+    /**
+     * For saving/loading.
+     */
     @Serial
     private static final long serialVersionUID = 7776666666L;
 
@@ -132,14 +134,9 @@ public class Room implements Serializable {
     }
 
     /**
-     * Returns if the room has been visited.
-     * @return if the room has been visited.
-     */
-    public boolean haveIBeen() { return myHasBeenVisited;}
-
-    /**
      * Adds Door to Room based on direction.
      * @param theDirection Direction.
+     * @param theDoor Door.
      */
     public void addDoor(final Direction theDirection, final Door theDoor) {
         Door door;
@@ -199,12 +196,6 @@ public class Room implements Serializable {
     }
 
     /**
-     * Sets if Room has been visited.
-     * @param theBool boolean flag if the room has been visited.
-     */
-    public void setHasBeenVisited (final boolean theBool) { myHasBeenVisited = theBool;}
-
-    /**
      * Return if Maze has searched here.
      * @return boolean.
      */
@@ -220,7 +211,6 @@ public class Room implements Serializable {
         myMazeVisited = theBool;
     }
 
-
     /**
      * Returns String of Room (but not doors).
      * @return String.
@@ -231,7 +221,7 @@ public class Room implements Serializable {
             return "s";
         } else if (myIsBlock) {
             return "w";
-        } else if (myIsEnd) { // REMOVE THIS LATER. WILL ADD DOORS TO MAZE STRING
+        } else if (myIsEnd) {
             return "e";
         } else {
             return "+";

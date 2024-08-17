@@ -14,11 +14,10 @@ import java.util.ArrayList;
  *
  * @author Zane Swaims
  * @author Abbygaile Yrojo
- * @author Mahammod
+ * @author Mohammed
  * @version 1.0
  */
 public class MultiQuestion extends AbstractQuestion {
-
     /**
      * Array of incorrect answers.
      */
@@ -28,9 +27,13 @@ public class MultiQuestion extends AbstractQuestion {
      * Constructs MultiQuestion.
      */
     public MultiQuestion() {
-        myIncorrectAnswers = new ArrayList<> ();
+        myIncorrectAnswers = new ArrayList<>();
     }
 
+    /**
+     * Adds answer to list of incorrect answers.
+     * @param theAnswer
+     */
     public void addIncorrectAnswer(final String theAnswer) {
         myIncorrectAnswers.add(theAnswer);
     }
@@ -40,6 +43,6 @@ public class MultiQuestion extends AbstractQuestion {
      * @return ArrayList of answers.
      */
     public ArrayList<String> getIncorrectAnswers() {
-        return myIncorrectAnswers;
+        return (ArrayList<String>) myIncorrectAnswers.clone();
     }
 }

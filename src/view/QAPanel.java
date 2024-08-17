@@ -30,7 +30,7 @@ import javax.swing.KeyStroke;
  * Panel to display question and answers.
  *
  * @author Abbygaile Yrojo
- * @version August 14, 2024
+ * @version August 16, 2024
  */
 public class QAPanel extends JPanel {
     /** Dimension of this panel. */
@@ -86,7 +86,8 @@ public class QAPanel extends JPanel {
         InputMap inputMap = myTextField.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
         ActionMap actionMap = myTextField.getActionMap();
 
-        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "enter_key_pressed");
+        inputMap.put(KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0),
+                "enter_key_pressed");
         actionMap.put("enter_key_pressed", new AbstractAction() {
             @Override
             public void actionPerformed(final ActionEvent theE) {

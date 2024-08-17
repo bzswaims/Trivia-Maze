@@ -16,13 +16,12 @@ import view.TriviaMazeGui;
  *
  * @author Zane Swaims (bzswaims@uw.edu)
  * @author Abbygaile Yrojo
- * @author Mohammod
+ * @author Mohammed
  * @version 1.0
  */
 public final class TriviaMazeMain {
-
     /**
-     *  private constructor to inhibit instantiation.
+     *  Private constructor to inhibit instantiation.
      */
     private TriviaMazeMain() {
         // do not instantiate objects of this class
@@ -35,9 +34,8 @@ public final class TriviaMazeMain {
     private static void setLookAndFeel() {
 
         try {
-
-            UIManager.setLookAndFeel("javax.swing.plaf.metal.MetalLookAndFeel");
-
+            UIManager.setLookAndFeel
+                    ("javax.swing.plaf.metal.MetalLookAndFeel");
         } catch (final UnsupportedLookAndFeelException e) {
             System.out.println("UnsupportedLookAndFeelException");
         } catch (final ClassNotFoundException e) {

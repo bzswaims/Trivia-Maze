@@ -8,12 +8,12 @@ package view;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import javax.swing.JPanel;
-import javax.swing.JButton;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JPanel;
 
 /**
  * Creates a panel that contains a save button and an exit button.
@@ -44,14 +44,15 @@ public class OptionsPanel extends JPanel {
     public OptionsPanel() {
         myOptionButtons = new ArrayList<>();
         myListeners = createListeners();
-
         myPCSupport = new PropertyChangeSupport(this);
-
         createButtons();
         setUpOptionsPanel();
         setLayout (new BoxLayout (this, BoxLayout.Y_AXIS));
     }
 
+    /**
+     * Set up buttons in options panel.
+     */
     private void setUpOptionsPanel() {
         for (JButton myOptionButton : myOptionButtons) {
             add(myOptionButton);

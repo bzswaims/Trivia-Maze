@@ -17,7 +17,9 @@ import java.io.Serializable;
  * @version 1.0
  */
 public class Door implements Serializable {
-
+    /**
+     * For saving.
+     */
     @Serial
     private static final long serialVersionUID = 3666666777L;
 
@@ -95,6 +97,10 @@ public class Door implements Serializable {
         myExit = theBool;
     }
 
+    /**
+     * Returns if door is the exit.
+     * @return boolean.
+     */
     public boolean getExit() {
         return myExit;
     }

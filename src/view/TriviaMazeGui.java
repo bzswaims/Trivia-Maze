@@ -314,10 +314,9 @@ public class TriviaMazeGui {
     /**
      * Sets the size of the minimap.
      * @param theRows the number of rows in the map.
-     * @param theCols the number of columns in the map.
      */
-    public void setMapValues(final int theRows, final int theCols) {
-        myMinimap.setUpMap(theRows, theCols);
+    public void setMapValues(final int theRows) {
+        myMinimap.setUpMap(theRows);
     }
 
     /**
@@ -336,7 +335,8 @@ public class TriviaMazeGui {
      * @param theDirection the number representing door's direction
      * @param theState the number representing door's state
      */
-    public void showDoor(final int theRow, final int theCol, final Direction theDirection, final int theState) {
+    public void showDoor(final int theRow, final int theCol,
+                         final Direction theDirection, final int theState) {
         myMinimap.addDoorTile(theRow, theCol, theDirection, theState);
     }
 
