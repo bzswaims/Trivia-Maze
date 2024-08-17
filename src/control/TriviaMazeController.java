@@ -74,9 +74,6 @@ public class TriviaMazeController {
                         myMaze.getCurrentRoom().getDoor(dir).getLockState());
             }
         }
-
-        //TODO remove
-        System.out.println(myMaze);
     }
 
     /**
@@ -140,7 +137,6 @@ public class TriviaMazeController {
 
                 } else if (value.equals("forward")) {
                     final int state = myMaze.getDoorLockState();
-                    System.out.println("Door state: " + state);
                     if (state == 2) {
                         myMaze.moveForward();
                         myView.showRoom(myMaze.getCurrentRoom().getRow(),
@@ -161,7 +157,6 @@ public class TriviaMazeController {
                         myView.updateView("up");
                     } else if (state == 1) {
                         // disable nav bar
-                        System.out.println("Show question");
                         myView.setUpQuestion(
                                 myMaze.getCurrentQuestion().getType(),
                                 myMaze.getCurrentQuestion().getQuestion(),
@@ -176,7 +171,6 @@ public class TriviaMazeController {
                 }
 
             } else if (name.equals("Answer")) {
-                System.out.println("Correct? : " + myMaze.isCorrect(theEvt.getNewValue().toString()));
                 if (myMaze.isCorrect(theEvt.getNewValue().toString())) {
                     myMaze.setDoorState(2);
                     myView.stopQuestion();

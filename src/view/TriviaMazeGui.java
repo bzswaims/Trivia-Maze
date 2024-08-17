@@ -217,7 +217,6 @@ public class TriviaMazeGui {
                 }
                 setValue("Movement", newValue);
             } else if (theEvt.getPropertyName().equals("Answer")) {
-                System.out.println("TriviaMazeGui sending answer to Controller");
                 setValue("Answer", newValue);
             }
         };
