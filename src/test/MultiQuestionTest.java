@@ -5,78 +5,128 @@
 
 package test;
 
+import java.util.ArrayList;
 import model.MultiQuestion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
-class MultiQuestionTest {
+/**
+ * Tests for MultiQuestion.
+ *
+ * @author Zane Swaims
+ * @version 1.0
+ */
+public class MultiQuestionTest {
+    /**
+     * Question object to test on.
+     */
+    private MultiQuestion myQuestion;
 
-    private MultiQuestion multiQuestion;
-
+    /**
+     * Set up MultiQuestion for testing.
+     */
     @BeforeEach
-    void setUp() {
-        multiQuestion = new MultiQuestion();
-        multiQuestion.setQuestion("What is the capital of Italy?");
-        multiQuestion.setCorrectAnswer("Rome");
+    public void setUp() {
+        myQuestion = new MultiQuestion();
+        myQuestion.setQuestion("What is the capital of Italy?");
+        myQuestion.setCorrectAnswer("Rome");
     }
 
+    /**
+     * Tests constructor.
+     */
     @Test
-    void testDefaultConstructor() {
-        assertNotNull(multiQuestion.getIncorrectAnswers(), "Incorrect answers list should be initialized.");
-        assertTrue(multiQuestion.getIncorrectAnswers().isEmpty(), "Incorrect answers list should be empty by default.");
+    public void testDefaultConstructor() {
+        assertNotNull(myQuestion.getIncorrectAnswers(),
+                "Incorrect answers list should be initialized.");
+        assertTrue(myQuestion.getIncorrectAnswers().isEmpty(),
+                "Incorrect answers list should be empty by default.");
     }
 
+    /**
+     * Tests adding incorrect answers.
+     */
     @Test
-    void testAddIncorrectAnswer() {
-        multiQuestion.addIncorrectAnswer("Venice");
-        multiQuestion.addIncorrectAnswer("Milan");
+    public void testAddIncorrectAnswer() {
+        myQuestion.addIncorrectAnswer("Venice");
+        myQuestion.addIncorrectAnswer("Milan");
 
-        ArrayList<String> incorrectAnswers = multiQuestion.getIncorrectAnswers();
-        assertEquals(2, incorrectAnswers.size(), "There should be two incorrect answers.");
-        assertTrue(incorrectAnswers.contains("Venice"), "Incorrect answers should include 'Venice'.");
-        assertTrue(incorrectAnswers.contains("Milan"), "Incorrect answers should include 'Milan'.");
+        ArrayList<String> incorrectAnswers =
+                myQuestion.getIncorrectAnswers();
+        assertEquals(2, incorrectAnswers.size(),
+                "There should be two incorrect answers.");
+        assertTrue(incorrectAnswers.contains("Venice"),
+                "Incorrect answers should include 'Venice'.");
+        assertTrue(incorrectAnswers.contains("Milan"),
+                "Incorrect answers should include 'Milan'.");
     }
 
+    /**
+     * Tests if there can be duplicate incorrect answers.
+     */
     @Test
-    void testAddDuplicateIncorrectAnswer() {
-        multiQuestion.addIncorrectAnswer("Florence");
-        multiQuestion.addIncorrectAnswer("Florence");
+    public void testAddDuplicateIncorrectAnswer() {
+        myQuestion.addIncorrectAnswer("Florence");
+        myQuestion.addIncorrectAnswer("Florence");
 
-        ArrayList<String> incorrectAnswers = multiQuestion.getIncorrectAnswers();
-        assertEquals(2, incorrectAnswers.size(), "There should be two incorrect answers, even if duplicates are added.");
-        assertEquals("Florence", incorrectAnswers.get(0), "First incorrect answer should be 'Florence'.");
-        assertEquals("Florence", incorrectAnswers.get(1), "Second incorrect answer should also be 'Florence'.");
+        ArrayList<String> incorrectAnswers =
+                myQuestion.getIncorrectAnswers();
+        assertEquals(2, incorrectAnswers.size(),
+                "There should be two incorrect answers," +
+                        " even if duplicates are added.");
+        assertEquals("Florence", incorrectAnswers.get(0),
+                "First incorrect answer should be 'Florence'.");
+        assertEquals("Florence", incorrectAnswers.get(1),
+                "Second incorrect answer should also be 'Florence'.");
     }
 
+    /**
+     * Tests setting the question.
+     */
     @Test
-    void testSetQuestion() {
-        multiQuestion.setQuestion("What is the capital of France?");
-        assertEquals("What is the capital of France?", multiQuestion.getQuestion(), "Question text should be updated correctly.");
+    public void testSetQuestion() {
+        myQuestion.setQuestion("What is the capital of France?");
+        assertEquals("What is the capital of France?",
+                myQuestion.getQuestion(),
+                "Question text should be updated correctly.");
     }
 
+    /**
+     * Tests setting the correct answer.
+     */
     @Test
-    void testSetCorrectAnswer() {
-        multiQuestion.setCorrectAnswer("Paris");
-        assertEquals("Paris", multiQuestion.getCorrectAnswer(), "Correct answer should be updated correctly.");
+    public void testSetCorrectAnswer() {
+        myQuestion.setCorrectAnswer("Paris");
+        assertEquals("Paris", myQuestion.getCorrectAnswer(),
+                "Correct answer should be updated correctly.");
     }
 
+    /**
+     * Tests if list of incorrect answers is empty.
+     */
     @Test
-    void testGetIncorrectAnswersEmpty() {
-        assertTrue(multiQuestion.getIncorrectAnswers().isEmpty(), "Incorrect answers list should be empty initially.");
+    public void testGetIncorrectAnswersEmpty() {
+        assertTrue(myQuestion.getIncorrectAnswers().isEmpty(),
+                "Incorrect answers list should be empty initially.");
     }
 
+    /**
+     * Tests adding to incorrect answers list.
+     */
     @Test
-    void testIncorrectAnswersList() {
-        multiQuestion.addIncorrectAnswer("Florence");
-        multiQuestion.addIncorrectAnswer("Naples");
+    public void testIncorrectAnswersList() {
+        myQuestion.addIncorrectAnswer("Florence");
+        myQuestion.addIncorrectAnswer("Naples");
 
-        ArrayList<String> incorrectAnswers = multiQuestion.getIncorrectAnswers();
-        assertEquals(2, incorrectAnswers.size(), "Incorrect answers list should contain 2 items.");
-        assertTrue(incorrectAnswers.contains("Florence"), "Incorrect answers should contain 'Florence'.");
-        assertTrue(incorrectAnswers.contains("Naples"), "Incorrect answers should contain 'Naples'.");
+        ArrayList<String> incorrectAnswers =
+                myQuestion.getIncorrectAnswers();
+        assertEquals(2, incorrectAnswers.size(),
+                "Incorrect answers list should contain 2 items.");
+        assertTrue(incorrectAnswers.contains("Florence"),
+                "Incorrect answers should contain 'Florence'.");
+        assertTrue(incorrectAnswers.contains("Naples"),
+                "Incorrect answers should contain 'Naples'.");
     }
 }

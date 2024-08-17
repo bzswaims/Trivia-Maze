@@ -11,53 +11,90 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TrueFalseQuestionTest {
+/**
+ * Tests for TrueFalseQuestion.
+ *
+ * @author Zane Swaims
+ * @version 1.0
+ */
+public class TrueFalseQuestionTest {
+    /**
+     * Question object for the tests.
+     */
+    private TrueFalseQuestion myQuestion;
 
-    private TrueFalseQuestion trueFalseQuestion;
-
+    /**
+     * Sets up question for testing.
+     */
     @BeforeEach
-    void setUp() {
-        trueFalseQuestion = new TrueFalseQuestion();
-        trueFalseQuestion.setQuestion("Is the sky blue?");
-        trueFalseQuestion.setCorrectAnswer("True");
+    public void setUp() {
+        myQuestion = new TrueFalseQuestion();
+        myQuestion.setQuestion("Is the sky blue?");
+        myQuestion.setCorrectAnswer("True");
     }
 
+    /**
+     * Tests the constructor.
+     */
     @Test
-    void testDefaultConstructor() {
-        assertNotNull(trueFalseQuestion, "TrueFalseQuestion instance should be created.");
+    public void testDefaultConstructor() {
+        assertNotNull(myQuestion, "TrueFalseQuestion " +
+                "instance should be created.");
     }
 
+    /**
+     * Tests setting the question.
+     */
     @Test
-    void testSetQuestion() {
-        trueFalseQuestion.setQuestion("Is 2 + 2 equal to 4?");
-        assertEquals("Is 2 + 2 equal to 4?", trueFalseQuestion.getQuestion(), "Question text should be updated correctly.");
+    public void testSetQuestion() {
+        myQuestion.setQuestion("Is 2 + 2 equal to 4?");
+        assertEquals("Is 2 + 2 equal to 4?", myQuestion.getQuestion(),
+                "Question text should be updated correctly.");
     }
 
+    /**
+     * Tests setting the correct answer.
+     */
     @Test
-    void testSetCorrectAnswer() {
-        trueFalseQuestion.setCorrectAnswer("False");
-        assertEquals("False", trueFalseQuestion.getCorrectAnswer(), "Correct answer should be updated correctly.");
+    public void testSetCorrectAnswer() {
+        myQuestion.setCorrectAnswer("False");
+        assertEquals("False", myQuestion.getCorrectAnswer(),
+                "Correct answer should be updated correctly.");
     }
 
+    /**
+     * Tests getting the question.
+     */
     @Test
-    void testGetQuestion() {
-        assertEquals("Is the sky blue?", trueFalseQuestion.getQuestion(), "Initial question should match the set value.");
+    public void testGetQuestion() {
+        assertEquals("Is the sky blue?", myQuestion.getQuestion(),
+                "Initial question should match the set value.");
     }
 
+    /**
+     * Tests getting the correct answer.
+     */
     @Test
-    void testGetCorrectAnswer() {
-        assertEquals("True", trueFalseQuestion.getCorrectAnswer(), "Initial correct answer should match the set value.");
+    public void testGetCorrectAnswer() {
+        assertEquals("True", myQuestion.getCorrectAnswer(),
+                "Initial correct answer should match the set value.");
     }
 
+    /**
+     * Tests setting the ID.
+     */
     @Test
-    void testSetID() {
-        trueFalseQuestion.setID(202);
-        assertEquals(202, trueFalseQuestion.getID(), "ID should be set correctly.");
+    public void testSetID() {
+        myQuestion.setID(202);
+        assertEquals(202, myQuestion.getID(), "ID should be set correctly.");
     }
 
+    /**
+     * Tests setting the type of question.
+     */
     @Test
-    void testSetType() {
-        trueFalseQuestion.setType(2); // Assuming 2 is the type for true/false questions.
-        assertEquals(2, trueFalseQuestion.getType(), "Type should be set correctly.");
+    public void testSetType() {
+        myQuestion.setType(2); // Assuming 2 is the type for true/false questions.
+        assertEquals(2, myQuestion.getType(), "Type should be set correctly.");
     }
 }
