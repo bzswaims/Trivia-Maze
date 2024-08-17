@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+
 import model.Direction;
 import model.Maze;
 import view.TriviaMazeGui;
@@ -20,8 +21,7 @@ import view.TriviaMazeGui;
  *
  * @author Abbygaile Yrojo
  * @author Zane Swaims
- * @author Mohammed
- * @version August 16, 2024
+ * @version July 30, 2024
  */
 public class TriviaMazeController {
     /**
@@ -63,9 +63,8 @@ public class TriviaMazeController {
      */
     public void start() {
         myView.start();
-        myView.setMapValues(myMaze.getRows());
-        myView.showRoom(myMaze.getCurrentRoom().getRow(),
-                myMaze.getCurrentRoom().getCol());
+        myView.setMapValues(myMaze.getRows(), myMaze.getCols());
+        myView.showRoom(myMaze.getCurrentRoom().getRow(), myMaze.getCurrentRoom().getCol());
 
         for ( Direction dir : Direction.values()){
             if(myMaze.getCurrentRoom().getDoor(dir)!=null){
@@ -122,71 +121,83 @@ public class TriviaMazeController {
      */
     private PropertyChangeListener createListener() {
         return theEvt -> {
+            // for when direction changes
             String name = theEvt.getPropertyName();
-            if (name.equals("Save")) {
-                createSave();
-            } else if (name.equals("Load")) {
-                loadSave();
-            } else if (name.equals("Movement")) {
-                String value = theEvt.getNewValue().toString();
-                if (value.equals("left") || value.equals("right")) {
-                    myMaze.setCurrentDirection(value);
-                    myView.rotatePlayer(myMaze.getCurrentDirection());
+            switch (name) {
+                case "Save" ->
+                    //creates a save file
+                        createSave();
+                case "Load" ->
+                    //loads a save file
+                        loadSave();
+                case "Movement" -> {
+                    String value = theEvt.getNewValue().toString();
+                    if (value.equals("left") || value.equals("right")) {
+                        myMaze.setCurrentDirection(value);
+                        myView.rotatePlayer(myMaze.getCurrentDirection());
 
-                } else if (value.equals("forward")) {
-                    final int state = myMaze.getDoorLockState();
-                    if (state == 2) {
-                        myMaze.moveForward();
-                        myView.showRoom(myMaze.getCurrentRoom().getRow(),
-                                        myMaze.getCurrentRoom().getCol());
+                    } else if (value.equals("forward")) {
+                        final int state = myMaze.getDoorLockState();
+                        if (state == 2) {
+                            myMaze.moveForward();
+                            myView.showRoom(myMaze.getCurrentRoom().getRow(),
+                                    myMaze.getCurrentRoom().getCol());
 
-                        for ( Direction dir : Direction.values()) {
-                            if(myMaze.getCurrentRoom().getDoor(dir)!=null) {
-                                myView.showDoor
-                                        (myMaze.getCurrentRoom().getRow(),
-                                        myMaze.getCurrentRoom().getCol(),
-                                        dir,
-                                        myMaze.getCurrentRoom().getDoor(dir)
-                                                .getLockState());
+                            for (Direction dir : Direction.values()) {
+                                if (myMaze.getCurrentRoom().getDoor(dir) != null) {
+                                    myView.showDoor(myMaze.getCurrentRoom().getRow(),
+                                            myMaze.getCurrentRoom().getCol(),
+                                            dir,
+                                            myMaze.getCurrentRoom().getDoor(dir).getLockState());
+                                }
                             }
+
+
+                            myView.movePlayer(myMaze.getCurrentDirection());
+
+                            myView.updateView("up");
+                        } else if (state == 1) {
+                            // disable nav bar
+                            myView.setUpQuestion(
+                                    myMaze.getCurrentQuestion().getType(),
+                                    myMaze.getCurrentQuestion().getQuestion(),
+                                    myMaze.getAnswers());
                         }
 
-
-                        myView.movePlayer(myMaze.getCurrentDirection());
-
-                        myView.updateView("up");
-                    } else if (state == 1) {
-                        // disable nav bar
-                        myView.setUpQuestion(
-                                myMaze.getCurrentQuestion().getType(),
-                                myMaze.getCurrentQuestion().getQuestion(),
-                                myMaze.getAnswers());
-                    }
-
-                    if(myMaze.getCurrentRoom().isEnd()){
-                        myView.win();
+                        if (myMaze.getCurrentRoom().isEnd()) {
+                            // Now we are going to check if they got lost in the maze
+                            // Show lost state visual
+                            myView.win();
+                        }
                     }
                 }
-
-            } else if (name.equals("Answer")) {
-                if (myMaze.isCorrect(theEvt.getNewValue().toString())) {
-                    myMaze.setDoorState(2);
-                    myView.stopQuestion();
-                } else {
-                    myMaze.setDoorState(0);
-                    myView.stopQuestion();
-                }
-                for ( Direction dir : Direction.values()){
-                    if(myMaze.getCurrentRoom().getDoor(dir)!=null){
-                        myView.showDoor(myMaze.getCurrentRoom().getRow(),
-                                myMaze.getCurrentRoom().getCol(),
-                                dir,
-                                myMaze.getCurrentRoom().getDoor(dir)
-                                        .getLockState());
+                case "Answer" -> {
+                    if (myMaze.isCorrect(theEvt.getNewValue().toString())) {
+                        myMaze.setDoorState(2);
+                        myView.stopQuestion();
+                        // myView.stopQuestion()
+                        // clear QAPanel
+                        // re-enable navbar
+                        // update view
+                    } else {
+                        myMaze.setDoorState(0);
+                        myView.stopQuestion();
                     }
-                }
-                if(myMaze.hasLost()){
-                    myView.lost();
+
+                    for (Direction dir : Direction.values()) {
+                        if (myMaze.getCurrentRoom().getDoor(dir) != null) {
+                            myView.showDoor(myMaze.getCurrentRoom().getRow(),
+                                    myMaze.getCurrentRoom().getCol(),
+                                    dir,
+                                    myMaze.getCurrentRoom().getDoor(dir).getLockState());
+                        }
+                    }
+
+                    if (myMaze.hasLost()) {
+                        // Now we are going to check if they got lost in the maze
+                        // Show lost state visual
+                        myView.lost();
+                    }
                 }
             }
         };

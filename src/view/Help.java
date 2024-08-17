@@ -18,9 +18,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
-// TODO - Get the font working and colors not flashbanging
-//          aka get it to fit the theme
-
 /**
  * Displays the help screen.
  *

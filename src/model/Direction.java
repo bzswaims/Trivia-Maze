@@ -59,6 +59,7 @@ public enum Direction {
         myLetter = theLetter;
     }
 
+    //To remove this unused method would require a lot more work than it initially appears.
     /**
      * Returns the letter corresponding to this direction.
      *
