@@ -47,7 +47,7 @@ public class Maze implements Serializable {
     /**
      * Question factory to build questions with.
      */
-    QuestionFactory myQuestionFactory;
+    private QuestionFactory myQuestionFactory;
 
     /** Int representation of player's game progress.
      *  0 is game lost. 1 is in progress. 2 is game win.
@@ -517,7 +517,7 @@ public class Maze implements Serializable {
      *
      * @param theRandom Random object to randomly select the questions.
      */
-    private void setQuestions(Random theRandom) {
+    private void setQuestions(final Random theRandom) {
         int questionCount = 0; // or door count
         for (Room room : myPathRooms) {
             for (Direction direction : DIRECTIONS) {

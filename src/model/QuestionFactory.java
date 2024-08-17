@@ -187,7 +187,7 @@ public class QuestionFactory implements Serializable {
     /**
      * Builds a short answer question
      */
-    private AbstractQuestion buildShortAnswer (final int theType) {
+    private ShortQuestion buildShortAnswer (final int theType) {
         ShortQuestion tempQuestion = new ShortQuestion();
 
         String query = "SELECT * FROM Questions ORDER BY RANDOM()";
@@ -268,7 +268,7 @@ public class QuestionFactory implements Serializable {
     /**
      * Builds a true false answer question
      */
-    private AbstractQuestion buildTrueFalseAnswer (final int theType) {
+    private TrueFalseQuestion buildTrueFalseAnswer (final int theType) {
         TrueFalseQuestion tempQuestion = new TrueFalseQuestion();
 
         String query = "SELECT * FROM Questions ORDER BY RANDOM()";

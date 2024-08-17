@@ -276,7 +276,7 @@ public class TriviaMazeGui {
      * Changes the menu by notifying listener.
      * @param theNewValue String.
      */
-    public void setValue(final String theProperty,
+    private void setValue(final String theProperty,
                          final String theNewValue) {
         this.myPCSupport.firePropertyChange(theProperty,
                 "TriviaMazeGui", theNewValue);
@@ -286,7 +286,7 @@ public class TriviaMazeGui {
      * Update board.
      * @param theChange String.
      */
-    public void updateView(String theChange) {
+    public void updateView(final String theChange) {
         if (theChange.equals("up")) {
             myBoard.up();
         }

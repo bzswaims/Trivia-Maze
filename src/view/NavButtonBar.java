@@ -74,7 +74,7 @@ public class NavButtonBar {
      *
      * @return The button proper.
      */
-    public JButton buttonMaker(ImageIcon theIcon) {
+    private JButton buttonMaker(final ImageIcon theIcon) {
         final JButton button = new JButton(theIcon);
         button.setEnabled(true);
 
@@ -138,7 +138,7 @@ public class NavButtonBar {
      * Notifies listener of upward movement.
      * @param theNewValue String.
      */
-    public void setValue(String theNewValue) {
+    public void setValue(final String theNewValue) {
         String oldValue = "Still";
         myPCSupport.firePropertyChange("Movement",
                 oldValue, theNewValue);
