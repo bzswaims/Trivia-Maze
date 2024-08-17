@@ -518,25 +518,18 @@ public class Maze implements Serializable {
      * @param theRandom Random object to randomly select the questions.
      */
     private void setQuestions(Random theRandom) {
-        int questionCount = 0; // or door count
         for (Room room : myPathRooms) {
             for (Direction direction : DIRECTIONS) {
                 Door door = room.getDoor(direction);
                 if (door != null && door.getQuestion() == null) {
-                    System.out.println("Door state: " + door.getLockState());
                     door.setQuestion(myQuestionFactory.makeQuestion(theRandom.nextInt(3) + 1));
                     AbstractQuestion question = door.getQuestion();
-                    System.out.println((++questionCount) + ": " + question.getQuestion() + " " + question.getCorrectAnswer());
                     if (question.getType() == 1) {
                         List<String> list = ((MultiQuestion) question).getIncorrectAnswers();
-                        for (int k = 0; k < 3; k++) {
-                            System.out.println("Incorrect answer: " + list.get(k));
-                        }
                     }
                 }
             }
         }
-        System.out.println("Question count: " + questionCount);
     }
 
     /**

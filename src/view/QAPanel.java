@@ -102,7 +102,6 @@ public class QAPanel extends JPanel {
     private void setUpButtons() {
         final ActionListener buttonListener = theE -> {
             if (theE.getSource() instanceof JButton button) {
-                System.out.println("Answered: " + button.getText());
                 setValue(button.getText());
             }
         };
