@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 
 import model.Direction;
 import model.Maze;
+
 import view.TriviaMazeGui;
 
 /**
@@ -40,11 +41,6 @@ public class TriviaMazeController {
     private Maze myMaze;
 
     /**
-     * Listener for view.
-     */
-    private final PropertyChangeListener myListener;
-
-    /**
      * Construct the controller.
      * @param theMaze Maze for model.
      * @param theView TriviaMazeGui for view.
@@ -54,8 +50,7 @@ public class TriviaMazeController {
         myMaze = theMaze;
         myView = theView;
         myFileName = "triviagame.sav";
-        myListener = createListener();
-        myView.addPropertyChangeListener(myListener);
+        myView.addPropertyChangeListener(createListener());
     }
 
     /**
@@ -63,7 +58,7 @@ public class TriviaMazeController {
      */
     public void start() {
         myView.start();
-        myView.setMapValues(myMaze.getRows(), myMaze.getCols());
+        myView.setMapValues(myMaze.getRows());
         myView.showRoom(myMaze.getCurrentRoom().getRow(), myMaze.getCurrentRoom().getCol());
 
         for ( Direction dir : Direction.values()){

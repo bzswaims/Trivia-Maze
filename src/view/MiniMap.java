@@ -5,15 +5,20 @@
 
 package view;
 
-import java.awt.*;
+import model.Direction;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.*;
 import javax.swing.SwingUtilities;
-import model.Direction;
 
 /**
  * Creates the minimap panel to be used on the main GUI for the game.
@@ -157,18 +162,12 @@ public class MiniMap extends JPanel {
      * @param theRow int row.
      * @param theCol int col.
      * @param theDirection int direction.
-     * @return boolean.
      */
-    private boolean removeDoorTile(final int theRow, final int theCol,
+    private void removeDoorTile(final int theRow, final int theCol,
                                    final Direction theDirection) {
-        for (MyDoorTile tile : myDoorTiles) {
-            if (tile.myCol == theCol && tile.myRow == theRow
-                    && tile.myDir == theDirection) {
-                myDoorTiles.remove(tile);
-                return true;
-            }
-        }
-        return false;
+        myDoorTiles.removeIf(tile -> tile.myCol == theCol
+                && tile.myRow == theRow
+                && tile.myDir == theDirection);
     }
 
     /**
@@ -392,7 +391,7 @@ public class MiniMap extends JPanel {
             }
 
             try {
-                SwingUtilities.invokeAndWait(() -> repaint());
+                SwingUtilities.invokeAndWait(this::repaint);
             } catch (InterruptedException | InvocationTargetException ex) {
                 throw new RuntimeException(ex);
             }

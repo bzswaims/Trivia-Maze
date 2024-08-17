@@ -8,7 +8,9 @@ package control;
 import java.awt.EventQueue;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+
 import model.Maze;
+
 import view.TriviaMazeGui;
 
 /**
