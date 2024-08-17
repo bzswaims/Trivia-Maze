@@ -19,19 +19,19 @@ public interface Question {
      * Mutator for the question text.
      * @param theQuestion The text for the question.
      */
-    void setQuestion(String theQuestion);
+    void setQuestion(final String theQuestion);
 
     /**
      * Mutator for the correct answer text.
      * @param theAnswer The text for the correct answer.
      */
-    void setCorrectAnswer(String theAnswer);
+    void setCorrectAnswer(final String theAnswer);
 
     /**
      * Mutator for setting the ID for this question.
      * @param theID The ID to be applied to this question.
      */
-    void setID(int theID);
+    void setID(final int theID);
 
     /**
      * Mutator for the type of question it is. Stored as an int value.
@@ -40,7 +40,7 @@ public interface Question {
      * 3 - Short answer question
      * @param theType The type of question it is.
      */
-    void setType(int theType);
+    void setType(final int theType);
 
     /**
      * Accessor for retrieving the text of the question.

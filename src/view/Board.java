@@ -46,7 +46,7 @@ public class Board extends JPanel{
     /**
      * Constructor.
      */
-    Board() {
+    public Board() {
         super();
         myRoom = new ImageIcon[8];
         myRoom[0] = new ImageIcon("boards/north.png");

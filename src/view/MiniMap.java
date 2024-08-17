@@ -9,7 +9,6 @@ import model.Direction;
 
 import java.awt.*;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 import javax.swing.*;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;

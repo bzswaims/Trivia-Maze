@@ -93,7 +93,7 @@ public class OptionsPanel extends JPanel {
      *
      * @return The button proper.
      */
-    public JButton buttonMaker(ImageIcon theIcon) {
+    private JButton buttonMaker(final ImageIcon theIcon) {
         final JButton button = new JButton(theIcon);
         button.setEnabled(true);
 
